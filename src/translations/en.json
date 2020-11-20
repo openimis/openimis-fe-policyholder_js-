@@ -1,2 +1,20 @@
 {
+    "policyHolder.menu.policyHolders": "Policy Holders",
+    "policyHolder.policyHolders.page.title": "Policy Holders",
+    "policyHolder.displayName": "Display name",
+    "policyHolder.location": "Location",
+    "policyHolder.legalForm": "Legal form",
+    "policyHolder.activityCode": "Activity code",
+    "policyHolder.dateValidFrom": "Valid from",
+    "policyHolder.dateValidTo": "Valid to",
+    "policyHolder.PolicyHolderFilter.code": "Code",
+    "policyHolder.PolicyHolderFilter.tradeName": "Tradename",
+    "policyHolder.PolicyHolderFilter.dateValidFrom": "Valid from",
+    "policyHolder.PolicyHolderFilter.dateValidTo": "Valid to",
+    "policyHolder.LegalFormPicker.legalForm": "Legal form",
+    "policyHolder.LegalFormPicker.legalForm.null": "Any",
+    "policyHolder.ActivityCodePicker.activityCode": "Activity code",
+    "policyHolder.ActivityCodePicker.activityCode.null": "Any",
+    "policyHolder.policyHolders.searcher.results.title": "{count} Policy Holders Found",
+    "policyHolder.actionButtonColumnHeader": " "
 }
