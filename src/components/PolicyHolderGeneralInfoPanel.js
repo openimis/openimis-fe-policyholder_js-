@@ -72,7 +72,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     <Grid item xs={2} className={classes.item}>
                         <TextInput
                             module="policyHolder"
-                            label="PolicyHolderFilter.code"
+                            label="code"
                             required
                             value={!!edited && !!edited.code ? edited.code : ""}
                             onChange={v => this.updateAttribute('code', v)}
@@ -81,7 +81,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     <Grid item xs={2} className={classes.item}>
                         <TextInput
                             module="policyHolder"
-                            label="PolicyHolderFilter.tradeName"
+                            label="tradeName"
                             required
                             value={!!edited && !!edited.tradeName ? edited.tradeName : ""}
                             onChange={v => this.updateAttribute('tradeName', v)}
@@ -101,7 +101,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     <Grid item xs={2} className={classes.item}>
                         <TextAreaInput
                             module="policyHolder"
-                            label="policyHolder.address"
+                            label="address"
                             //rows="2"
                             value={!!edited && !!edited.address ? edited.address : ""}
                             onChange={v => this.updateAttribute('address', v)}
@@ -110,7 +110,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     <Grid item xs={2} className={classes.item}>
                         <TextInput
                             module="policyHolder"
-                            label="policyHolder.phone"
+                            label="phone"
                             value={!!edited && !!edited.phone ? edited.phone : ""}
                             error={this.fieldError('phone', edited.phone)}
                             onChange={v => this.updateAttribute('phone', v)}
@@ -119,7 +119,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     <Grid item xs={2} className={classes.item}>
                         <TextInput
                             module="policyHolder"
-                            label="policyHolder.fax"
+                            label="fax"
                             value={!!edited && !!edited.fax ? edited.fax : ""}
                             error={this.fieldError('fax', edited.fax)}
                             onChange={v => this.updateAttribute('fax', v)}
@@ -128,7 +128,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     <Grid item xs={2} className={classes.item}>
                         <TextInput
                             module="policyHolder"
-                            label="policyHolder.email"
+                            label="email"
                             value={!!edited && !!edited.email ? edited.email : ""}
                             error={this.fieldError('email', edited.email)}
                             onChange={v => this.updateAttribute('email', v)}
@@ -137,7 +137,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     <Grid item xs={2} className={classes.item}>
                         <TextInput
                             module="policyHolder"
-                            label="policyHolder.contactName"
+                            label="contactName"
                             value={!!edited && !!edited.contactName ? edited.contactName : ""}
                             onChange={v => this.updateAttribute('contactName', v)}
                         />
@@ -146,7 +146,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <PublishedComponent
                             pubRef="policyHolder.LegalFormPicker"
                             module="policyHolder"
-                            label="LegalFormPicker.legalForm"
+                            label="legalForm"
                             value={!!edited ? edited.legalForm : null}
                             onChange={v => this.updateAttribute('legalForm', v)}
                         />
@@ -155,7 +155,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <PublishedComponent
                             pubRef="policyHolder.ActivityCodePicker"
                             module="policyHolder"
-                            label="ActivityCodePicker.activityCode"
+                            label="activityCode"
                             value={!!edited ? edited.activityCode : null}
                             onChange={v => this.updateAttribute('activityCode', v)}
                         />
@@ -163,7 +163,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     <Grid item xs={2} className={classes.item}>
                         <TextInput
                             module="policyHolder"
-                            label="policyHolder.accountancyAccount"
+                            label="accountancyAccount"
                             value={!!edited && !!edited.accountancyAccount ? edited.accountancyAccount : ""}
                             onChange={v => this.updateAttribute('accountancyAccount', v)}
                         />
@@ -171,7 +171,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     <Grid item xs={2} className={classes.item}>
                         <TextInput
                             module="policyHolder"
-                            label="policyHolder.bankAccount"
+                            label="bankAccount"
                             value={!!edited && !!edited.bankAccount ? edited.bankAccount : ""}
                             onChange={v => this.updateAttribute('bankAccount', v)}
                         />
@@ -179,7 +179,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     <Grid item xs={2} className={classes.item}>
                         <TextInput
                             module="policyHolder"
-                            label="policyHolder.paymentReference"
+                            label="paymentReference"
                             value={!!edited && !!edited.paymentReference ? edited.paymentReference : ""}
                             onChange={v => this.updateAttribute('paymentReference', v)}
                         />
@@ -188,7 +188,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <PublishedComponent
                             pubRef="core.DatePicker"
                             module="policyHolder"
-                            label="PolicyHolderFilter.dateValidFrom"
+                            label="dateValidFrom"
                             required
                             value={!!edited && !!edited.dateValidFrom ? edited.dateValidFrom : null}
                             onChange={v => this.updateAttribute('dateValidFrom', v)}
@@ -198,7 +198,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <PublishedComponent
                             pubRef="core.DatePicker"
                             module="policyHolder"
-                            label="PolicyHolderFilter.dateValidTo"
+                            label="dateValidTo"
                             value={!!edited && !!edited.dateValidTo ? edited.dateValidTo : null}
                             onChange={v => this.updateAttribute('dateValidTo', v)}
                         />

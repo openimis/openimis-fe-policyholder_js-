@@ -29,13 +29,13 @@ class PolicyHoldersPage extends Component {
                 <div className={classes.page}>
                     <PolicyHolderSearcher />
                     {withTooltip(
-                    <div className={classes.fab} >
-                        <Fab color="primary" onClick={this.onAdd}>
-                            <AddIcon />
-                        </Fab>
-                    </div>,
-                    formatMessage(intl, "policyHolder", "addNewPolicyHolderTooltip")
-                )}
+                        <div className={classes.fab} >
+                            <Fab color="primary" onClick={this.onAdd}>
+                                <AddIcon />
+                            </Fab>
+                        </div>,
+                        formatMessage(intl, "policyHolder", "addNewPolicyHolderTooltip")
+                    )}
                 </div>
             )
         )
