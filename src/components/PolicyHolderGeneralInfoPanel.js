@@ -23,33 +23,35 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
     }
 
     fieldError = (field, value) => {
-        if (!!value) {
-            switch(field) {
-                case "phone":
-                    return (value.match(this.phoneRegex) == null)
-                        ? formatMessage(this.props.intl, "policyHolder", "phone.error")
-                        : false;
-                case "fax":
-                    return (value.match(this.faxRegex) == null)
-                        ? formatMessage(this.props.intl, "policyHolder", "fax.error")
-                        : false;
-                case "email":
-                    return (value.match(this.emailRegex) == null)
-                        ? formatMessage(this.props.intl, "policyHolder", "email.error")
-                        : false;
-                case "accountancyAccount":
-                    return (value.match(this.accountancyAccountRegex) == null)
-                        ? formatMessage(this.props.intl, "policyHolder", "accountancyAccount.error")
-                        : false;
-                case "paymentReference":
-                    return (value.match(this.paymentReferenceRegex) == null)
-                        ? formatMessage(this.props.intl, "policyHolder", "paymentReference.error")
-                        : false;
-                default:
-                    return false;
-            }
+        switch(field) {
+            case "code":
+            case "tradeName":
+                return !!value
+                    ? false
+                    : formatMessage(this.props.intl, "policyHolder", "mandatoryField.error");
+            case "phone":
+                return (!!value && value.match(this.phoneRegex) == null)
+                    ? formatMessage(this.props.intl, "policyHolder", "phone.error")
+                    : false;
+            case "fax":
+                return (!!value && value.match(this.faxRegex) == null)
+                    ? formatMessage(this.props.intl, "policyHolder", "fax.error")
+                    : false;
+            case "email":
+                return (!!value && value.match(this.emailRegex) == null)
+                    ? formatMessage(this.props.intl, "policyHolder", "email.error")
+                    : false;
+            case "accountancyAccount":
+                return (!!value && value.match(this.accountancyAccountRegex) == null)
+                    ? formatMessage(this.props.intl, "policyHolder", "accountancyAccount.error")
+                    : false;
+            case "paymentReference":
+                return (!!value && value.match(this.paymentReferenceRegex) == null)
+                    ? formatMessage(this.props.intl, "policyHolder", "paymentReference.error")
+                    : false;
+            default:
+                return false;
         }
-        return false;
     }
 
     render() {
@@ -75,6 +77,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             label="code"
                             required
                             value={!!edited && !!edited.code ? edited.code : ""}
+                            error={this.fieldError('code', edited.code)}
                             onChange={v => this.updateAttribute('code', v)}
                         />
                     </Grid>
@@ -84,6 +87,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             label="tradeName"
                             required
                             value={!!edited && !!edited.tradeName ? edited.tradeName : ""}
+                            error={this.fieldError('tradeName', edited.tradeName)}
                             onChange={v => this.updateAttribute('tradeName', v)}
                         />
                     </Grid>

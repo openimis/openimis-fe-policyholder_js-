@@ -8,14 +8,10 @@ const POLICYHOLDER_FULL_PROJECTION = mm => [
 ];
 
 export function fetchPolicyHolders(mm, prms) {
-    var projections = ["code", "tradeName",
-        "locations" + mm.getProjection("location.Location.FlatProjection"),
-        "legalForm", "activityCode", "dateValidFrom", "dateValidTo"
-    ];
     const payload = formatPageQueryWithCount(
         "policyHolder",
         prms,
-        projections
+        POLICYHOLDER_FULL_PROJECTION(mm)
     );
     return graphql(payload, "POLICYHOLDER_POLICYHOLDERS")
 }
@@ -52,5 +48,5 @@ export function createPolicyHolder(mm, policyHolder, clientMutationLabel) {
             clientMutationLabel,
             requestedDateTime
         }
-    );
+    )
 }

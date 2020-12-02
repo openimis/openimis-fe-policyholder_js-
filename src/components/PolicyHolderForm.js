@@ -27,7 +27,7 @@ class PolicyHolderForm extends Component {
     canSave = () => {
         if (!!this.state.policyHolder.code
             && !!this.state.policyHolder.tradeName
-            //&& !!this.state.policyHolder.location
+            && !!this.state.policyHolder.location
             && !!this.state.policyHolder.dateValidFrom) {
             return true;
         }

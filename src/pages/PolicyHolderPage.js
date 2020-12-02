@@ -64,4 +64,4 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators({ createPolicyHolder, journalize }, dispatch);
 };
 
-export default withHistory(withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(null, mapDispatchToProps)(PolicyHolderPage))))));
+export default withHistory(withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PolicyHolderPage))))));

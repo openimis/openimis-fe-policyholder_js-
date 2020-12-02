@@ -3,6 +3,7 @@
     "policyHolder.policyHolders.page.title": "Policy Holders",
     "policyHolder.code": "Code",
     "policyHolder.tradeName": "Tradename",
+    "policyHolder.mandatoryField.error": "This field is mandatory",
     "policyHolder.displayName": "Display name",
     "policyHolder.location": "Location",
     "policyHolder.legalForm": "Legal form",
