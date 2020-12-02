@@ -4,9 +4,12 @@ import { withModulesManager, formatMessage } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 
 export class ConfigBasedPicker extends Component {
-    state = {
-        value: null
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: !!props.value ? props.value : null
+        };
+    }
 
     _onChange = v => {
         this.setState(
@@ -16,7 +19,7 @@ export class ConfigBasedPicker extends Component {
     };
 
     render() {
-        const { intl, module, label, configOptions } = this.props;
+        const { intl, module, label, configOptions, disabled } = this.props;
         const { value } = this.state;
         const options = [{
             value: null,
@@ -28,17 +31,18 @@ export class ConfigBasedPicker extends Component {
         }];
         if (!!configOptions) {
             options.push(...configOptions.map(option => ({
-                value: option.value,
-                label: option.display[intl.locale]
+                value: parseInt(option.value),
+                label: option.label[intl.locale]
             })));
         };
         return (
             <SelectInput
                 module={module}
-                label={label}
+                label={!!disabled ? null : label}
                 options={options}
                 value={value}
-                onChange={this._onChange} />
+                onChange={this._onChange}
+                disabled={disabled} />
         );
     }
 }

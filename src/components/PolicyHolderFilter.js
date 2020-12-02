@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { injectIntl } from 'react-intl';
-import { withModulesManager, TextInput, PublishedComponent } from "@openimis/fe-core";
-import { Grid } from "@material-ui/core";
+import { withModulesManager, formatMessage, TextInput, PublishedComponent } from "@openimis/fe-core";
+import { Grid, FormControlLabel, Checkbox } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 
 const styles = theme => ({
@@ -43,67 +43,78 @@ class PolicyHolderFilter extends Component {
     }
 
     render() {
-        const { classes, onChangeFilters } = this.props;
+        const { intl, classes, filters, onChangeFilters } = this.props;
         return (
             <Grid container className={classes.form}>
                 <Grid item xs={2} className={classes.item}>
                     <TextInput
                         module="policyHolder"
-                        label="PolicyHolderFilter.code"
+                        label="code"
                         value={this._filterValue('code')}
-                        onChange={(v, _) => this._onChangeStringFilter('code', v, 'Icontains')}
+                        onChange={v => this._onChangeStringFilter('code', v, 'Icontains')}
                     />
                 </Grid>
                 <Grid item xs={2} className={classes.item}>
                     <TextInput
                         module="policyHolder"
-                        label="PolicyHolderFilter.tradeName"
+                        label="tradeName"
                         value={this._filterValue('tradeName')}
-                        onChange={(v, _) => this._onChangeStringFilter('tradeName', v, 'Icontains')}
+                        onChange={v => this._onChangeStringFilter('tradeName', v, 'Icontains')}
                     />
                 </Grid>
                 <Grid item xs={8}>
                     <PublishedComponent
                         pubRef="location.DetailedLocationFilter"
                         withNull={true}
-                        anchor="parentLocation"
+                        filters={filters}
                         onChangeFilters={onChangeFilters}
+                        anchor="parentLocation"
                     />
                 </Grid>
                 <Grid item xs={3} className={classes.item}>
                     <PublishedComponent
                         pubRef="policyHolder.LegalFormPicker"
                         module="policyHolder"
-                        label="LegalFormPicker.legalForm"
+                        label="legalForm"
                         value={this._filterValue('legalForm')}
-                        onChange={(v, _) => this._onChangeFilter('legalForm', v)}
+                        onChange={v => this._onChangeFilter('legalForm', v)}
                     />
                 </Grid>
                 <Grid item xs={3} className={classes.item}>
                     <PublishedComponent
                         pubRef="policyHolder.ActivityCodePicker"
                         module="policyHolder"
-                        label="ActivityCodePicker.activityCode"
+                        label="activityCode"
                         value={this._filterValue('activityCode')}
-                        onChange={(v, _) => this._onChangeFilter('activityCode', v)}
+                        onChange={v => this._onChangeFilter('activityCode', v)}
                     />
                 </Grid>
-                <Grid item xs={3} className={classes.item}>
+                <Grid item xs={2} className={classes.item}>
                     <PublishedComponent
                         pubRef="core.DatePicker"
                         module="policyHolder"
-                        label="PolicyHolderFilter.dateValidFrom"
+                        label="dateValidFrom"
                         value={this._filterValue('dateValidFrom')}
-                        onChange={(v, _) => this._onChangeFilter('dateValidFrom', v)}
+                        onChange={v => this._onChangeStringFilter('dateValidFrom', v, 'Gte')}
                     />
                 </Grid>
-                <Grid item xs={3} className={classes.item}>
+                <Grid item xs={2} className={classes.item}>
                     <PublishedComponent
                         pubRef="core.DatePicker"
                         module="policyHolder"
-                        label="PolicyHolderFilter.dateValidTo"
+                        label="dateValidTo"
                         value={this._filterValue('dateValidTo')}
-                        onChange={(v, _) => this._onChangeFilter('dateValidTo', v)}
+                        onChange={v => this._onChangeStringFilter('dateValidTo', v, 'Lte')}
+                    />
+                </Grid>
+                <Grid item xs={2} className={classes.item}>
+                    <FormControlLabel
+                        control={<Checkbox 
+                            checked={!!this._filterValue('isDeleted')}
+                            onChange={event => this._onChangeFilter('isDeleted', event.target.checked)}
+                            name="isDeleted" 
+                        />}
+                        label={formatMessage(intl, "policyHolder", "isDeleted")}
                     />
                 </Grid>
             </Grid>

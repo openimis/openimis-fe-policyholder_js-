@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react"
 import { injectIntl } from 'react-intl';
-import { withModulesManager, Searcher, formatMessageWithValues } from "@openimis/fe-core";
+import { withModulesManager, Searcher, formatMessageWithValues, formatDateFromISO, PublishedComponent } from "@openimis/fe-core";
 import PolicyHolderFilter from "./PolicyHolderFilter";
 import { fetchPolicyHolders } from "../actions"
 import { bindActionCreators } from "redux";
@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { IconButton } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import TabIcon from '@material-ui/icons/Tab';
 
 class PolicyHolderSearcher extends Component {
     constructor(props) {
@@ -34,7 +35,6 @@ class PolicyHolderSearcher extends Component {
         if (!!state.orderBy) {
             prms.push(`orderBy: ["${state.orderBy}"]`);
         }
-        console.log(prms);
         return prms;
     }
 
@@ -47,26 +47,53 @@ class PolicyHolderSearcher extends Component {
             "policyHolder.dateValidFrom",
             "policyHolder.dateValidTo",
             "policyHolder.actionButtonColumnHeader",
+            "policyHolder.actionButtonColumnHeader",
             "policyHolder.actionButtonColumnHeader"
         ];
     }
 
     itemFormatters = () => {
+        const { intl, modulesManager } = this.props;
         return [
-            policyHolder => `${policyHolder.code} ${policyHolder.tradeName}`,
-            policyHolder => policyHolder.name,
-            policyHolder => "",
-            policyHolder => "",
-            policyHolder => "",
-            policyHolder => "",
+            policyHolder => !!policyHolder.code && policyHolder.tradeName
+                ? `${policyHolder.code} ${policyHolder.tradeName}` : "",
+            policyHolder => 
+                <PublishedComponent
+                    pubRef="location.DetailedLocation"
+                    withNull={true}
+                    readOnly={true}
+                    value={!!policyHolder.locationsUuid ? policyHolder.locationsUuid : null} />,
+            policyHolder => !!policyHolder.legalForm
+                ? <PublishedComponent
+                    pubRef="policyHolder.LegalFormPicker"
+                    module="policyHolder"
+                    label="legalForm"
+                    value={policyHolder.legalForm}
+                    disabled={true} />
+                : "",
+            policyHolder => !!policyHolder.activityCode
+                ? <PublishedComponent
+                    pubRef="policyHolder.ActivityCodePicker"
+                    module="policyHolder"
+                    label="activityCode"
+                    value={policyHolder.activityCode}
+                    disabled={true} />
+                : "",
+            policyHolder => !!policyHolder.dateValidFrom
+                ? formatDateFromISO(modulesManager, intl, policyHolder.dateValidFrom)
+                : "",
+            policyHolder => !!policyHolder.dateValidTo
+                ? formatDateFromISO(modulesManager, intl, policyHolder.dateValidTo)
+                : "",
             policyHolder => <IconButton disabled><EditIcon /></IconButton>,
-            policyHolder => <IconButton disabled><DeleteIcon /></IconButton>
+            policyHolder => <IconButton disabled><DeleteIcon /></IconButton>,
+            policyHolder => <IconButton disabled><TabIcon /></IconButton>
         ]
     }
 
     sorts = () => {
         return [
-            ['displayName', true],
+            ['code', true],
             ['location', true],
             ['legalForm', true],
             ['activityCode', true],
@@ -76,9 +103,7 @@ class PolicyHolderSearcher extends Component {
     }
 
     render() {
-        const { intl, fetchingPolicyHolders, fetchedPolicyHolders, errorPolicyHolders, policyHolders, policyHoldersPageInfo } = this.props;
-        const count = policyHoldersPageInfo.totalCount;
-        console.log(policyHoldersPageInfo);
+        const { intl, fetchingPolicyHolders, fetchedPolicyHolders, errorPolicyHolders, policyHolders, policyHoldersPageInfo, policyHoldersTotalCount } = this.props;
         return (
             <Fragment>
                 <Searcher
@@ -90,7 +115,7 @@ class PolicyHolderSearcher extends Component {
                     fetchingItems={fetchingPolicyHolders}
                     fetchedItems={fetchedPolicyHolders}
                     errorItems={errorPolicyHolders}
-                    tableTitle={formatMessageWithValues(intl, "policyHolder", "policyHolders.searcher.results.title", { count })}
+                    tableTitle={formatMessageWithValues(intl, "policyHolder", "policyHolders.searcher.results.title", { policyHoldersTotalCount })}
                     headers={this.headers}
                     itemFormatters={this.itemFormatters}
                     filtersToQueryParams={this.filtersToQueryParams}
@@ -109,7 +134,8 @@ const mapStateToProps = state => ({
     fetchedPolicyHolders: state.policyHolder.fetchedPolicyHolders,
     errorPolicyHolders: state.policyHolder.errorPolicyHolders,
     policyHolders: state.policyHolder.policyHolders,
-    policyHoldersPageInfo: state.policyHolder.policyHoldersPageInfo
+    policyHoldersPageInfo: state.policyHolder.policyHoldersPageInfo,
+    policyHoldersTotalCount: state.policyHolder.policyHoldersTotalCount
 });
 
 const mapDispatchToProps = dispatch => {
