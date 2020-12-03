@@ -42,6 +42,16 @@ class PolicyHolderFilter extends Component {
         ])
     }
 
+    _onChangeDateFilter = (k, v, lookup) => {
+        this.props.onChangeFilters([
+            {
+                id: k,
+                value: v,
+                filter: `${k}_${lookup}: "${v}T00:00:00"`
+            }
+        ])
+    }
+
     render() {
         const { intl, classes, filters, onChangeFilters } = this.props;
         return (
@@ -68,7 +78,7 @@ class PolicyHolderFilter extends Component {
                         withNull={true}
                         filters={filters}
                         onChangeFilters={onChangeFilters}
-                        anchor="parentLocation"
+                        anchor="locations_Uuid"
                     />
                 </Grid>
                 <Grid item xs={3} className={classes.item}>
@@ -95,7 +105,7 @@ class PolicyHolderFilter extends Component {
                         module="policyHolder"
                         label="dateValidFrom"
                         value={this._filterValue('dateValidFrom')}
-                        onChange={v => this._onChangeStringFilter('dateValidFrom', v, 'Gte')}
+                        onChange={v => this._onChangeDateFilter('dateValidFrom', v, 'Gte')}
                     />
                 </Grid>
                 <Grid item xs={2} className={classes.item}>
@@ -104,7 +114,7 @@ class PolicyHolderFilter extends Component {
                         module="policyHolder"
                         label="dateValidTo"
                         value={this._filterValue('dateValidTo')}
-                        onChange={v => this._onChangeStringFilter('dateValidTo', v, 'Lte')}
+                        onChange={v => this._onChangeDateFilter('dateValidTo', v, 'Lte')}
                     />
                 </Grid>
                 <Grid item xs={2} className={classes.item}>

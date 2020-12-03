@@ -22,15 +22,27 @@ class PolicyHolderSearcher extends Component {
     }
 
     filtersToQueryParams = (state) => {
+        /**
+         * location "Level" parameter introduced 
+         * in @see openimis-fe-location_js module 
+         * by @see DetailedLocationFilter component
+         * has to be removed from the filter
+         */
+        if (state.filters.hasOwnProperty('locations_Uuid')) {
+            state.filters['locations_Uuid']['filter'] = state.filters['locations_Uuid']['filter'].split(',')[0];
+        }
         let prms = Object.keys(state.filters)
             .filter(f => !!state.filters[f]['filter'])
             .map(f => state.filters[f]['filter']);
         prms.push(`first: ${state.pageSize}`);
+        if (!state.filters.hasOwnProperty('isDeleted')) {
+            prms.push("isDeleted: false");
+        }
         if (!!state.afterCursor) {
-            prms.push(`after: "${state.afterCursor}"`)
+            prms.push(`after: "${state.afterCursor}"`);
         }
         if (!!state.beforeCursor) {
-            prms.push(`before: "${state.beforeCursor}"`)
+            prms.push(`before: "${state.beforeCursor}"`);
         }
         if (!!state.orderBy) {
             prms.push(`orderBy: ["${state.orderBy}"]`);
@@ -62,7 +74,7 @@ class PolicyHolderSearcher extends Component {
                     pubRef="location.DetailedLocation"
                     withNull={true}
                     readOnly={true}
-                    value={!!policyHolder.locationsUuid ? policyHolder.locationsUuid : null} />,
+                    value={!!policyHolder.locations ? policyHolder.locations : null} />,
             policyHolder => !!policyHolder.legalForm
                 ? <PublishedComponent
                     pubRef="policyHolder.LegalFormPicker"
@@ -94,7 +106,7 @@ class PolicyHolderSearcher extends Component {
     sorts = () => {
         return [
             ['code', true],
-            ['location', true],
+            null,
             ['legalForm', true],
             ['activityCode', true],
             ['dateValidFrom', true],

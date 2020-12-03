@@ -4,7 +4,7 @@ import {
 
 export function fetchPolicyHolders(mm, prms) {
     var projections = ["code", "tradeName",
-        "locationsUuid" + mm.getProjection("location.Location.FlatProjection"),
+        "locations" + mm.getProjection("location.Location.FlatProjection"),
         "legalForm", "activityCode", "dateValidFrom", "dateValidTo"
     ];
     const payload = formatPageQueryWithCount(
