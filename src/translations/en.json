@@ -29,5 +29,6 @@
     "policyHolder.accountancyAccount": "Accountancy account",
     "policyHolder.bankAccount": "Bank account",
     "policyHolder.paymentReference": "Payment reference",
-    "policyHolder.CreatePolicyHolder.mutationLabel": "Create Policy Holder - {code}"
+    "policyHolder.CreatePolicyHolder.mutationLabel": "Create Policy Holder - {code}",
+    "policyHolder.mandatoryFieldsEmptyError": "Fields with * are mandatory"
 }

@@ -10,6 +10,10 @@ const styles = theme => ({
     fullHeight: {
         height: "100%"
     },
+    headPanelError: {
+        color: '#801a00',
+        textAlign:'center'
+    } 
 });
 
 class PolicyHolderGeneralInfoPanel extends FormPanel {
@@ -22,40 +26,14 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
         this.paymentReferenceRegex = props.modulesManager.getConf("policyHolder", "paymentReferenceRegex", /.+/);
     }
 
-    fieldError = (field, value) => {
-        switch(field) {
-            case "code":
-            case "tradeName":
-                return !!value
-                    ? false
-                    : formatMessage(this.props.intl, "policyHolder", "mandatoryField.error");
-            case "phone":
-                return (!!value && value.match(this.phoneRegex) == null)
-                    ? formatMessage(this.props.intl, "policyHolder", "phone.error")
-                    : false;
-            case "fax":
-                return (!!value && value.match(this.faxRegex) == null)
-                    ? formatMessage(this.props.intl, "policyHolder", "fax.error")
-                    : false;
-            case "email":
-                return (!!value && value.match(this.emailRegex) == null)
-                    ? formatMessage(this.props.intl, "policyHolder", "email.error")
-                    : false;
-            case "accountancyAccount":
-                return (!!value && value.match(this.accountancyAccountRegex) == null)
-                    ? formatMessage(this.props.intl, "policyHolder", "accountancyAccount.error")
-                    : false;
-            case "paymentReference":
-                return (!!value && value.match(this.paymentReferenceRegex) == null)
-                    ? formatMessage(this.props.intl, "policyHolder", "paymentReference.error")
-                    : false;
-            default:
-                return false;
-        }
+    regexError = (field, value) => {
+        return !!value && !this[`${field}Regex`].test(value)
+            ? formatMessage(this.props.intl, "policyHolder", `${field}.error`)
+            : false;
     }
 
     render() {
-        const { classes, edited } = this.props;
+        const { classes, edited, displayHeadPanelError } = this.props;
         return (
             <Fragment>
                 <Grid container className={classes.tableTitle}>
@@ -70,6 +48,14 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     </Grid>
                 </Grid>
                 <Divider />
+                {displayHeadPanelError &&
+                    <Fragment>
+                        <div className={`${classes.item} ${classes.headPanelError}`}>
+                            <FormattedMessage module="policyHolder" id="mandatoryFieldsEmptyError" />
+                        </div>
+                        <Divider />
+                    </Fragment>
+                }
                 <Grid container className={classes.item}>
                     <Grid item xs={2} className={classes.item}>
                         <TextInput
@@ -77,7 +63,6 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             label="code"
                             required
                             value={!!edited && !!edited.code ? edited.code : ""}
-                            error={this.fieldError('code', edited.code)}
                             onChange={v => this.updateAttribute('code', v)}
                         />
                     </Grid>
@@ -87,7 +72,6 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             label="tradeName"
                             required
                             value={!!edited && !!edited.tradeName ? edited.tradeName : ""}
-                            error={this.fieldError('tradeName', edited.tradeName)}
                             onChange={v => this.updateAttribute('tradeName', v)}
                         />
                     </Grid>
@@ -95,7 +79,6 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <PublishedComponent
                             pubRef="location.DetailedLocation"
                             withNull={true}
-                            //anchor="parentLocation"
                             required
                             filterLabels={false}
                             value={!!edited ? edited.location : null}
@@ -106,7 +89,6 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <TextAreaInput
                             module="policyHolder"
                             label="address"
-                            //rows="2"
                             value={!!edited && !!edited.address ? edited.address : ""}
                             onChange={v => this.updateAttribute('address', v)}
                         />
@@ -116,7 +98,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             module="policyHolder"
                             label="phone"
                             value={!!edited && !!edited.phone ? edited.phone : ""}
-                            error={this.fieldError('phone', edited.phone)}
+                            error={this.regexError('phone', edited.phone)}
                             onChange={v => this.updateAttribute('phone', v)}
                         />
                     </Grid>
@@ -125,7 +107,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             module="policyHolder"
                             label="fax"
                             value={!!edited && !!edited.fax ? edited.fax : ""}
-                            error={this.fieldError('fax', edited.fax)}
+                            error={this.regexError('fax', edited.fax)}
                             onChange={v => this.updateAttribute('fax', v)}
                         />
                     </Grid>
@@ -134,7 +116,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             module="policyHolder"
                             label="email"
                             value={!!edited && !!edited.email ? edited.email : ""}
-                            error={this.fieldError('email', edited.email)}
+                            error={this.regexError('email', edited.email)}
                             onChange={v => this.updateAttribute('email', v)}
                         />
                     </Grid>

@@ -56,6 +56,7 @@ class PolicyHolderForm extends Component {
                     save={this._save}
                     onEditedChanged={this.onEditedChanged}
                     HeadPanel={PolicyHolderGeneralInfoPanel}
+                    displayHeadPanelError={!this.canSave()}
                 />
             </Fragment>
         )
