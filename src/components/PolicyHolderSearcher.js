@@ -23,10 +23,12 @@ class PolicyHolderSearcher extends Component {
 
     filtersToQueryParams = (state) => {
         /**
-         * location "Level" parameter introduced 
+         * Location "Level" parameter introduced 
          * in @see openimis-fe-location_js module 
          * by @see DetailedLocationFilter component
-         * has to be removed from the filter
+         * has to be removed from the filter for backend to respond correctly.
+         * In the future this parameter should be handled to filter
+         * PolicyHolders' locations with parent location
          */
         if (state.filters.hasOwnProperty('locations_Uuid')) {
             state.filters['locations_Uuid']['filter'] = state.filters['locations_Uuid']['filter'].split(',')[0];

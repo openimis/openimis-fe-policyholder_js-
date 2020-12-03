@@ -1,5 +1,5 @@
 import React from "react"
-import { Business } from "@material-ui/icons"
+import BusinessIcon from "@material-ui/icons/Business"
 import { FormattedMessage } from "@openimis/fe-core";
 import messages_en from "./translations/en.json";
 import PolicyHoldersPage from "./pages/PolicyHoldersPage";
@@ -23,7 +23,7 @@ const DEFAULT_CONFIG = {
   "insuree.MainMenu": [
     {
       text: <FormattedMessage module="policyHolder" id="menu.policyHolders" />,
-      icon: <Business />,
+      icon: <BusinessIcon />,
       route: "/" + ROUTE_POLICY_HOLDERS,
       filter: rights => rights.includes(RIGHT_POLICYHOLDER_SEARCH)
     }
