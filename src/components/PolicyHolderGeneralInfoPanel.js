@@ -9,27 +9,57 @@ const styles = theme => ({
     item: theme.paper.item,
     fullHeight: {
         height: "100%"
-    },
-    headPanelError: {
-        color: '#801a00',
-        textAlign:'center'
-    } 
+    }
 });
 
 class PolicyHolderGeneralInfoPanel extends FormPanel {
     constructor(props) {
         super(props);
-        this.phoneRegex = props.modulesManager.getConf("policyHolder", "phoneRegex", /^[0-9]*$/);
-        this.faxRegex = props.modulesManager.getConf("policyHolder", "faxRegex", /^[1-9]{8,9}$/);
-        this.emailRegex = props.modulesManager.getConf("policyHolder", "emailRegex", /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-        this.accountancyAccountRegex = props.modulesManager.getConf("policyHolder", "accountancyAccountRegex", /.+/);
-        this.paymentReferenceRegex = props.modulesManager.getConf("policyHolder", "paymentReferenceRegex", /.+/);
+        this.phoneValidation = props.modulesManager.getConf("policyHolder", "phoneRegex", {
+            "regex": /^[0-9]*$/,
+            "label": {
+                "en": formatMessage(props.intl, "policyHolder", "defaultValidation.label.en"),
+                "fr": formatMessage(props.intl, "policyHolder", "defaultValidation.label.fr"),
+            }
+        });
+        this.faxValidation = props.modulesManager.getConf("policyHolder", "faxValidation", {
+            "regex": /^[0-9]{8,9}$/,
+            "label": {
+                "en": formatMessage(props.intl, "policyHolder", "faxValidation.label.en"),
+                "fr": formatMessage(props.intl, "policyHolder", "faxValidation.label.fr"),
+            }
+        });
+        this.emailValidation = props.modulesManager.getConf("policyHolder", "emailRegex", {
+            "regex": /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            "label": {
+                "en": formatMessage(props.intl, "policyHolder", "defaultValidation.label.en"),
+                "fr": formatMessage(props.intl, "policyHolder", "defaultValidation.label.fr"),
+            }
+        });            
+        this.accountancyAccountValidation = props.modulesManager.getConf("policyHolder", "accountancyAccountRegex", {
+            "regex": /.+/,
+            "label": {
+                "en": formatMessage(props.intl, "policyHolder", "defaultValidation.label.en"),
+                "fr": formatMessage(props.intl, "policyHolder", "defaultValidation.label.fr"),
+            }
+        });
+        this.paymentReferenceValidation = props.modulesManager.getConf("policyHolder", "paymentReferenceRegex", {
+            "regex": /.+/,
+            "label": {
+                "en": formatMessage(props.intl, "policyHolder", "defaultValidation.label.en"),
+                "fr": formatMessage(props.intl, "policyHolder", "defaultValidation.label.fr"),
+            }
+        });
     }
 
     regexError = (field, value) => {
-        return !!value && !this[`${field}Regex`].test(value)
-            ? formatMessage(this.props.intl, "policyHolder", `${field}.error`)
-            : false;
+        if (!!value) {
+            let validation = this[`${field}Validation`];
+            return (!!validation && !validation.regex.test(value))
+                ? validation.label[this.props.intl.locale]
+                : false;
+        }
+        return false;
     }
 
     render() {
@@ -50,7 +80,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                 <Divider />
                 {displayHeadPanelError &&
                     <Fragment>
-                        <div className={`${classes.item} ${classes.headPanelError}`}>
+                        <div className={classes.item}>
                             <FormattedMessage module="policyHolder" id="mandatoryFieldsEmptyError" />
                         </div>
                         <Divider />

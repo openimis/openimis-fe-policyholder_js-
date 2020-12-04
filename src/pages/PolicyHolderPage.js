@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import PolicyHolderForm from "../components/PolicyHolderForm";
 import { createPolicyHolder } from "../actions"
+import { RIGHT_POLICYHOLDER_CREATE } from "../constants"
 
 const styles = theme => ({
     page: theme.page,
@@ -42,20 +43,23 @@ class PolicyHolderPage extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, rights } = this.props;
         return (
-            <div className={classes.page}>
-                <PolicyHolderForm
-                    policyHolderUuid={null}
-                    back={this.back}
-                    save={this.save}
-                />
-            </div>
+            rights.includes(RIGHT_POLICYHOLDER_CREATE) && (
+                <div className={classes.page}>
+                    <PolicyHolderForm
+                        policyHolderUuid={null}
+                        back={this.back}
+                        save={this.save}
+                    />
+                </div>
+            )
         )
     }
 }
 
 const mapStateToProps = state => ({
+    rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
     submittingMutation: state.policyHolder.submittingMutation,
     mutation: state.policyHolder.mutation
 });

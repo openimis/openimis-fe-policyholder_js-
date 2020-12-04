@@ -48,7 +48,7 @@ function reducer(
         case "POLICYHOLDER_MUTATION_ERR":
             return dispatchMutationErr(state, action);
         case "POLICYHOLDER_CREATE_POLICYHOLDER_RESP":
-            dispatchMutationResp(state, "createPolicyHolder", action);
+            return dispatchMutationResp(state, "createPolicyHolder", action);
         default:
             return state;
     }
