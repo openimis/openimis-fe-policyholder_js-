@@ -8,7 +8,8 @@ function reducer(
         errorPolicyHolders: null,
         fetchedPolicyHolders: false,
         policyHolders: [],
-        policyHoldersPageInfo: { totalCount: 0 }
+        policyHoldersPageInfo: {},
+        policyHoldersTotalCount: 0
     },
     action
 ) {
@@ -19,7 +20,8 @@ function reducer(
                 fetchingPolicyHolders: true,
                 fetchedPolicyHolders: false,
                 policyHolders: [],
-                policyHoldersPageInfo: { totalCount: 0 },
+                policyHoldersPageInfo: {},
+                policyHoldersTotalCount: 0,
                 errorPolicyHolders: null
             };
         case "POLICYHOLDER_POLICYHOLDERS_RESP":
@@ -27,8 +29,9 @@ function reducer(
                 ...state,
                 fetchingPolicyHolders: false,
                 fetchedPolicyHolders: true,
-                policyHolders: parseData(action.payload.data.healthFacilities),
-                policyHoldersPageInfo: pageInfo(action.payload.data.healthFacilities),
+                policyHolders: parseData(action.payload.data.policyHolder),
+                policyHoldersPageInfo: pageInfo(action.payload.data.policyHolder),
+                policyHoldersTotalCount: action.payload.data.policyHolder.totalCount,
                 errorPolicyHolders: formatGraphQLError(action.payload)
             };
         case "POLICYHOLDER_POLICYHOLDERS_ERR":

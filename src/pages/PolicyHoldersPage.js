@@ -3,6 +3,8 @@ import PolicyHolderSearcher from "../components/PolicyHolderSearcher";
 import { withModulesManager, formatMessage } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
+import { RIGHT_POLICYHOLDER_SEARCH } from "../constants"
 
 const styles = theme => ({
     page: theme.page,
@@ -14,13 +16,19 @@ class PolicyHoldersPage extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, rights } = this.props;
         return (
-            <div className={classes.page}>
-                <PolicyHolderSearcher />
-            </div>
+            rights.includes(RIGHT_POLICYHOLDER_SEARCH) && (
+                <div className={classes.page}>
+                    <PolicyHolderSearcher />
+                </div>
+            )
         )
     }
 }
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(PolicyHoldersPage))));
+const mapStateToProps = state => ({
+    rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : []
+});
+
+export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, null)(PolicyHoldersPage)))));
