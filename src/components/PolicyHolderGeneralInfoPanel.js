@@ -15,39 +15,39 @@ const styles = theme => ({
 class PolicyHolderGeneralInfoPanel extends FormPanel {
     constructor(props) {
         super(props);
-        this.phoneValidation = props.modulesManager.getConf("policyHolder", "phoneRegex", {
+        this.phoneValidation = props.modulesManager.getConf("policyHolder", "phoneValidation", {
             "regex": /^[0-9]*$/,
-            "label": {
-                "en": formatMessage(props.intl, "policyHolder", "defaultValidation.label.en"),
-                "fr": formatMessage(props.intl, "policyHolder", "defaultValidation.label.fr"),
+            "regexMsg": {
+                "en": formatMessage(props.intl, "policyHolder", "phoneValidation.regexMsg.en"),
+                "fr": formatMessage(props.intl, "policyHolder", "phoneValidation.regexMsg.fr"),
             }
         });
         this.faxValidation = props.modulesManager.getConf("policyHolder", "faxValidation", {
             "regex": /^[0-9]{8,9}$/,
-            "label": {
-                "en": formatMessage(props.intl, "policyHolder", "faxValidation.label.en"),
-                "fr": formatMessage(props.intl, "policyHolder", "faxValidation.label.fr"),
+            "regexMsg": {
+                "en": formatMessage(props.intl, "policyHolder", "faxValidation.regexMsg.en"),
+                "fr": formatMessage(props.intl, "policyHolder", "faxValidation.regexMsg.fr"),
             }
         });
-        this.emailValidation = props.modulesManager.getConf("policyHolder", "emailRegex", {
+        this.emailValidation = {
             "regex": /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            "label": {
-                "en": formatMessage(props.intl, "policyHolder", "defaultValidation.label.en"),
-                "fr": formatMessage(props.intl, "policyHolder", "defaultValidation.label.fr"),
+            "regexMsg": {
+                "en": formatMessage(props.intl, "policyHolder", "emailValidation.regexMsg.en"),
+                "fr": formatMessage(props.intl, "policyHolder", "emailValidation.regexMsg.fr"),
             }
-        });            
-        this.accountancyAccountValidation = props.modulesManager.getConf("policyHolder", "accountancyAccountRegex", {
+        };      
+        this.accountancyAccountValidation = props.modulesManager.getConf("policyHolder", "accountancyAccountValidation", {
             "regex": /.+/,
-            "label": {
-                "en": formatMessage(props.intl, "policyHolder", "defaultValidation.label.en"),
-                "fr": formatMessage(props.intl, "policyHolder", "defaultValidation.label.fr"),
+            "regexMsg": {
+                "en": formatMessage(props.intl, "policyHolder", "accountancyAccountValidation.regexMsg.en"),
+                "fr": formatMessage(props.intl, "policyHolder", "accountancyAccountValidation.regexMsg.fr"),
             }
         });
-        this.paymentReferenceValidation = props.modulesManager.getConf("policyHolder", "paymentReferenceRegex", {
+        this.paymentReferenceValidation = props.modulesManager.getConf("policyHolder", "paymentReferenceValidation", {
             "regex": /.+/,
-            "label": {
-                "en": formatMessage(props.intl, "policyHolder", "defaultValidation.label.en"),
-                "fr": formatMessage(props.intl, "policyHolder", "defaultValidation.label.fr"),
+            "regexMsg": {
+                "en": formatMessage(props.intl, "policyHolder", "paymentReferenceValidation.regexMsg.en"),
+                "fr": formatMessage(props.intl, "policyHolder", "paymentReferenceValidation.regexMsg.fr"),
             }
         });
     }
@@ -55,8 +55,8 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
     regexError = (field, value) => {
         if (!!value) {
             let validation = this[`${field}Validation`];
-            return (!!validation && !validation.regex.test(value))
-                ? validation.label[this.props.intl.locale]
+            return (!!validation && !validation['regex'].test(value))
+                ? validation['regexMsg'][this.props.intl.locale]
                 : false;
         }
         return false;
@@ -181,6 +181,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             module="policyHolder"
                             label="accountancyAccount"
                             value={!!edited && !!edited.accountancyAccount ? edited.accountancyAccount : ""}
+                            error={this.regexError('accountancyAccount', edited.accountancyAccount)}
                             onChange={v => this.updateAttribute('accountancyAccount', v)}
                         />
                     </Grid>
@@ -197,6 +198,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             module="policyHolder"
                             label="paymentReference"
                             value={!!edited && !!edited.paymentReference ? edited.paymentReference : ""}
+                            error={this.regexError('paymentReference', edited.paymentReference)}
                             onChange={v => this.updateAttribute('paymentReference', v)}
                         />
                     </Grid>

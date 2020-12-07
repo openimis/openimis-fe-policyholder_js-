@@ -33,8 +33,14 @@
     "policyHolder.mandatoryFieldsEmptyError": "* These fields are required",
     "policyHolder.savePolicyHolderButton.tooltip.enabled": "Save changes",
     "policyHolder.savePolicyHolderButton.tooltip.disabled": "Please fill General Information fields first",
-    "policyHolder.faxValidation.label.en": "Please enter an 8 or 9 digit number",
-    "policyHolder.faxValidation.label.fr": "Veuiillez entrer un numero à 8 ou 9 chiffres",
-    "policyHolder.defaultValidation.label.en": "Invalid value",
-    "policyHolder.defaultValidation.label.fr": "Invalid value"
+    "policyHolder.phoneValidation.regexMsg.en": "Invalid phone number",
+    "policyHolder.phoneValidation.regexMsg.fr": "Numéro de téléphone invalide",
+    "policyHolder.faxValidation.regexMsg.en": "Invalid fax number",
+    "policyHolder.faxValidation.regexMsg.fr": "Numéro de fax invalide",
+    "policyHolder.emailValidation.regexMsg.en": "Invalid email",
+    "policyHolder.emailValidation.regexMsg.fr": "Couriel invalide",
+    "policyHolder.paymentReferenceValidation.regexMsg.en": "Invalid payment reference",
+    "policyHolder.paymentReferenceValidation.regexMsg.fr": "Référence de payement invalide",
+    "policyHolder.accountancyAccountValidation.regexMsg.en": "Invalid accountancy account",
+    "policyHolder.accountancyAccountValidation.regexMsg.fr": "Numéro de compte comptable invalide"
 }
