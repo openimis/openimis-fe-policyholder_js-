@@ -8,7 +8,7 @@ It is dedicated to be deployed as a module of [openimis-fe_js](https://github.co
 None
 
 ## Other Contributions
-* `core.Router`: registering `policyHolders` routes in openIMIS client-side router
+* `core.Router`: registering `policyHolders`, `policyHolders/policyHolder` routes in openIMIS client-side router
 * `insuree.MainMenu`:
     
     **Policy Holders** (`menu.policyHolders` translation key)
@@ -22,6 +22,8 @@ None
 
 ## Dispatched Redux Actions
 * `POLICYHOLDER_POLICYHOLDERS_{REQ|RESP|ERR}`, fetching policy holders (as triggered by the searcher)
+* `POLICYHOLDER_MUTATION_{REQ|ERR}`, sending a mutation
+* `POLICYHOLDER_CREATE_POLICYHOLDER_RESP`, receiving a result of create Policy Holder mutation
 
 ## Other Modules Listened Redux Actions
 None
@@ -32,7 +34,8 @@ None
 ## Configurations Options
 * `policyHolderFilter.rowsPerPageOptions`: pagination page size options in PolicyHolderSearcher component (Default: `[10, 20, 50, 100]`)
 * `policyHolderFilter.defaultPageSize`: pagination pre-selected page size options in PolicyHolderSearcher component (Default: `10`)
-* `policyHolderFilter.legalFormOptions`: options for LegalFormPicker component (Default: 
+* `policyHolderFilter.legalFormOptions`: options for LegalFormPicker component (Default:
+    ```json
     [{
         "value": "1", 
         "label": {
@@ -63,8 +66,11 @@ None
             "en": "Union",
             "fr":"Syndicat"
         }
-    }])
+    }]
+    ```
+)
 * `policyHolderFilter.activityCodeOptions`: options for ActivityCodePicker component (Default:
+    ```json
     [{   
         "value": "1", 
         "label": {
@@ -95,4 +101,50 @@ None
             "en": "Services",
             "fr":"Services"
         }
-    }])
+    }]
+    ```
+)
+* `policyHolderForm.phoneValidation`: Phone field validation (regex + error message when regex does not match) (Default:
+    ```json
+    "phoneValidation": {
+        "regex": /^[0-9]*$/,
+        "regexMsg": {
+            "en": "Invalid phone number",
+            "fr": "Numéro de téléphone invalide"
+        }
+    }
+    ```
+)
+* `policyHolderForm.faxValidation`: Fax field validation (regex + error message when regex does not match) (Default:
+    ```json
+    "faxValidation", {
+        "regex": /^[0-9]{8,9}$/,
+        "regexMsg": {
+            "en": "Invalid fax number",
+            "fr": "Numéro de fax invalide"
+        }
+    }
+    ```
+)
+* `policyHolderForm.paymentReferenceValidation`: PaymentReference field validation (regex + error message when regex does not match) (Default:
+    ```json
+    "paymentReferenceValidation", {
+        "regex": /.+/,
+        "regexMsg": {
+            "en": "Invalid payment reference",
+            "fr": "Référence de payement invalide"
+        }
+    }
+    ```
+)
+* `policyHolderForm.accountancyAccountValidation`: AccountancyAccount field validation (regex + error message when regex does not match) (Default:
+    ```json
+    "accountancyAccountValidation", {
+        "regex": /.+/,
+        "regexMsg": {
+            "en": "Invalid accountancy account",
+            "fr": "Numéro de compte comptable invalide"
+        }
+    }
+    ```
+)

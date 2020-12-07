@@ -1,5 +1,6 @@
 import {
-    formatServerError, formatGraphQLError, parseData, pageInfo
+    formatServerError, formatGraphQLError, parseData, pageInfo,
+    dispatchMutationReq, dispatchMutationResp, dispatchMutationErr
 } from "@openimis/fe-core";
 
 function reducer(
@@ -9,7 +10,9 @@ function reducer(
         fetchedPolicyHolders: false,
         policyHolders: [],
         policyHoldersPageInfo: {},
-        policyHoldersTotalCount: 0
+        policyHoldersTotalCount: 0,
+        submittingMutation: false,
+        mutation: {}
     },
     action
 ) {
@@ -39,7 +42,13 @@ function reducer(
                 ...state,
                 fetchingPolicyHolders: false,
                 errorPolicyHolders: formatServerError(action.payload)
-            }
+            };
+        case "POLICYHOLDER_MUTATION_REQ":
+            return dispatchMutationReq(state, action);
+        case "POLICYHOLDER_MUTATION_ERR":
+            return dispatchMutationErr(state, action);
+        case "POLICYHOLDER_CREATE_POLICYHOLDER_RESP":
+            return dispatchMutationResp(state, "createPolicyHolder", action);
         default:
             return state;
     }
