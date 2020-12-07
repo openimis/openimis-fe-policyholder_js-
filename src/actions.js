@@ -3,7 +3,7 @@ import {
 } from "@openimis/fe-core";
 
 const POLICYHOLDER_FULL_PROJECTION = mm => [
-    "code", "tradeName", "location" + mm.getProjection("location.Location.FlatProjection"),
+    "code", "tradeName", "locations" + mm.getProjection("location.Location.FlatProjection"),
     "address", "legalForm", "activityCode", "dateValidFrom", "dateValidTo"
 ];
 
@@ -27,8 +27,8 @@ function formatPolicyHolderGQL(policyHolder) {
         ${!!policyHolder.fax ? `fax: "${formatGQLString(policyHolder.fax)}"` : ""}
         ${!!policyHolder.email ? `email: "${formatGQLString(policyHolder.email)}"` : ""}
         ${!!policyHolder.contactName ? `contactName: ${JSON.stringify(policyHolder.contactName)}` : ""}
-        ${!!policyHolder.legalForm ? `legalForm: "${policyHolder.legalForm}"` : ""}
-        ${!!policyHolder.activityCode ? `activityCode: "${policyHolder.activityCode}"` : ""}
+        ${!!policyHolder.legalForm ? `legalForm: ${policyHolder.legalForm}` : ""}
+        ${!!policyHolder.activityCode ? `activityCode: ${policyHolder.activityCode}` : ""}
         ${!!policyHolder.accountancyAccount ? `accountancyAccount: "${formatGQLString(policyHolder.accountancyAccount)}"` : ""}
         ${!!policyHolder.bankAccount ? `bankAccount: ${JSON.stringify(policyHolder.bankAccount)}` : ""}
         ${!!policyHolder.paymentReference ? `paymentReference: "${formatGQLString(policyHolder.paymentReference)}"` : ""}
