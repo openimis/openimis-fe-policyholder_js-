@@ -15,14 +15,14 @@ const styles = theme => ({
 class PolicyHolderGeneralInfoPanel extends FormPanel {
     constructor(props) {
         super(props);
-        this.phoneValidation = props.modulesManager.getConf("policyHolder", "phoneValidation", {
+        this.phoneValidation = props.modulesManager.getConf("policyHolder", "policyHolderForm.phoneValidation", {
             "regex": /^[0-9]*$/,
             "regexMsg": {
                 "en": formatMessage(props.intl, "policyHolder", "phoneValidation.regexMsg.en"),
                 "fr": formatMessage(props.intl, "policyHolder", "phoneValidation.regexMsg.fr"),
             }
         });
-        this.faxValidation = props.modulesManager.getConf("policyHolder", "faxValidation", {
+        this.faxValidation = props.modulesManager.getConf("policyHolder", "policyHolderForm.faxValidation", {
             "regex": /^[0-9]{8,9}$/,
             "regexMsg": {
                 "en": formatMessage(props.intl, "policyHolder", "faxValidation.regexMsg.en"),
@@ -36,14 +36,14 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                 "fr": formatMessage(props.intl, "policyHolder", "emailValidation.regexMsg.fr"),
             }
         };      
-        this.accountancyAccountValidation = props.modulesManager.getConf("policyHolder", "accountancyAccountValidation", {
+        this.accountancyAccountValidation = props.modulesManager.getConf("policyHolder", "policyHolderForm.accountancyAccountValidation", {
             "regex": /.+/,
             "regexMsg": {
                 "en": formatMessage(props.intl, "policyHolder", "accountancyAccountValidation.regexMsg.en"),
                 "fr": formatMessage(props.intl, "policyHolder", "accountancyAccountValidation.regexMsg.fr"),
             }
         });
-        this.paymentReferenceValidation = props.modulesManager.getConf("policyHolder", "paymentReferenceValidation", {
+        this.paymentReferenceValidation = props.modulesManager.getConf("policyHolder", "policyHolderForm.paymentReferenceValidation", {
             "regex": /.+/,
             "regexMsg": {
                 "en": formatMessage(props.intl, "policyHolder", "paymentReferenceValidation.regexMsg.en"),

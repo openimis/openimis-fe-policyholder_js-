@@ -13,7 +13,7 @@ export function fetchPolicyHolders(mm, prms) {
         prms,
         POLICYHOLDER_FULL_PROJECTION(mm)
     );
-    return graphql(payload, "POLICYHOLDER_POLICYHOLDERS")
+    return graphql(payload, "POLICYHOLDER_POLICYHOLDERS");
 }
 
 function formatPolicyHolderGQL(policyHolder) {
@@ -34,7 +34,7 @@ function formatPolicyHolderGQL(policyHolder) {
         ${!!policyHolder.paymentReference ? `paymentReference: "${formatGQLString(policyHolder.paymentReference)}"` : ""}
         ${!!policyHolder.dateValidFrom ? `dateValidFrom: "${policyHolder.dateValidFrom}"` : ""}
         ${!!policyHolder.dateValidTo ? `dateValidTo: "${policyHolder.dateValidTo}"` : ""}
-    `
+    `;
 }
 
 export function createPolicyHolder(mm, policyHolder, clientMutationLabel) {
@@ -48,5 +48,5 @@ export function createPolicyHolder(mm, policyHolder, clientMutationLabel) {
             clientMutationLabel,
             requestedDateTime
         }
-    )
+    );
 }
