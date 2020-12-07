@@ -34,7 +34,7 @@ class PolicyHoldersPage extends Component {
                                 <AddIcon />
                             </Fab>
                         </div>,
-                        formatMessage(intl, "policyHolder", "addNewPolicyHolderTooltip")
+                        formatMessage(intl, "policyHolder", "createNewPolicyHolder.tooltip")
                     )}
                 </div>
             )

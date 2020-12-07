@@ -15,7 +15,7 @@
     "policyHolder.isDeleted": "Show deleted",
     "policyHolder.policyHolders.searcher.results.title": "{policyHoldersTotalCount} Policy Holders Found",
     "policyHolder.actionButtonColumnHeader": " ",
-    "policyHolder.addNewPolicyHolderTooltip": "Add new Policy Holder",
+    "policyHolder.createNewPolicyHolder.tooltip": "Create new Policy Holder",
     "policyHolder.policyHolder.page.title": "Policy Holder {label}",
     "policyHolder.generalInfoPanel.title": "General Information",
     "policyHolder.address": "Address",
