@@ -34,7 +34,7 @@ function reducer(
                 fetchedPolicyHolders: true,
                 policyHolders: parseData(action.payload.data.policyHolder),
                 policyHoldersPageInfo: pageInfo(action.payload.data.policyHolder),
-                policyHoldersTotalCount: action.payload.data.policyHolder.totalCount,
+                policyHoldersTotalCount: !!action.payload.data.policyHolder ? action.payload.data.policyHolder.totalCount : null,
                 errorPolicyHolders: formatGraphQLError(action.payload)
             };
         case "POLICYHOLDER_POLICYHOLDERS_ERR":

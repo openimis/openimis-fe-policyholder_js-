@@ -78,7 +78,7 @@ class PolicyHolderFilter extends Component {
                         withNull={true}
                         filters={filters}
                         onChangeFilters={onChangeFilters}
-                        anchor="locations_Uuid"
+                        anchor="parentLocation"
                     />
                 </Grid>
                 <Grid item xs={3} className={classes.item}>

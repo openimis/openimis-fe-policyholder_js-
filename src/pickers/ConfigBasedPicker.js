@@ -38,7 +38,7 @@ export class ConfigBasedPicker extends Component {
         return (
             <SelectInput
                 module={module}
-                label={!!disabled ? ' ' : label}
+                label={!!disabled ? 'emptyLabel' : label}
                 options={options}
                 value={value}
                 onChange={this._onChange}
