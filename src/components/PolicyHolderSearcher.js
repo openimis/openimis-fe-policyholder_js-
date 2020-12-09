@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from "react"
 import { injectIntl } from 'react-intl';
-import { withModulesManager, Searcher, formatMessageWithValues, formatDateFromISO, PublishedComponent } from "@openimis/fe-core";
+import { withModulesManager, Searcher, formatMessage, formatMessageWithValues, formatDateFromISO, PublishedComponent } from "@openimis/fe-core";
 import PolicyHolderFilter from "./PolicyHolderFilter";
 import { fetchPolicyHolders } from "../actions"
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Tooltip } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import TabIcon from '@material-ui/icons/Tab';
 
 class PolicyHolderSearcher extends Component {
     constructor(props) {
@@ -50,13 +49,12 @@ class PolicyHolderSearcher extends Component {
             "policyHolder.dateValidFrom",
             "policyHolder.dateValidTo",
             "policyHolder.emptyLabel",
-            "policyHolder.emptyLabel",
             "policyHolder.emptyLabel"
         ];
     }
 
     itemFormatters = () => {
-        const { intl, modulesManager } = this.props;
+        const { intl, modulesManager, onDoubleClick, policyHolderPageLink } = this.props;
         return [
             policyHolder => !!policyHolder.code && policyHolder.tradeName
                 ? `${policyHolder.code} ${policyHolder.tradeName}` : "",
@@ -88,9 +86,16 @@ class PolicyHolderSearcher extends Component {
             policyHolder => !!policyHolder.dateValidTo
                 ? formatDateFromISO(modulesManager, intl, policyHolder.dateValidTo)
                 : "",
-            policyHolder => <IconButton disabled><EditIcon /></IconButton>,
-            policyHolder => <IconButton disabled><DeleteIcon /></IconButton>,
-            policyHolder => <IconButton disabled><TabIcon /></IconButton>
+            policyHolder => (
+                <Tooltip title={formatMessage(this.props.intl, "policyHolder", "editButton.tooltip")}>
+                    <IconButton 
+                        href={policyHolderPageLink(policyHolder)} 
+                        onClick={e => e.stopPropagation() && !policyHolder.clientMutationId && onDoubleClick(policyHolder)}>
+                        <EditIcon />
+                    </IconButton>
+                </Tooltip>
+            ),
+            policyHolder => <IconButton disabled><DeleteIcon /></IconButton>
         ]
     }
 
@@ -106,7 +111,8 @@ class PolicyHolderSearcher extends Component {
     }
 
     render() {
-        const { intl, fetchingPolicyHolders, fetchedPolicyHolders, errorPolicyHolders, policyHolders, policyHoldersPageInfo, policyHoldersTotalCount } = this.props;
+        const { intl, fetchingPolicyHolders, fetchedPolicyHolders, errorPolicyHolders, policyHolders, policyHoldersPageInfo,
+            policyHoldersTotalCount, onDoubleClick } = this.props;
         return (
             <Fragment>
                 <Searcher
@@ -126,6 +132,7 @@ class PolicyHolderSearcher extends Component {
                     rowsPerPageOptions={this.rowsPerPageOptions}
                     defaultPageSize={this.defaultPageSize}
                     defaultOrderBy="code"
+                    onDoubleClick={policyHolder => !policyHolder.clientMutationId && onDoubleClick(policyHolder)}
                 />
             </Fragment>
         )

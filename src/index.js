@@ -23,7 +23,7 @@ const DEFAULT_CONFIG = {
   ],
   "core.Router": [
     { path: ROUTE_POLICY_HOLDERS, component: PolicyHoldersPage },
-    { path: ROUTE_POLICY_HOLDER, component: PolicyHolderPage }
+    { path: ROUTE_POLICY_HOLDER  + "/:policyholder_id?", component: PolicyHolderPage }
   ],
   "insuree.MainMenu": [
     {

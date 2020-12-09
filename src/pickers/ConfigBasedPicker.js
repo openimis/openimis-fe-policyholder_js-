@@ -19,8 +19,7 @@ export class ConfigBasedPicker extends Component {
     };
 
     render() {
-        const { intl, module, label, configOptions, disabled } = this.props;
-        const { value } = this.state;
+        const { intl, module, label, configOptions, disabled, value } = this.props;
         const options = [{
             value: null,
             label: formatMessage(
@@ -46,4 +45,5 @@ export class ConfigBasedPicker extends Component {
         );
     }
 }
+
 export default withModulesManager(injectIntl(ConfigBasedPicker));

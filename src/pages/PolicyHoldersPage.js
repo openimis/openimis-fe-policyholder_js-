@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { RIGHT_POLICYHOLDER_SEARCH } from "../constants"
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import { decodeId } from "@openimis/fe-core";
 
 const styles = theme => ({
     page: theme.page,
@@ -22,19 +23,30 @@ class PolicyHoldersPage extends Component {
         historyPush(this.props.modulesManager, this.props.history, "policyHolder.route.policyHolder");
     }
 
+    policyHolderPageLink = policyHolder => {
+        return `${this.props.modulesManager.getRef("policyHolder.route.policyHolder")}${"/" + decodeId(policyHolder.id)}`;
+    }
+
+    onDoubleClick = (policyHolder, newTab = false) => {
+        historyPush(this.props.modulesManager, this.props.history, "policyHolder.route.policyHolder", [decodeId(policyHolder.id)], newTab);
+    }
+
     render() {
         const { intl, classes, rights } = this.props;
         return (
             rights.includes(RIGHT_POLICYHOLDER_SEARCH) && (
                 <div className={classes.page}>
-                    <PolicyHolderSearcher />
+                    <PolicyHolderSearcher
+                        onDoubleClick={this.onDoubleClick}
+                        policyHolderPageLink={this.policyHolderPageLink}
+                    />
                     {withTooltip(
                         <div className={classes.fab} >
                             <Fab color="primary" onClick={this.onAdd}>
                                 <AddIcon />
                             </Fab>
                         </div>,
-                        formatMessage(intl, "policyHolder", "createNewPolicyHolder.tooltip")
+                        formatMessage(intl, "policyHolder", "createButton.tooltip")
                     )}
                 </div>
             )
