@@ -12,7 +12,11 @@ function reducer(
         policyHoldersPageInfo: {},
         policyHoldersTotalCount: 0,
         submittingMutation: false,
-        mutation: {}
+        mutation: {},
+        fetchingPolicyHolder: false,
+        errorPolicyHolder: null,
+        fetchedPolicyHolder: false,
+        policyHolder: {}
     },
     action
 ) {
@@ -43,12 +47,37 @@ function reducer(
                 fetchingPolicyHolders: false,
                 errorPolicyHolders: formatServerError(action.payload)
             };
+        case 'POLICYHOLDER_POLICYHOLDER_REQ':
+            return {
+                ...state,
+                fetchingPolicyHolder: true,
+                fetchedPolicyHolder: false,
+                policyHolder: null,
+                errorPolicyHolder: null,
+            };
+        case 'POLICYHOLDER_POLICYHOLDER_RESP':
+            var policyHolders = parseData(action.payload.data.policyHolder);
+            return {
+                ...state,
+                fetchingPolicyHolder: false,
+                fetchedPolicyHolder: true,
+                policyHolder: (!!policyHolders && policyHolders.length > 0) ? policyHolders[0] : null,
+                errorPolicyHolder: formatGraphQLError(action.payload)
+            };
+        case 'POLICYHOLDER_POLICYHOLDER_ERR':
+            return {
+                ...state,
+                fetchingPolicyHolder: false,
+                errorPolicyHolder: formatServerError(action.payload)
+            };
         case "POLICYHOLDER_MUTATION_REQ":
             return dispatchMutationReq(state, action);
         case "POLICYHOLDER_MUTATION_ERR":
             return dispatchMutationErr(state, action);
         case "POLICYHOLDER_CREATE_POLICYHOLDER_RESP":
             return dispatchMutationResp(state, "createPolicyHolder", action);
+        case "POLICYHOLDER_UPDATE_POLICYHOLDER_RESP":
+            return dispatchMutationResp(state, "updatePolicyHolder", action);
         default:
             return state;
     }

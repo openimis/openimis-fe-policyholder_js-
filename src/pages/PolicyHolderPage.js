@@ -1,34 +1,35 @@
 import React, { Component } from "react"
-import { withModulesManager, formatMessage, formatMessageWithValues, withHistory, historyPush, journalize } from "@openimis/fe-core";
+import { withModulesManager, formatMessageWithValues, withHistory, historyPush } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import PolicyHolderForm from "../components/PolicyHolderForm";
-import { createPolicyHolder } from "../actions"
-import { RIGHT_POLICYHOLDER_CREATE } from "../constants"
+import { createPolicyHolder, updatePolicyHolder } from "../actions"
+import { RIGHT_POLICYHOLDER_CREATE, RIGHT_POLICYHOLDER_UPDATE } from "../constants"
 
 const styles = theme => ({
     page: theme.page,
 });
 
 class PolicyHolderPage extends Component {
-    componentDidMount() {
-        document.title = formatMessage(this.props.intl, "policyHolder", "policyHolders.page.title");
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.submittingMutation && !this.props.submittingMutation) {
-            this.props.journalize(this.props.mutation);
-        }
-    }
-
     back = () => {
         historyPush(this.props.modulesManager, this.props.history, "policyHolder.route.policyHolders")
     }
 
     save = (policyHolder) => {
-        if (!policyHolder.uuid) {
+        if (!!policyHolder.id) {
+            this.props.updatePolicyHolder(
+                this.props.modulesManager,
+                policyHolder,
+                formatMessageWithValues(
+                    this.props.intl,
+                    "policyHolder",
+                    "UpdatePolicyHolder.mutationLabel",
+                    { label: this.titleParams(policyHolder).label }
+                )
+            );
+        } else {
             this.props.createPolicyHolder(
                 this.props.modulesManager,
                 policyHolder,
@@ -36,21 +37,36 @@ class PolicyHolderPage extends Component {
                     this.props.intl,
                     "policyHolder",
                     "CreatePolicyHolder.mutationLabel",
-                    { code: !!policyHolder.code ? policyHolder.code : "" }
+                    { label: this.titleParams(policyHolder).label }
                 )
             );
         }
     }
 
+    titleParams = (policyHolder) => {
+        var params = { label: null };
+        if (!!policyHolder.code && !!policyHolder.tradeName) {
+            params.label = `${policyHolder.code} - ${policyHolder.tradeName}`
+        } else {
+            if (!!policyHolder.code) {
+                params.label = `${policyHolder.code}`;
+            } else if (!!policyHolder.tradeName) {
+                params.label = `${policyHolder.tradeName}`;
+            }
+        }
+        return params;
+    }
+
     render() {
-        const { classes, rights } = this.props;
+        const { classes, rights, policyHolderId } = this.props;
         return (
-            rights.includes(RIGHT_POLICYHOLDER_CREATE) && (
+            rights.includes(RIGHT_POLICYHOLDER_CREATE) && rights.includes(RIGHT_POLICYHOLDER_UPDATE) && (
                 <div className={classes.page}>
                     <PolicyHolderForm
-                        policyHolderUuid={null}
+                        policyHolderId={policyHolderId}
                         back={this.back}
                         save={this.save}
+                        titleParams={this.titleParams}
                     />
                 </div>
             )
@@ -58,14 +74,13 @@ class PolicyHolderPage extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, props) => ({
     rights: !!state.core && !!state.core.user && !!state.core.user.i_user ? state.core.user.i_user.rights : [],
-    submittingMutation: state.policyHolder.submittingMutation,
-    mutation: state.policyHolder.mutation
+    policyHolderId: props.match.params.policyholder_id,
 });
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ createPolicyHolder, journalize }, dispatch);
+    return bindActionCreators({ createPolicyHolder, updatePolicyHolder }, dispatch);
 };
 
 export default withHistory(withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PolicyHolderPage))))));

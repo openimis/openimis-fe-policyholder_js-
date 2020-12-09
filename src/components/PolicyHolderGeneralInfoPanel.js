@@ -52,6 +52,22 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
         });
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this._componentDidUpdate(prevProps, prevState, snapshot);
+        const { edited } = this.props;
+        if (prevProps.edited !== edited) {
+            let isFormValid = true;
+            if (!!this.regexError('phone', edited.phone)
+                || !!this.regexError('fax', edited.fax)
+                || !!this.regexError('email', edited.email)
+                || !!this.regexError('accountancyAccount', edited.accountancyAccount)
+                || !!this.regexError('paymentReference', edited.paymentReference)) {
+                isFormValid = false;
+            }
+            this.props.onValidation(isFormValid);
+        }
+    }
+
     regexError = (field, value) => {
         if (!!value) {
             let validation = this[`${field}Validation`];
@@ -94,6 +110,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             required
                             value={!!edited && !!edited.code ? edited.code : ""}
                             onChange={v => this.updateAttribute('code', v)}
+                            readOnly={!!edited && !!edited.id ? true : false}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -111,8 +128,8 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             withNull={true}
                             required
                             filterLabels={false}
-                            value={!!edited ? edited.location : null}
-                            onChange={v => this.updateAttribute('location', v)}
+                            value={!!edited ? edited.locations : null}
+                            onChange={v => this.updateAttribute('locations', v)}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -210,6 +227,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             required
                             value={!!edited && !!edited.dateValidFrom ? edited.dateValidFrom : null}
                             onChange={v => this.updateAttribute('dateValidFrom', v)}
+                            readOnly={!!edited && !!edited.id ? true : false}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
