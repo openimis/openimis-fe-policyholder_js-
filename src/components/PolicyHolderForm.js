@@ -27,7 +27,7 @@ class PolicyHolderForm extends Component {
         document.title = formatMessageWithValues(this.props.intl, "policyHolder", "policyHolder.page.title", { label: "" })
         if (!!this.props.policyHolderId) {
             this.setState(
-                { policyHolderId: this.props.policyHolderId },
+                (state, props) => ({ policyHolderId: props.policyHolderId }),
                 () => this.props.fetchPolicyHolder(this.props.modulesManager, this.props.policyHolderId)
             )
         }
@@ -36,7 +36,7 @@ class PolicyHolderForm extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.fetchedPolicyHolder !== this.props.fetchedPolicyHolder && !!this.props.fetchedPolicyHolder) {
             this.setState(
-                { policyHolder: this.props.policyHolder, policyHolderId: this.props.policyHolderId },
+                (state, props) => ({ policyHolder: props.policyHolder, policyHolderId: props.policyHolderId }),
                 () => document.title = formatMessageWithValues(this.props.intl, "policyHolder", "policyHolder.page.title", { label: this.titleParams().label })
             );
         }
