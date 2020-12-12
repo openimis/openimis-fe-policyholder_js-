@@ -52,7 +52,7 @@ function formatPolicyHolderGQL(policyHolder) {
     `;
 }
 
-export function createPolicyHolder(mm, policyHolder, clientMutationLabel) {
+export function createPolicyHolder(policyHolder, clientMutationLabel) {
     let mutation = formatMutation("createPolicyHolder", formatPolicyHolderGQL(policyHolder), clientMutationLabel);
     var requestedDateTime = new Date();
     return graphql(
@@ -66,12 +66,27 @@ export function createPolicyHolder(mm, policyHolder, clientMutationLabel) {
     );
 }
 
-export function updatePolicyHolder(mm, policyHolder, clientMutationLabel) {
+export function updatePolicyHolder(policyHolder, clientMutationLabel) {
     let mutation = formatMutation("updatePolicyHolder", formatPolicyHolderGQL(policyHolder), clientMutationLabel);
     var requestedDateTime = new Date();
     return graphql(
         mutation.payload,
         ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_UPDATE_POLICYHOLDER_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}
+
+export function deletePolicyHolder(policyHolder, clientMutationLabel, clientMutationDetails = null) {
+    let policyHolderUuids = `uuids: ["${decodeId(policyHolder.id)}"]`;
+    let mutation = formatMutation("deletePolicyHolder", policyHolderUuids, clientMutationLabel, clientMutationDetails);
+    var requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_DELETE_POLICYHOLDER_RESP", "POLICYHOLDER_MUTATION_ERR"],
         {
             clientMutationId: mutation.clientMutationId,
             clientMutationLabel,

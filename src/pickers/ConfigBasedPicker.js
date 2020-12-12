@@ -8,11 +8,7 @@ export class ConfigBasedPicker extends Component {
         const { intl, module, label, configOptions, disabled, value, onChange } = this.props;
         const options = [{
             value: null,
-            label: formatMessage(
-                this.props.intl,
-                this.props.module,
-                `${this.props.label}.null`
-            )
+            label: formatMessage(intl, module, `${label}.null`)
         }];
         if (!!configOptions) {
             options.push(...configOptions.map(option => ({
