@@ -4,7 +4,7 @@ import { withModulesManager, formatMessage, withTooltip, historyPush } from "@op
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { RIGHT_POLICYHOLDER_SEARCH } from "../constants"
+import { RIGHT_POLICYHOLDER_SEARCH, RIGHT_POLICYHOLDER_CREATE, RIGHT_POLICYHOLDER_UPDATE } from "../constants"
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { decodeId } from "@openimis/fe-core";
@@ -28,7 +28,10 @@ class PolicyHoldersPage extends Component {
     }
 
     onDoubleClick = (policyHolder, newTab = false) => {
-        historyPush(this.props.modulesManager, this.props.history, "policyHolder.route.policyHolder", [decodeId(policyHolder.id)], newTab);
+        const { rights, modulesManager, history } = this.props;
+        if (rights.includes(RIGHT_POLICYHOLDER_UPDATE)) {
+            historyPush(modulesManager, history, "policyHolder.route.policyHolder", [decodeId(policyHolder.id)], newTab);
+        }
     }
 
     render() {
@@ -39,8 +42,9 @@ class PolicyHoldersPage extends Component {
                     <PolicyHolderSearcher
                         onDoubleClick={this.onDoubleClick}
                         policyHolderPageLink={this.policyHolderPageLink}
+                        rights={rights}
                     />
-                    {withTooltip(
+                    {rights.includes(RIGHT_POLICYHOLDER_CREATE) && withTooltip(
                         <div className={classes.fab} >
                             <Fab color="primary" onClick={this.onAdd}>
                                 <AddIcon />

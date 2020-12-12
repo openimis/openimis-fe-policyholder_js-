@@ -17,6 +17,7 @@
     "policyHolder.emptyLabel": " ",
     "policyHolder.createButton.tooltip": "Create new Policy Holder",
     "policyHolder.editButton.tooltip": "Edit",
+    "policyHolder.deleteButton.tooltip": "Delete",
     "policyHolder.policyHolder.page.title": "Policy Holder {label}",
     "policyHolder.generalInfoPanel.title": "General Information",
     "policyHolder.address": "Address",
@@ -29,6 +30,7 @@
     "policyHolder.paymentReference": "Payment Reference",
     "policyHolder.CreatePolicyHolder.mutationLabel": "Create Policy Holder - {label}",
     "policyHolder.UpdatePolicyHolder.mutationLabel": "Update Policy Holder - {label}",
+    "policyHolder.DeletePolicyHolder.mutationLabel": "Delete Policy Holder - {code} - {tradeName}",
     "policyHolder.mandatoryFieldsEmptyError": "* These fields are required",
     "policyHolder.savePolicyHolderButton.tooltip.enabled": "Save changes",
     "policyHolder.savePolicyHolderButton.tooltip.disabled": "Please fill General Information fields first",
@@ -41,5 +43,7 @@
     "policyHolder.paymentReferenceValidation.regexMsg.en": "Invalid payment reference",
     "policyHolder.paymentReferenceValidation.regexMsg.fr": "Référence de payement invalide",
     "policyHolder.accountancyAccountValidation.regexMsg.en": "Invalid accountancy account",
-    "policyHolder.accountancyAccountValidation.regexMsg.fr": "Numéro de compte comptable invalide"
+    "policyHolder.accountancyAccountValidation.regexMsg.fr": "Numéro de compte comptable invalide",
+    "policyHolder.deletePolicyHolder.confirm.title": "Delete {code} - {tradeName}",
+    "policyHolder.deletePolicyHolder.confirm.message": "Are you sure you want to delete {code} - {tradeName}?"
 }

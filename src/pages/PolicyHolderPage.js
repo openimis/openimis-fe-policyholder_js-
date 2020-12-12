@@ -20,7 +20,6 @@ class PolicyHolderPage extends Component {
     save = (policyHolder) => {
         if (!!policyHolder.id) {
             this.props.updatePolicyHolder(
-                this.props.modulesManager,
                 policyHolder,
                 formatMessageWithValues(
                     this.props.intl,
@@ -31,7 +30,6 @@ class PolicyHolderPage extends Component {
             );
         } else {
             this.props.createPolicyHolder(
-                this.props.modulesManager,
                 policyHolder,
                 formatMessageWithValues(
                     this.props.intl,
