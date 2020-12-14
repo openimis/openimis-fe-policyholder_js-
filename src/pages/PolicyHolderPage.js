@@ -65,6 +65,7 @@ class PolicyHolderPage extends Component {
                         back={this.back}
                         save={this.save}
                         titleParams={this.titleParams}
+                        rights={rights}
                     />
                 </div>
             )
