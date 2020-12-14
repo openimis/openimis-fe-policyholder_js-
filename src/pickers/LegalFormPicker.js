@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withModulesManager } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
-import { ConfigBasedPicker } from "./ConfigBasedPicker";
+import ConfigBasedPicker from "./ConfigBasedPicker";
 
 class LegalFormPicker extends Component {
     constructor(props) {

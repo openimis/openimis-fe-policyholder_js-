@@ -8,6 +8,7 @@ import LegalFormPicker from "./pickers/LegalFormPicker";
 import ActivityCodePicker from "./pickers/ActivityCodePicker";
 import reducer from "./reducer";
 import { RIGHT_POLICYHOLDER_SEARCH } from "./constants"
+import TabPanel from "./components/TabPanel";
 
 const ROUTE_POLICY_HOLDERS = "policyHolders";
 const ROUTE_POLICY_HOLDER = "policyHolders/policyHolder";
@@ -18,6 +19,7 @@ const DEFAULT_CONFIG = {
   "refs": [
     { key: "policyHolder.LegalFormPicker", ref: LegalFormPicker },
     { key: "policyHolder.ActivityCodePicker", ref: ActivityCodePicker },
+    { key: "policyHolder.TabPanel", ref: TabPanel },
     { key: "policyHolder.route.policyHolders", ref: ROUTE_POLICY_HOLDERS },
     { key: "policyHolder.route.policyHolder", ref: ROUTE_POLICY_HOLDER }
   ],

@@ -6,6 +6,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { fetchPolicyHolder } from "../actions"
 import PolicyHolderGeneralInfoPanel from "./PolicyHolderGeneralInfoPanel";
+import PolicyHolderTabPanel from "./PolicyHolderTabPanel";
 
 const styles = theme => ({
     paper: theme.paper.paper,
@@ -45,19 +46,19 @@ class PolicyHolderForm extends Component {
         }
     }
 
-    isMandatoryFieldsNotEmpty = () => {
+    isMandatoryFieldsEmpty = () => {
         const { policyHolder} = this.state;
         if (!!policyHolder.code
             && !!policyHolder.tradeName
             && !!policyHolder.locations
             && !!policyHolder.dateValidFrom) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     canSave = () => {
-        return this.isMandatoryFieldsNotEmpty() && this.state.isFormValid
+        return !this.isMandatoryFieldsEmpty() && this.state.isFormValid
     }
 
     save = (policyHolder) => {
@@ -79,7 +80,7 @@ class PolicyHolderForm extends Component {
     }
 
     render() {
-        const { intl, back } = this.props;
+        const { intl, rights, back } = this.props;
         return (
             <Fragment>
                 <Form
@@ -92,9 +93,11 @@ class PolicyHolderForm extends Component {
                     save={this.save}
                     onEditedChanged={this.onEditedChanged}
                     HeadPanel={PolicyHolderGeneralInfoPanel}
-                    displayHeadPanelError={!this.isMandatoryFieldsNotEmpty()}
+                    mandatoryFieldsEmpty={this.isMandatoryFieldsEmpty()}
                     saveTooltip={formatMessage(intl, "policyHolder", `savePolicyHolderButton.tooltip.${this.canSave() ? 'enabled' : 'disabled'}`)} 
                     onValidation={this.onValidation}
+                    Panels={[PolicyHolderTabPanel]}
+                    rights={rights}
                 />
             </Fragment>
         )

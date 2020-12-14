@@ -45,5 +45,6 @@
     "policyHolder.accountancyAccountValidation.regexMsg.en": "Invalid accountancy account",
     "policyHolder.accountancyAccountValidation.regexMsg.fr": "Numéro de compte comptable invalide",
     "policyHolder.deletePolicyHolder.confirm.title": "Delete {code} - {tradeName}",
-    "policyHolder.deletePolicyHolder.confirm.message": "Are you sure you want to delete {code} - {tradeName}?"
+    "policyHolder.deletePolicyHolder.confirm.message": "Are you sure you want to delete {code} - {tradeName}?",
+    "policyHolder.tabPanelDisabledError": "To start creating new Policy Holder Insuree, you need to fill in General Information fields and click Save."
 }
