@@ -9,13 +9,13 @@ import { connect } from "react-redux";
 import { IconButton, Tooltip } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { RIGHT_POLICYHOLDER_UPDATE, RIGHT_POLICYHOLDER_DELETE } from "../constants"
+import { RIGHT_POLICYHOLDER_UPDATE, RIGHT_POLICYHOLDER_DELETE, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, DATE_TO_DATETIME_SUFFIX } from "../constants"
 
 class PolicyHolderSearcher extends Component {
     constructor(props) {
         super(props);
-        this.rowsPerPageOptions = props.modulesManager.getConf("fe-policyHolder", "policyHolderFilter.rowsPerPageOptions", [10, 20, 50, 100]);
-        this.defaultPageSize = props.modulesManager.getConf("fe-policyHolder", "policyHolderFilter.defaultPageSize", 10);
+        this.rowsPerPageOptions = props.modulesManager.getConf("fe-policyHolder", "policyHolderFilter.rowsPerPageOptions", ROWS_PER_PAGE_OPTIONS);
+        this.defaultPageSize = props.modulesManager.getConf("fe-policyHolder", "policyHolderFilter.defaultPageSize", DEFAULT_PAGE_SIZE);
         this.state = {
             toDelete: null,
             deleted: []
@@ -31,28 +31,42 @@ class PolicyHolderSearcher extends Component {
         }
     }
 
-    fetch = (prms) => {
-        this.props.fetchPolicyHolders(this.props.modulesManager, prms);
+    fetch = (params) => {
+        this.props.fetchPolicyHolders(this.props.modulesManager, params);
     }
 
     filtersToQueryParams = state => {
-        let prms = Object.keys(state.filters)
+        let params = Object.keys(state.filters)
             .filter(f => !!state.filters[f]['filter'])
             .map(f => state.filters[f]['filter']);
-        prms.push(`first: ${state.pageSize}`);
+        params.push(`first: ${state.pageSize}`);
         if (!state.filters.hasOwnProperty('isDeleted')) {
-            prms.push("isDeleted: false");
+            params.push("isDeleted: false");
+        }
+        if (!state.filters.hasOwnProperty('dateValidTo')) {
+            let dateValidAt = formatDateFromISO(this.props.modulesManager, this.props.intl, new Date());
+            if (state.filters.hasOwnProperty('dateValidFrom')) {
+                /**
+                 * If @see dateValidTo is not set but @see dateValidFrom is set,
+                 * then all @see PolicyHolder valid at @see dateValidFrom are shown.
+                 * Default filter on @see dateValidFrom has to be removed from query params. 
+                 */
+                dateValidAt = state.filters['dateValidFrom']['value'];
+                params = params.filter(f => !f.startsWith('dateValidFrom'));
+            }
+            params.push(`dateValidFrom_Lte: "${dateValidAt}${DATE_TO_DATETIME_SUFFIX}"`);
+            params.push(`dateValidTo_Gte: "${dateValidAt}${DATE_TO_DATETIME_SUFFIX}"`);
         }
         if (!!state.afterCursor) {
-            prms.push(`after: "${state.afterCursor}"`);
+            params.push(`after: "${state.afterCursor}"`);
         }
         if (!!state.beforeCursor) {
-            prms.push(`before: "${state.beforeCursor}"`);
+            params.push(`before: "${state.beforeCursor}"`);
         }
         if (!!state.orderBy) {
-            prms.push(`orderBy: ["${state.orderBy}"]`);
+            params.push(`orderBy: ["${state.orderBy}"]`);
         }
-        return prms;
+        return params;
     }
 
     headers = () => {
@@ -140,7 +154,7 @@ class PolicyHolderSearcher extends Component {
 
     onDelete = policyHolder => {
         const { intl, coreConfirm, deletePolicyHolder } = this.props;
-        let confirm = e => coreConfirm(
+        let confirm = () => coreConfirm(
             formatMessageWithValues(intl, "policyHolder", "deletePolicyHolder.confirm.title",
                 {
                     code: policyHolder.code,

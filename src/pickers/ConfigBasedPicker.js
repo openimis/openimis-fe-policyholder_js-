@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { SelectInput } from "@openimis/fe-core";
-import { withModulesManager, formatMessage } from "@openimis/fe-core";
+import { formatMessage } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 
-export class ConfigBasedPicker extends Component {
+class ConfigBasedPicker extends Component {
     render() {
         const { intl, module, label, configOptions, disabled, value, onChange } = this.props;
         const options = [{
@@ -28,4 +28,4 @@ export class ConfigBasedPicker extends Component {
     }
 }
 
-export default withModulesManager(injectIntl(ConfigBasedPicker));
+export default injectIntl(ConfigBasedPicker);

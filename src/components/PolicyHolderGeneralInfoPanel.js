@@ -79,7 +79,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
     }
 
     render() {
-        const { classes, edited, displayHeadPanelError } = this.props;
+        const { classes, edited, mandatoryFieldsEmpty } = this.props;
         return (
             <Fragment>
                 <Grid container className={classes.tableTitle}>
@@ -94,7 +94,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     </Grid>
                 </Grid>
                 <Divider />
-                {displayHeadPanelError &&
+                {mandatoryFieldsEmpty &&
                     <Fragment>
                         <div className={classes.item}>
                             <FormattedMessage module="policyHolder" id="mandatoryFieldsEmptyError" />

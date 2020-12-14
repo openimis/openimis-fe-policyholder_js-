@@ -16,7 +16,13 @@ function reducer(
         fetchingPolicyHolder: false,
         errorPolicyHolder: null,
         fetchedPolicyHolder: false,
-        policyHolder: {}
+        policyHolder: {},
+        fetchingPolicyHolderInsurees: false,
+        errorPolicyHolderInsurees: null,
+        fetchedPolicyHolderInsurees: false,
+        policyHolderInsurees: [],
+        policyHolderInsureesPageInfo: {},
+        policyHolderInsureesTotalCount: 0
     },
     action
 ) {
@@ -69,6 +75,32 @@ function reducer(
                 ...state,
                 fetchingPolicyHolder: false,
                 errorPolicyHolder: formatServerError(action.payload)
+            };
+        case "POLICYHOLDER_POLICYHOLDERINSUREES_REQ":
+            return {
+                ...state,
+                fetchingPolicyHolderInsurees: true,
+                fetchedPolicyHolderInsurees: false,
+                policyHolderInsurees: [],
+                policyHolderInsureesPageInfo: {},
+                policyHolderInsureesTotalCount: 0,
+                errorPolicyHolderInsurees: null
+            };
+        case "POLICYHOLDER_POLICYHOLDERINSUREES_RESP":
+            return {
+                ...state,
+                fetchingPolicyHolderInsurees: false,
+                fetchedPolicyHolderInsurees: true,
+                policyHolderInsurees: parseData(action.payload.data.policyHolderInsuree),
+                policyHolderInsureesPageInfo: pageInfo(action.payload.data.policyHolderInsuree),
+                policyHolderInsureesTotalCount: !!action.payload.data.policyHolderInsuree ? action.payload.data.policyHolderInsuree.totalCount : null,
+                errorPolicyHolderInsurees: formatGraphQLError(action.payload)
+            };
+        case "POLICYHOLDER_POLICYHOLDERINSUREES_ERR":
+            return {
+                ...state,
+                fetchingPolicyHolderInsurees: false,
+                errorPolicyHolders: formatServerError(action.payload)
             };
         case "POLICYHOLDER_MUTATION_REQ":
             return dispatchMutationReq(state, action);
