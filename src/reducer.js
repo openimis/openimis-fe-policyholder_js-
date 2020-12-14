@@ -16,7 +16,13 @@ function reducer(
         fetchingPolicyHolder: false,
         errorPolicyHolder: null,
         fetchedPolicyHolder: false,
-        policyHolder: {}
+        policyHolder: {},
+        fetchingPolicyHolderUsers: false,
+        errorPolicyHolderUsers: null,
+        fetchedPolicyHolderUsers: false,
+        policyHolderUsers: [],
+        policyHolderUsersPageInfo: {},
+        policyHolderUsersTotalCount: 0
     },
     action
 ) {
@@ -69,6 +75,32 @@ function reducer(
                 ...state,
                 fetchingPolicyHolder: false,
                 errorPolicyHolder: formatServerError(action.payload)
+            };
+        case "POLICYHOLDER_POLICYHOLDERUSERS_REQ":
+            return {
+                ...state,
+                fetchingPolicyHolderUsers: true,
+                fetchedPolicyHolderUsers: false,
+                policyHolderUsers: [],
+                policyHolderUsersPageInfo: {},
+                policyHolderUsersTotalCount: 0,
+                errorPolicyHolderUsers: null
+            };
+        case "POLICYHOLDER_POLICYHOLDERUSERS_RESP":
+            return {
+                ...state,
+                fetchingPolicyHolderUsers: false,
+                fetchedPolicyHolderUsers: true,
+                policyHolderUsers: parseData(action.payload.data.policyHolderUser),
+                policyHolderUsersPageInfo: pageInfo(action.payload.data.policyHolderUser),
+                policyHolderUsersTotalCount: !!action.payload.data.policyHolderUser ? action.payload.data.policyHolderUser.totalCount : null,
+                errorPolicyHolderUsers: formatGraphQLError(action.payload)
+            };
+        case "POLICYHOLDER_POLICYHOLDERUSERS_ERR":
+            return {
+                ...state,
+                fetchingPolicyHolderUsers: false,
+                errorPolicyHolders: formatServerError(action.payload)
             };
         case "POLICYHOLDER_MUTATION_REQ":
             return dispatchMutationReq(state, action);

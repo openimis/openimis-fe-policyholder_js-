@@ -8,6 +8,10 @@ const POLICYHOLDER_FULL_PROJECTION = mm => [
     "accountancyAccount", "bankAccount", "paymentReference", "dateValidFrom", "dateValidTo"
 ];
 
+const POLICYHOLDERUSER_FULL_PROJECTION = mm => [
+    "id", "dateValidFrom", "dateValidTo"
+];
+
 function dateTimeToDate(date) {
     return date.split('T')[0];
 }
@@ -29,6 +33,16 @@ export function fetchPolicyHolder(mm, policyHolderId) {
         POLICYHOLDER_FULL_PROJECTION(mm)
     );
     return graphql(payload, "POLICYHOLDER_POLICYHOLDER");
+}
+
+export function fetchPolicyHolderUsers(mm, prms) {
+    const payload = formatPageQuery(
+        "policyHolderUser",
+        prms,
+        POLICYHOLDERUSER_FULL_PROJECTION(mm)
+    );
+    console.log(payload);
+    return graphql(payload, "POLICYHOLDER_POLICYHOLDERUSER");
 }
 
 function formatPolicyHolderGQL(policyHolder) {
