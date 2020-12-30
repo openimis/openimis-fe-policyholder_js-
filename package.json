@@ -14,7 +14,9 @@
     "build": "rollup -c",
     "start": "rollup -c -w"
   },
-  "peerDependency": {},
+  "peerDependency": {
+    "react-intl": "^5.8.1"
+  },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
@@ -28,12 +30,10 @@
     "@rollup/plugin-json": "^4.0.3",
     "@rollup/plugin-node-resolve": "^7.1.3",
     "@rollup/plugin-url": "^5.0.0",
+    "react-intl": "^5.8.1",
     "rollup": "^2.10.0"
   },
   "files": [
     "dist"
-  ],
-  "dependencies": {
-    "react-intl": "^5.8.1"
-  }
+  ]
 }
