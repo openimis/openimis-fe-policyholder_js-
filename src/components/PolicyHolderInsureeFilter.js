@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl';
 import { withModulesManager, formatMessage, TextInput, PublishedComponent } from "@openimis/fe-core";
 import { Grid, FormControlLabel, Checkbox } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { GREATER_OR_EQUAL_LOOKUP, LESS_OR_EQUAL_LOOKUP, DATE_TO_DATETIME_SUFFIX, CONTAINS_LOOKUP } from "../constants"
+import { GREATER_OR_EQUAL_LOOKUP, LESS_OR_EQUAL_LOOKUP, STARTS_WITH_LOOKUP, DATE_TO_DATETIME_SUFFIX } from "../constants"
 
 const styles = theme => ({
     form: {
@@ -14,7 +14,7 @@ const styles = theme => ({
     }
 });
 
-class PolicyHolderFilter extends Component {
+class PolicyHolderInsureeFilter extends Component {
     _filterValue = k => {
         const { filters } = this.props;
         return !!filters[k] ? filters[k].value : null
@@ -30,12 +30,14 @@ class PolicyHolderFilter extends Component {
         ])
     }
 
-    _onChangeStringFilter = (k, v, lookup) => {
+    _onChangeStringFilter = (k, v, lookup = null) => {
         this.props.onChangeFilters([
             {
                 id: k,
                 value: v,
-                filter: `${k}_${lookup}: "${v}"`
+                filter: !!lookup
+                    ? `${k}_${lookup}: "${v}"`
+                    : `${k}: "${v}"`
             }
         ])
     }
@@ -51,50 +53,24 @@ class PolicyHolderFilter extends Component {
     }
 
     render() {
-        const { intl, classes, filters, onChangeFilters } = this.props;
+        const { intl, classes } = this.props;
         return (
             <Grid container className={classes.form}>
-                <Grid item xs={2} className={classes.item}>
+                <Grid item xs={3} className={classes.item}>
                     <TextInput
-                        module="policyHolder"
-                        label="code"
-                        value={this._filterValue('code')}
-                        onChange={v => this._onChangeStringFilter('code', v, CONTAINS_LOOKUP)}
+                        module="claim" 
+                        label="ClaimFilter.insureeCHFID"
+                        value={this._filterValue('chfId')}
+                        onChange={v => this._onChangeStringFilter('insuree_ChfId', v, STARTS_WITH_LOOKUP)}
                     />
                 </Grid>
-                <Grid item xs={2} className={classes.item}>
-                    <TextInput
-                        module="policyHolder"
-                        label="tradeName"
-                        value={this._filterValue('tradeName')}
-                        onChange={v => this._onChangeStringFilter('tradeName', v, CONTAINS_LOOKUP)}
-                    />
-                </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={3} className={classes.item}>
                     <PublishedComponent
-                        pubRef="location.DetailedLocationFilter"
+                        pubRef="contributionPlan.ContributionPlanBundlePicker"
                         withNull={true}
-                        filters={filters}
-                        onChangeFilters={onChangeFilters}
-                        anchor="parentLocation"
-                    />
-                </Grid>
-                <Grid item xs={3} className={classes.item}>
-                    <PublishedComponent
-                        pubRef="policyHolder.LegalFormPicker"
-                        module="policyHolder"
-                        label="legalForm"
-                        value={this._filterValue('legalForm')}
-                        onChange={v => this._onChangeFilter('legalForm', v)}
-                    />
-                </Grid>
-                <Grid item xs={3} className={classes.item}>
-                    <PublishedComponent
-                        pubRef="policyHolder.ActivityCodePicker"
-                        module="policyHolder"
-                        label="activityCode"
-                        value={this._filterValue('activityCode')}
-                        onChange={v => this._onChangeFilter('activityCode', v)}
+                        nullLabel={formatMessage(intl, "contributionPlan", "any")}
+                        value={this._filterValue('contributionPlanBundle_Id')}
+                        onChange={v => this._onChangeStringFilter('contributionPlanBundle_Id', v)}
                     />
                 </Grid>
                 <Grid item xs={2} className={classes.item}>
@@ -122,7 +98,7 @@ class PolicyHolderFilter extends Component {
                             onChange={event => this._onChangeFilter('isDeleted', event.target.checked)}
                             name="isDeleted" 
                         />}
-                        label={formatMessage(intl, "policyHolder", "isDeleted")}
+                        label={formatMessage(intl, "policyHolder", "PolicyHolderInsurees.isDeleted")}
                     />
                 </Grid>
             </Grid>
@@ -130,4 +106,4 @@ class PolicyHolderFilter extends Component {
     }
 }
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(PolicyHolderFilter))));
+export default withModulesManager(injectIntl(withTheme(withStyles(styles)(PolicyHolderInsureeFilter))));

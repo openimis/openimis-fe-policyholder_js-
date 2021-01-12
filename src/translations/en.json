@@ -28,6 +28,9 @@
     "policyHolder.accountancyAccount": "Accountancy Account",
     "policyHolder.bankAccount": "Bank Account",
     "policyHolder.paymentReference": "Payment Reference",
+    "policyHolder.name": "Name",
+    "policyHolder.contributionPlanBundle": "Contribution Plan Bundle",
+    "policyHolder.calculation": "Calculation Parameter",
     "policyHolder.CreatePolicyHolder.mutationLabel": "Create Policy Holder - {label}",
     "policyHolder.UpdatePolicyHolder.mutationLabel": "Update Policy Holder - {label}",
     "policyHolder.DeletePolicyHolder.mutationLabel": "Delete Policy Holder - {code} - {tradeName}",
@@ -46,5 +49,8 @@
     "policyHolder.accountancyAccountValidation.regexMsg.fr": "Numéro de compte comptable invalide",
     "policyHolder.deletePolicyHolder.confirm.title": "Delete {code} - {tradeName}",
     "policyHolder.deletePolicyHolder.confirm.message": "Are you sure you want to delete {code} - {tradeName}?",
-    "policyHolder.tabPanelDisabledError": "To start creating new Policy Holder Insuree, you need to fill in General Information fields and click Save."
+    "policyHolder.policyHolderInsureesTabDisabledError": "To start creating new Policy Holder Insuree, you need to fill in General Information fields and click Save.",
+    "policyHolder.PolicyHolderTabPanel.policyHolderInsureesTab": "Policy Holder Insuree",
+    "policyHolder.PolicyHolderInsurees.searcher.results.title": "{policyHolderInsureesTotalCount} Policy Holder Insurees Found",
+    "policyHolder.PolicyHolderInsurees.isDeleted": "Show Deleted Insurees"
 }

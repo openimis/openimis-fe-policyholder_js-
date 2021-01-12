@@ -2,33 +2,48 @@ import {
     graphql, formatPageQuery, formatPageQueryWithCount, formatMutation, decodeId, formatGQLString
 } from "@openimis/fe-core";
 
-const POLICYHOLDER_FULL_PROJECTION = mm => [
-    "id", "code", "tradeName", "locations" + mm.getProjection("location.Location.FlatProjection"),
+const POLICYHOLDER_FULL_PROJECTION = modulesManager => [
+    "id", "code", "tradeName", "locations" + modulesManager.getProjection("location.Location.FlatProjection"),
     "address", "phone", "fax", "email", "contactName", "legalForm", "activityCode",
     "accountancyAccount", "bankAccount", "paymentReference", "dateValidFrom", "dateValidTo"
+];
+
+const POLICYHOLDERINSUREE_FULL_PROJECTION = modulesManager => [
+    "id", "dateValidFrom", "dateValidTo", "jsonExt",
+    "insuree" + modulesManager.getProjection("insuree.InsureePicker.projection"),
+    "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection")
 ];
 
 function dateTimeToDate(date) {
     return date.split('T')[0];
 }
 
-export function fetchPolicyHolders(mm, prms) {
+export function fetchPolicyHolders(modulesManager, params) {
     const payload = formatPageQueryWithCount(
         "policyHolder",
-        prms,
-        POLICYHOLDER_FULL_PROJECTION(mm)
+        params,
+        POLICYHOLDER_FULL_PROJECTION(modulesManager)
     );
     return graphql(payload, "POLICYHOLDER_POLICYHOLDERS");
 }
 
-export function fetchPolicyHolder(mm, policyHolderId) {
+export function fetchPolicyHolder(modulesManager, policyHolderId) {
     let filter = !!policyHolderId ? `id: "${policyHolderId}"` : '';
     const payload = formatPageQuery(
         "policyHolder",
         [filter],
-        POLICYHOLDER_FULL_PROJECTION(mm)
+        POLICYHOLDER_FULL_PROJECTION(modulesManager)
     );
     return graphql(payload, "POLICYHOLDER_POLICYHOLDER");
+}
+
+export function fetchPolicyHolderInsurees(modulesManager, params) {
+    const payload = formatPageQueryWithCount(
+        "policyHolderInsuree",
+        params,
+        POLICYHOLDERINSUREE_FULL_PROJECTION(modulesManager)
+    );
+    return graphql(payload, "POLICYHOLDER_POLICYHOLDERINSUREES");
 }
 
 function formatPolicyHolderGQL(policyHolder) {
