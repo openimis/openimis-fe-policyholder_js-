@@ -68,10 +68,10 @@ function formatPolicyHolderGQL(policyHolder) {
     `;
 }
 
-function formatPolicyHolderInsureeGQL(policyHolderInsuree) {
+function formatPolicyHolderInsureeGQL(policyHolderInsuree, isReplaceMutation = false) {
     return `
-        ${!!policyHolderInsuree.id ? `id: "${decodeId(policyHolderInsuree.id)}"` : ''}
-        ${!!policyHolderInsuree.policyHolder ? `policyHolderId: "${decodeId(policyHolderInsuree.policyHolder.id)}"` : ''}
+        ${!!policyHolderInsuree.id ? `${isReplaceMutation ? 'uuid' : 'id'}: "${decodeId(policyHolderInsuree.id)}"` : ''}
+        ${!!policyHolderInsuree.policyHolder && !isReplaceMutation ? `policyHolderId: "${decodeId(policyHolderInsuree.policyHolder.id)}"` : ''}
         ${!!policyHolderInsuree.insuree ? `insureeId: ${decodeId(policyHolderInsuree.insuree.id)}` : ""}
         ${!!policyHolderInsuree.contributionPlanBundle ? `contributionPlanBundleId: "${decodeId(policyHolderInsuree.contributionPlanBundle.id)}"` : ""}
         ${!!policyHolderInsuree.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderInsuree.dateValidFrom)}"` : ""}
@@ -157,6 +157,21 @@ export function deletePolicyHolderInsuree(policyHolderInsuree, clientMutationLab
     return graphql(
         mutation.payload,
         ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_DELETE_POLICYHOLDERINSUREE_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}
+
+export function replacePolicyHolderInsuree(policyHolderInsuree, clientMutationLabel) {
+    let mutation = formatMutation("replacePolicyHolderInsuree", formatPolicyHolderInsureeGQL(policyHolderInsuree, true), clientMutationLabel);
+    var requestedDateTime = new Date();
+    console.log(mutation.payload);
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_REPLACE_POLICYHOLDERINSUREE_RESP", "POLICYHOLDER_MUTATION_ERR"],
         {
             clientMutationId: mutation.clientMutationId,
             clientMutationLabel,
