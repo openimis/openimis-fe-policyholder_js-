@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react"
 import { injectIntl } from 'react-intl';
 import { withModulesManager, formatMessage, formatMessageWithValues, formatDateFromISO,
-    Searcher, PublishedComponent, withTooltip, coreConfirm } from "@openimis/fe-core";
+    Searcher, PublishedComponent, withTooltip, coreConfirm, decodeId } from "@openimis/fe-core";
 import PolicyHolderInsureeFilter from "./PolicyHolderInsureeFilter";
 import { fetchPolicyHolderInsurees, deletePolicyHolderInsuree } from "../actions"
 import { bindActionCreators } from "redux";
@@ -44,6 +44,7 @@ class PolicyHolderInsureeSearcher extends Component {
             .filter(f => !!state.filters[f]['filter'])
             .map(f => state.filters[f]['filter']);
         params.push(`first: ${state.pageSize}`);
+        params.push(`policyHolder_Id: "${decodeId(this.props.policyHolder.id)}"`);
         if (!state.filters.hasOwnProperty('isDeleted')) {
             params.push("isDeleted: false");
         }
