@@ -10,6 +10,7 @@ const POLICYHOLDER_FULL_PROJECTION = modulesManager => [
 
 const POLICYHOLDERINSUREE_FULL_PROJECTION = modulesManager => [
     "id", "dateValidFrom", "dateValidTo", "jsonExt",
+    "policyHolder{id}",
     "insuree" + modulesManager.getProjection("insuree.InsureePicker.projection"),
     "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection")
 ];
@@ -70,9 +71,9 @@ function formatPolicyHolderGQL(policyHolder) {
 function formatPolicyHolderInsureeGQL(policyHolderInsuree) {
     return `
         ${!!policyHolderInsuree.id ? `id: "${decodeId(policyHolderInsuree.id)}"` : ''}
-        ${!!policyHolderInsuree.policyHolderId ? `policyHolderId: "${formatGQLString(policyHolderInsuree.policyHolderId)}"` : ''}
+        ${!!policyHolderInsuree.policyHolder ? `policyHolderId: "${decodeId(policyHolderInsuree.policyHolder.id)}"` : ''}
         ${!!policyHolderInsuree.insuree ? `insureeId: ${decodeId(policyHolderInsuree.insuree.id)}` : ""}
-        ${!!policyHolderInsuree.contributionPlanBundleId ? `contributionPlanBundleId: "${formatGQLString(policyHolderInsuree.contributionPlanBundleId)}"` : ""}
+        ${!!policyHolderInsuree.contributionPlanBundle ? `contributionPlanBundleId: "${decodeId(policyHolderInsuree.contributionPlanBundle.id)}"` : ""}
         ${!!policyHolderInsuree.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderInsuree.dateValidFrom)}"` : ""}
         ${!!policyHolderInsuree.dateValidTo ? `dateValidTo: "${dateTimeToDate(policyHolderInsuree.dateValidTo)}"` : ""}
     `;
@@ -127,6 +128,20 @@ export function createPolicyHolderInsuree(policyHolderInsuree, clientMutationLab
     return graphql(
         mutation.payload,
         ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_CREATE_POLICYHOLDERINSUREE_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}
+
+export function updatePolicyHolderInsuree(policyHolderInsuree, clientMutationLabel) {
+    let mutation = formatMutation("updatePolicyHolderInsuree", formatPolicyHolderInsureeGQL(policyHolderInsuree), clientMutationLabel);
+    var requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_UPDATE_POLICYHOLDERINSUREE_RESP", "POLICYHOLDER_MUTATION_ERR"],
         {
             clientMutationId: mutation.clientMutationId,
             clientMutationLabel,

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { Tab, Grid, Typography } from "@material-ui/core";
 import { formatMessage, PublishedComponent, FormattedMessage } from "@openimis/fe-core";
-import { RIGHT_POLICYHOLDERUSER_SEARCH } from "../constants"
+import { RIGHT_POLICYHOLDERINSUREE_SEARCH } from "../constants"
 import PolicyHolderInsureeSearcher from "./PolicyHolderInsureeSearcher";
 import { POLICYHOLDERINSUREE_TAB_VALUE } from "../constants"
 import CreatePolicyHolderInsureeDialog from "../dialogs/CreatePolicyHolderInsureeDialog";
@@ -10,7 +10,7 @@ class PolicyHolderInsureesTabLabel extends Component {
     render() {
         const { intl, rights, onChange, disabled, tabStyle, isSelected } = this.props;
         return (
-            rights.includes(RIGHT_POLICYHOLDERUSER_SEARCH) &&
+            rights.includes(RIGHT_POLICYHOLDERINSUREE_SEARCH) &&
                 <Tab
                     onChange={onChange}
                     disabled={disabled}
@@ -31,7 +31,7 @@ class PolicyHolderInsureesTabPanel extends Component {
         }
     }
 
-    onCreate = () => {
+    onSave = () => {
         this.setState(state => ({
             reset: state.reset + 1
         }));
@@ -40,7 +40,7 @@ class PolicyHolderInsureesTabPanel extends Component {
     render() {
         const { rights, value, isTabsEnabled, policyHolder } = this.props;
         return (
-            rights.includes(RIGHT_POLICYHOLDERUSER_SEARCH) &&
+            rights.includes(RIGHT_POLICYHOLDERINSUREE_SEARCH) &&
                 <PublishedComponent
                     pubRef="policyHolder.TabPanel"
                     module="policyHolder"
@@ -58,12 +58,15 @@ class PolicyHolderInsureesTabPanel extends Component {
                                 <Grid item>
                                     <CreatePolicyHolderInsureeDialog
                                         policyHolder={policyHolder}
-                                        onCreate={this.onCreate}
+                                        onSave={this.onSave}
                                     />
                                 </Grid>
                             </Grid>
                             <PolicyHolderInsureeSearcher
+                                policyHolder={policyHolder}
+                                rights={rights}
                                 reset={this.state.reset}
+                                onSave={this.onSave}
                             />
                         </Fragment>
                     ) : (

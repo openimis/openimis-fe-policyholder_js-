@@ -55,8 +55,11 @@
     "policyHolder.policyHolderInsuree.searcher.title": "{policyHolderInsureesTotalCount} Policy Holder Insurees Found",
     "policyHolder.policyHolderInsuree.isDeleted": "Show Deleted Insurees",
     "policyHolder.policyHolderInsuree.createPolicyHolderInsuree": "Create new Policy Holder Insuree",
-    "policyHolder.policyHolderInsuree.dialog.title": "New Policy Holder Insuree",
+    "policyHolder.policyHolderInsuree.createDialog.title": "New Policy Holder Insuree",
+    "policyHolder.policyHolderInsuree.editDialog.title": "Edit Policy Holder Insuree",
     "policyHolder.policyHolderInsuree.dialog.cancel": "Cancel",
     "policyHolder.policyHolderInsuree.dialog.create": "Create",
-    "policyHolder.CreatePolicyHolderInsuree.mutationLabel": "Create Policy Holder Insuree for {code} - {tradeName}"
+    "policyHolder.policyHolderInsuree.dialog.update": "Save",
+    "policyHolder.CreatePolicyHolderInsuree.mutationLabel": "Create Policy Holder Insuree for {code} - {tradeName}",
+    "policyHolder.UpdatePolicyHolderInsuree.mutationLabel": "Update Policy Holder Insuree of {code} - {tradeName}"
 }
