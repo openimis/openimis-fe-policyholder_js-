@@ -69,13 +69,14 @@ class UpdatePolicyHolderInsureeDialog extends Component {
     }
 
     render() {
-        const { intl, classes } = this.props;
+        const { intl, classes, disabled } = this.props;
         const { open, policyHolderInsuree } = this.state;
         return (
             <Fragment>
                 <Tooltip title={formatMessage(intl, "policyHolder", "editButton.tooltip")}>
                     <IconButton
-                        onClick={this.handleOpen}>
+                        onClick={this.handleOpen}
+                        disabled={disabled}>
                         <EditIcon />
                     </IconButton>
                 </Tooltip>

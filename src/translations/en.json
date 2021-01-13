@@ -57,9 +57,12 @@
     "policyHolder.policyHolderInsuree.createPolicyHolderInsuree": "Create new Policy Holder Insuree",
     "policyHolder.policyHolderInsuree.createDialog.title": "New Policy Holder Insuree",
     "policyHolder.policyHolderInsuree.editDialog.title": "Edit Policy Holder Insuree",
+    "policyHolder.policyHolderInsuree.deleteDialog.title": "Are you sure you want to delete {otherNames} {lastName}?",
+    "policyHolder.policyHolderInsuree.deleteDialog.message": "Deleting the insuree will not erase them from OpenIMIS database. The insuree will be deactivated from the {code} {tradeName} list.",
     "policyHolder.policyHolderInsuree.dialog.cancel": "Cancel",
     "policyHolder.policyHolderInsuree.dialog.create": "Create",
     "policyHolder.policyHolderInsuree.dialog.update": "Save",
     "policyHolder.CreatePolicyHolderInsuree.mutationLabel": "Create Policy Holder Insuree for {code} - {tradeName}",
-    "policyHolder.UpdatePolicyHolderInsuree.mutationLabel": "Update Policy Holder Insuree of {code} - {tradeName}"
+    "policyHolder.UpdatePolicyHolderInsuree.mutationLabel": "Update Policy Holder Insuree of {code} - {tradeName}",
+    "policyHolder.DeletePolicyHolderInsuree.mutationLabel": "Delete Policy Holder Insuree from {code} - {tradeName}"
 }

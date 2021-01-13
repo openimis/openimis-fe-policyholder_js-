@@ -149,3 +149,18 @@ export function updatePolicyHolderInsuree(policyHolderInsuree, clientMutationLab
         }
     );
 }
+
+export function deletePolicyHolderInsuree(policyHolderInsuree, clientMutationLabel, clientMutationDetails = null) {
+    let policyHolderInsureeUuids = `uuids: ["${decodeId(policyHolderInsuree.id)}"]`;
+    let mutation = formatMutation("deletePolicyHolderInsuree", policyHolderInsureeUuids, clientMutationLabel, clientMutationDetails);
+    var requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_DELETE_POLICYHOLDERINSUREE_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}

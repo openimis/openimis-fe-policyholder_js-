@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddIcon from '@material-ui/icons/Add';
-import { FormattedMessage, formatMessageWithValues, PublishedComponent, decodeId } from "@openimis/fe-core";
+import { FormattedMessage, formatMessageWithValues, PublishedComponent } from "@openimis/fe-core";
 import { Fab, Grid } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { createPolicyHolderInsuree } from "../actions";
