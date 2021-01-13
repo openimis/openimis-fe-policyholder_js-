@@ -17,6 +17,7 @@
     "policyHolder.emptyLabel": " ",
     "policyHolder.createButton.tooltip": "Create new Policy Holder",
     "policyHolder.editButton.tooltip": "Edit",
+    "policyHolder.replaceButton.tooltip": "Replace",
     "policyHolder.deleteButton.tooltip": "Delete",
     "policyHolder.policyHolder.page.title": "Policy Holder {label}",
     "policyHolder.generalInfoPanel.title": "General Information",
@@ -59,10 +60,13 @@
     "policyHolder.policyHolderInsuree.editDialog.title": "Edit Policy Holder Insuree",
     "policyHolder.policyHolderInsuree.deleteDialog.title": "Are you sure you want to delete {otherNames} {lastName}?",
     "policyHolder.policyHolderInsuree.deleteDialog.message": "Deleting the insuree will not erase them from OpenIMIS database. The insuree will be deactivated from the {code} {tradeName} list.",
+    "policyHolder.policyHolderInsuree.replaceDialog.title": "Add new version of Policy Holder Insuree",
     "policyHolder.policyHolderInsuree.dialog.cancel": "Cancel",
     "policyHolder.policyHolderInsuree.dialog.create": "Create",
     "policyHolder.policyHolderInsuree.dialog.update": "Save",
+    "policyHolder.policyHolderInsuree.dialog.replace": "Add",
     "policyHolder.CreatePolicyHolderInsuree.mutationLabel": "Create Policy Holder Insuree for {code} - {tradeName}",
     "policyHolder.UpdatePolicyHolderInsuree.mutationLabel": "Update Policy Holder Insuree of {code} - {tradeName}",
-    "policyHolder.DeletePolicyHolderInsuree.mutationLabel": "Delete Policy Holder Insuree from {code} - {tradeName}"
+    "policyHolder.DeletePolicyHolderInsuree.mutationLabel": "Delete Policy Holder Insuree from {code} - {tradeName}",
+    "policyHolder.ReplacePolicyHolderInsuree.mutationLabel": "Replace Policy Holder Insuree of {code} - {tradeName}"
 }

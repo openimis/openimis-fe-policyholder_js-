@@ -10,7 +10,7 @@ import UpdatePolicyHolderInsureeDialog from "../dialogs/UpdatePolicyHolderInsure
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { DATE_TO_DATETIME_SUFFIX, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS,
-    RIGHT_POLICYHOLDERINSUREE_UPDATE, RIGHT_POLICYHOLDERINSUREE_DELETE} from "../constants"
+    RIGHT_POLICYHOLDERINSUREE_UPDATE, RIGHT_POLICYHOLDERINSUREE_DELETE, RIGHT_POLICYHOLDERINSUREE_REPLACE } from "../constants"
 
 const DEFAULT_ORDER_BY = "insuree";
 
@@ -82,6 +82,9 @@ class PolicyHolderInsureeSearcher extends Component {
             "policyHolder.dateValidFrom",
             "policyHolder.dateValidTo"
         ];
+        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_REPLACE)) {
+            result.push("policyHolder.emptyLabel");
+        }
         if (rights.includes(RIGHT_POLICYHOLDERINSUREE_UPDATE)) {
             result.push("policyHolder.emptyLabel");
         }
@@ -116,6 +119,18 @@ class PolicyHolderInsureeSearcher extends Component {
                 ? formatDateFromISO(modulesManager, intl, policyHolderInsuree.dateValidTo)
                 : ""
         ];
+        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_REPLACE)) {
+            result.push(
+                policyHolderInsuree =>
+                    <UpdatePolicyHolderInsureeDialog
+                        policyHolder={policyHolder}
+                        policyHolderInsuree={policyHolderInsuree}
+                        onSave={this.props.onSave}
+                        disabled={this.state.deleted.includes(policyHolderInsuree.id)}
+                        isReplacing={true}
+                    />
+            );
+        }
         if (rights.includes(RIGHT_POLICYHOLDERINSUREE_UPDATE)) {
             result.push(
                 policyHolderInsuree =>

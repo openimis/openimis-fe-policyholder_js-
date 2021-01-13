@@ -5,10 +5,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import EditIcon from '@material-ui/icons/Edit';
+import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import { FormattedMessage, formatMessage, formatMessageWithValues, PublishedComponent } from "@openimis/fe-core";
 import { Tooltip, Grid, IconButton } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { updatePolicyHolderInsuree } from "../actions";
+import { updatePolicyHolderInsuree, replacePolicyHolderInsuree } from "../actions";
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -31,22 +32,39 @@ class UpdatePolicyHolderInsureeDialog extends Component {
     };
 
     handleClose = () => {
-        this.setState({ open: false, policyHolderInsuree: {} });
+        this.setState({ open: false });
     };
 
     handleSave = () => {
-        this.props.updatePolicyHolderInsuree(
-            this.state.policyHolderInsuree,
-            formatMessageWithValues(
-                this.props.intl,
-                "policyHolder",
-                "UpdatePolicyHolderInsuree.mutationLabel",
-                {
-                    code: this.props.policyHolder.code,
-                    tradeName: this.props.policyHolder.tradeName
-                }
-            )
-        );
+        const { intl, policyHolder, isReplacing = false,
+            updatePolicyHolderInsuree, replacePolicyHolderInsuree } = this.props;
+        if (isReplacing) {
+            replacePolicyHolderInsuree(
+                this.state.policyHolderInsuree,
+                formatMessageWithValues(
+                    intl,
+                    "policyHolder",
+                    "ReplacePolicyHolderInsuree.mutationLabel",
+                    {
+                        code: policyHolder.code,
+                        tradeName: policyHolder.tradeName
+                    }
+                )
+            );
+        } else {
+            updatePolicyHolderInsuree(
+                this.state.policyHolderInsuree,
+                formatMessageWithValues(
+                    intl,
+                    "policyHolder",
+                    "UpdatePolicyHolderInsuree.mutationLabel",
+                    {
+                        code: policyHolder.code,
+                        tradeName: policyHolder.tradeName
+                    }
+                )
+            );
+        }
         this.props.onSave();
         this.handleClose();
     };
@@ -69,20 +87,34 @@ class UpdatePolicyHolderInsureeDialog extends Component {
     }
 
     render() {
-        const { intl, classes, disabled } = this.props;
+        const { intl, classes, disabled, isReplacing = false } = this.props;
         const { open, policyHolderInsuree } = this.state;
         return (
             <Fragment>
-                <Tooltip title={formatMessage(intl, "policyHolder", "editButton.tooltip")}>
-                    <IconButton
-                        onClick={this.handleOpen}
-                        disabled={disabled}>
-                        <EditIcon />
-                    </IconButton>
-                </Tooltip>
+                {isReplacing ? (
+                    <Tooltip title={formatMessage(intl, "policyHolder", "replaceButton.tooltip")}>
+                        <IconButton
+                            onClick={this.handleOpen}
+                            disabled={disabled}>
+                            <NoteAddIcon />
+                        </IconButton>
+                    </Tooltip>
+                ) : (
+                    <Tooltip title={formatMessage(intl, "policyHolder", "editButton.tooltip")}>
+                        <IconButton
+                            onClick={this.handleOpen}
+                            disabled={disabled}>
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
                 <Dialog open={open} onClose={this.handleClose}>
                     <DialogTitle>
-                        <FormattedMessage module="policyHolder" id="policyHolderInsuree.editDialog.title" />
+                        {isReplacing ? (
+                            <FormattedMessage module="policyHolder" id="policyHolderInsuree.replaceDialog.title" />
+                        ) : (
+                            <FormattedMessage module="policyHolder" id="policyHolderInsuree.editDialog.title" />
+                        )}
                     </DialogTitle>
                     <DialogContent>
                         <Grid container direction="column" className={classes.item}>
@@ -96,8 +128,10 @@ class UpdatePolicyHolderInsureeDialog extends Component {
                             <Grid item className={classes.item}>
                                 <PublishedComponent
                                     pubRef="contributionPlan.ContributionPlanBundlePicker"
+                                    required
                                     value={!!policyHolderInsuree.contributionPlanBundle && policyHolderInsuree.contributionPlanBundle}
-                                    readOnly
+                                    onChange={v => this.updateAttribute('contributionPlanBundle', v)}
+                                    readOnly={!isReplacing}
                                 />
                             </Grid>
                             <Grid item className={classes.item}>
@@ -105,8 +139,10 @@ class UpdatePolicyHolderInsureeDialog extends Component {
                                     pubRef="core.DatePicker"
                                     module="policyHolder"
                                     label="dateValidFrom"
+                                    required
                                     value={!!policyHolderInsuree.dateValidFrom && policyHolderInsuree.dateValidFrom}
-                                    readOnly
+                                    onChange={v => this.updateAttribute('dateValidFrom', v)}
+                                    readOnly={!isReplacing}
                                 />
                             </Grid>
                             <Grid item className={classes.item}>
@@ -125,7 +161,11 @@ class UpdatePolicyHolderInsureeDialog extends Component {
                             <FormattedMessage module="policyHolder" id="policyHolderInsuree.dialog.cancel" />
                         </Button>
                         <Button onClick={this.handleSave} disabled={!this.canSave()} variant="contained" color="primary" autoFocus>
-                            <FormattedMessage module="policyHolder" id="policyHolderInsuree.dialog.update" />
+                            {isReplacing ? (
+                                <FormattedMessage module="policyHolder" id="policyHolderInsuree.dialog.replace" />
+                            ) : (
+                                <FormattedMessage module="policyHolder" id="policyHolderInsuree.dialog.update" />
+                            )}
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -135,7 +175,7 @@ class UpdatePolicyHolderInsureeDialog extends Component {
 }
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ updatePolicyHolderInsuree }, dispatch);
+    return bindActionCreators({ updatePolicyHolderInsuree, replacePolicyHolderInsuree }, dispatch);
 };
 
 export default injectIntl(withTheme(withStyles(styles)(connect(null, mapDispatchToProps)(UpdatePolicyHolderInsureeDialog))));
