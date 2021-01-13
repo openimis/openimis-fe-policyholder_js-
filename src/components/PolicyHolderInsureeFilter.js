@@ -58,8 +58,8 @@ class PolicyHolderInsureeFilter extends Component {
             <Grid container className={classes.form}>
                 <Grid item xs={3} className={classes.item}>
                     <TextInput
-                        module="claim" 
-                        label="ClaimFilter.insureeCHFID"
+                        module="policyHolder" 
+                        label="insureeCHFID"
                         value={this._filterValue('chfId')}
                         onChange={v => this._onChangeStringFilter('insuree_ChfId', v, STARTS_WITH_LOOKUP)}
                     />
@@ -98,7 +98,7 @@ class PolicyHolderInsureeFilter extends Component {
                             onChange={event => this._onChangeFilter('isDeleted', event.target.checked)}
                             name="isDeleted" 
                         />}
-                        label={formatMessage(intl, "policyHolder", "PolicyHolderInsurees.isDeleted")}
+                        label={formatMessage(intl, "policyHolder", "policyHolderInsuree.isDeleted")}
                     />
                 </Grid>
             </Grid>

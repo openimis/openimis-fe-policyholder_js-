@@ -31,6 +31,7 @@
     "policyHolder.name": "Name",
     "policyHolder.contributionPlanBundle": "Contribution Plan Bundle",
     "policyHolder.calculation": "Calculation Parameter",
+    "policyHolder.insureeCHFID": "Insuree No.",
     "policyHolder.CreatePolicyHolder.mutationLabel": "Create Policy Holder - {label}",
     "policyHolder.UpdatePolicyHolder.mutationLabel": "Update Policy Holder - {label}",
     "policyHolder.DeletePolicyHolder.mutationLabel": "Delete Policy Holder - {code} - {tradeName}",
@@ -49,8 +50,13 @@
     "policyHolder.accountancyAccountValidation.regexMsg.fr": "Numéro de compte comptable invalide",
     "policyHolder.deletePolicyHolder.confirm.title": "Delete {code} - {tradeName}",
     "policyHolder.deletePolicyHolder.confirm.message": "Are you sure you want to delete {code} - {tradeName}?",
-    "policyHolder.policyHolderInsureesTabDisabledError": "To start creating new Policy Holder Insuree, you need to fill in General Information fields and click Save.",
-    "policyHolder.PolicyHolderTabPanel.policyHolderInsureesTab": "Policy Holder Insuree",
-    "policyHolder.PolicyHolderInsurees.searcher.results.title": "{policyHolderInsureesTotalCount} Policy Holder Insurees Found",
-    "policyHolder.PolicyHolderInsurees.isDeleted": "Show Deleted Insurees"
+    "policyHolder.policyHolderInsuree.tabDisabledError": "To start creating new Policy Holder Insuree, you need to fill in General Information fields and click Save.",
+    "policyHolder.policyHolderInsuree.label": "Policy Holder Insuree",
+    "policyHolder.policyHolderInsuree.searcher.title": "{policyHolderInsureesTotalCount} Policy Holder Insurees Found",
+    "policyHolder.policyHolderInsuree.isDeleted": "Show Deleted Insurees",
+    "policyHolder.policyHolderInsuree.createPolicyHolderInsuree": "Create new Policy Holder Insuree",
+    "policyHolder.policyHolderInsuree.dialog.title": "New Policy Holder Insuree",
+    "policyHolder.policyHolderInsuree.dialog.cancel": "Cancel",
+    "policyHolder.policyHolderInsuree.dialog.create": "Create",
+    "policyHolder.CreatePolicyHolderInsuree.mutationLabel": "Create Policy Holder Insuree for {code} - {tradeName}"
 }
