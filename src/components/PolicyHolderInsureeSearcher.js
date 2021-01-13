@@ -1,25 +1,36 @@
 import React, { Component, Fragment } from "react"
 import { injectIntl } from 'react-intl';
-import { withModulesManager, formatMessageWithValues, formatDateFromISO, Searcher, PublishedComponent, decodeId } from "@openimis/fe-core";
+import { withModulesManager, formatMessage, formatMessageWithValues, formatDateFromISO,
+    Searcher, PublishedComponent, withTooltip, coreConfirm } from "@openimis/fe-core";
 import PolicyHolderInsureeFilter from "./PolicyHolderInsureeFilter";
-import { fetchPolicyHolderInsurees } from "../actions"
+import { fetchPolicyHolderInsurees, deletePolicyHolderInsuree } from "../actions"
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import UpdatePolicyHolderInsureeDialog from "../dialogs/UpdatePolicyHolderInsureeDialog"
+import { IconButton } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
 import { DATE_TO_DATETIME_SUFFIX, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS,
-    RIGHT_POLICYHOLDERINSUREE_UPDATE } from "../constants"
+    RIGHT_POLICYHOLDERINSUREE_UPDATE, RIGHT_POLICYHOLDERINSUREE_DELETE} from "../constants"
 
 const DEFAULT_ORDER_BY = "insuree";
 
 class PolicyHolderInsureeSearcher extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            toDelete: null,
+            deleted: []
+        }
         this.rowsPerPageOptions = props.modulesManager.getConf("fe-policyHolder", "policyHolderFilter.rowsPerPageOptions", ROWS_PER_PAGE_OPTIONS);
         this.defaultPageSize = props.modulesManager.getConf("fe-policyHolder", "policyHolderFilter.defaultPageSize", DEFAULT_PAGE_SIZE);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.reset !== this.props.reset) {
+        if (prevProps.confirmed !== this.props.confirmed && !!this.props.confirmed && !!this.state.confirmedAction) {
+            this.state.confirmedAction();
+        } else if (prevState.toDelete !== this.state.toDelete) {
+            this.setState(state => ({ deleted: state.deleted.concat(state.toDelete) }));
+        } else if (prevState.deleted !== this.state.deleted || prevProps.reset !== this.props.reset) {
             this.refetch();
         }
     }
@@ -74,6 +85,9 @@ class PolicyHolderInsureeSearcher extends Component {
         if (rights.includes(RIGHT_POLICYHOLDERINSUREE_UPDATE)) {
             result.push("policyHolder.emptyLabel");
         }
+        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_DELETE)) {
+            result.push("policyHolder.emptyLabel");
+        }
         return result;
     }
 
@@ -109,11 +123,67 @@ class PolicyHolderInsureeSearcher extends Component {
                         policyHolder={policyHolder}
                         policyHolderInsuree={policyHolderInsuree}
                         onSave={this.props.onSave}
+                        disabled={this.state.deleted.includes(policyHolderInsuree.id)}
                     />
             );
         }
+        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_DELETE)) {
+            result.push(
+                policyHolderInsuree => withTooltip(
+                    <IconButton
+                        onClick={() => this.onDelete(policyHolderInsuree)}
+                        disabled={this.state.deleted.includes(policyHolderInsuree.id)}>
+                        <DeleteIcon />
+                    </IconButton>,
+                    formatMessage(this.props.intl, "policyHolder", "deleteButton.tooltip")
+                )
+            )
+        }
         return result;
     }
+
+    onDelete = policyHolderInsuree => {
+        const { intl, coreConfirm, deletePolicyHolderInsuree, policyHolder } = this.props;
+        let confirm = () => coreConfirm(
+            formatMessageWithValues(
+                intl,
+                "policyHolder",
+                "policyHolderInsuree.deleteDialog.title",
+                {
+                    otherNames: policyHolderInsuree.insuree.otherNames,
+                    lastName: policyHolderInsuree.insuree.lastName
+                }),
+            formatMessageWithValues(
+                intl,
+                "policyHolder",
+                "policyHolderInsuree.deleteDialog.message",
+                {
+                    code: policyHolder.code,
+                    tradeName: policyHolder.tradeName
+                })
+        );
+        let confirmedAction = () => {
+            deletePolicyHolderInsuree(
+                policyHolderInsuree,
+                formatMessageWithValues(
+                    intl,
+                    "policyHolder",
+                    "DeletePolicyHolderInsuree.mutationLabel",
+                    {
+                        code: policyHolder.code,
+                        tradeName: policyHolder.tradeName
+                    }
+                )
+            );
+            this.setState({ toDelete: policyHolderInsuree.id });
+        }
+        this.setState(
+            { confirmedAction },
+            confirm
+        )
+    }
+
+    rowDeleted = (_, policyHolderInsuree) => this.state.deleted.includes(policyHolderInsuree.id);
 
     sorts = () => {
         return [
@@ -147,6 +217,8 @@ class PolicyHolderInsureeSearcher extends Component {
                     rowsPerPageOptions={this.rowsPerPageOptions}
                     defaultPageSize={this.defaultPageSize}
                     defaultOrderBy={DEFAULT_ORDER_BY}
+                    rowLocked={this.rowDeleted}
+                    rowDisabled={this.rowDeleted}
                 />
             </Fragment>
         )
@@ -159,11 +231,12 @@ const mapStateToProps = state => ({
     errorPolicyHolderInsurees: state.policyHolder.errorPolicyHolderInsurees,
     policyHolderInsurees: state.policyHolder.policyHolderInsurees,
     policyHolderInsureesPageInfo: state.policyHolder.policyHolderInsureesPageInfo,
-    policyHolderInsureesTotalCount: state.policyHolder.policyHolderInsureesTotalCount
+    policyHolderInsureesTotalCount: state.policyHolder.policyHolderInsureesTotalCount,
+    confirmed: state.core.confirmed
 });
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ fetchPolicyHolderInsurees }, dispatch);
+    return bindActionCreators({ fetchPolicyHolderInsurees, deletePolicyHolderInsuree, coreConfirm }, dispatch);
 };
 
 export default withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PolicyHolderInsureeSearcher)));
