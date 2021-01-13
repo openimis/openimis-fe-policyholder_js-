@@ -7,6 +7,8 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { DATE_TO_DATETIME_SUFFIX, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS } from "../constants"
 
+const DEFAULT_ORDER_BY = "insuree";
+
 class PolicyHolderInsureeSearcher extends Component {
     constructor(props) {
         super(props);
@@ -14,9 +16,15 @@ class PolicyHolderInsureeSearcher extends Component {
         this.defaultPageSize = props.modulesManager.getConf("fe-policyHolder", "policyHolderFilter.defaultPageSize", DEFAULT_PAGE_SIZE);
     }
 
-    fetch = (params) => {
-        this.props.fetchPolicyHolderInsurees(this.props.modulesManager, params);
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.reset !== this.props.reset) {
+            this.refetch();
+        }
     }
+
+    fetch = params => this.props.fetchPolicyHolderInsurees(this.props.modulesManager, params);
+
+    refetch = () => this.fetch(this.filtersToQueryParams({ filters: {}, pageSize: this.defaultPageSize, orderBy: [DEFAULT_ORDER_BY] }));
 
     filtersToQueryParams = state => {
         let params = Object.keys(state.filters)
@@ -113,14 +121,14 @@ class PolicyHolderInsureeSearcher extends Component {
                     fetchingItems={fetchingPolicyHolderInsurees}
                     fetchedItems={fetchedPolicyHolderInsurees}
                     errorItems={errorPolicyHolderInsurees}
-                    tableTitle={formatMessageWithValues(intl, "policyHolder", "PolicyHolderInsurees.searcher.results.title", { policyHolderInsureesTotalCount })}
+                    tableTitle={formatMessageWithValues(intl, "policyHolder", "policyHolderInsuree.searcher.title", { policyHolderInsureesTotalCount })}
                     headers={this.headers}
                     itemFormatters={this.itemFormatters}
                     filtersToQueryParams={this.filtersToQueryParams}
                     sorts={this.sorts}
                     rowsPerPageOptions={this.rowsPerPageOptions}
                     defaultPageSize={this.defaultPageSize}
-                    defaultOrderBy="insuree"
+                    defaultOrderBy={DEFAULT_ORDER_BY}
                 />
             </Fragment>
         )

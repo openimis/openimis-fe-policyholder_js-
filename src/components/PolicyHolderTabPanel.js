@@ -12,10 +12,10 @@ const styles = theme => ({
         padding: 0
     },
     selectedTab: {
-        borderBottom: "3px solid white"
+        borderBottom: "4px solid white"
     },
     unselectedTab: {
-        borderBottom: "3px solid transparent"
+        borderBottom: "4px solid transparent"
     }
 });
 
@@ -59,6 +59,7 @@ class PolicyHolderTabPanel extends FormPanel {
                     rights={rights}
                     value={value}
                     isTabsEnabled={isTabsEnabled}
+                    policyHolder={edited}
                 />
             </Paper>
         )
