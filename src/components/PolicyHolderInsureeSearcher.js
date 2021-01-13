@@ -5,7 +5,9 @@ import PolicyHolderInsureeFilter from "./PolicyHolderInsureeFilter";
 import { fetchPolicyHolderInsurees } from "../actions"
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { DATE_TO_DATETIME_SUFFIX, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS } from "../constants"
+import UpdatePolicyHolderInsureeDialog from "../dialogs/UpdatePolicyHolderInsureeDialog"
+import { DATE_TO_DATETIME_SUFFIX, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS,
+    RIGHT_POLICYHOLDERINSUREE_UPDATE } from "../constants"
 
 const DEFAULT_ORDER_BY = "insuree";
 
@@ -61,18 +63,23 @@ class PolicyHolderInsureeSearcher extends Component {
     }
 
     headers = () => {
-        return [
+        const { rights } = this.props;
+        let result = [
             "policyHolder.name",
             "policyHolder.contributionPlanBundle",
             "policyHolder.calculation",
             "policyHolder.dateValidFrom",
             "policyHolder.dateValidTo"
         ];
+        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_UPDATE)) {
+            result.push("policyHolder.emptyLabel");
+        }
+        return result;
     }
 
     itemFormatters = () => {
-        const { intl, modulesManager } = this.props;
-        return [
+        const { intl, modulesManager, rights, policyHolder } = this.props;
+        let result = [
             policyHolderInsuree => !!policyHolderInsuree.insuree
                 ? <PublishedComponent
                     pubRef="insuree.InsureePicker"
@@ -84,7 +91,7 @@ class PolicyHolderInsureeSearcher extends Component {
                 ? <PublishedComponent
                     pubRef="contributionPlan.ContributionPlanBundlePicker"
                     withLabel={false}
-                    value={decodeId(policyHolderInsuree.contributionPlanBundle.id)}
+                    value={policyHolderInsuree.contributionPlanBundle}
                     readOnly />
                 : "",
             policyHolderInsuree => !!policyHolderInsuree.jsonExt ? policyHolderInsuree.jsonExt : "",
@@ -95,6 +102,17 @@ class PolicyHolderInsureeSearcher extends Component {
                 ? formatDateFromISO(modulesManager, intl, policyHolderInsuree.dateValidTo)
                 : ""
         ];
+        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_UPDATE)) {
+            result.push(
+                policyHolderInsuree =>
+                    <UpdatePolicyHolderInsureeDialog
+                        policyHolder={policyHolder}
+                        policyHolderInsuree={policyHolderInsuree}
+                        onSave={this.props.onSave}
+                    />
+            );
+        }
+        return result;
     }
 
     sorts = () => {
