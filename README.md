@@ -21,9 +21,17 @@ None
 * `policyHolder.ActivityCodePicker`, picker for activity code (from JSON stored in the module configuration)
 
 ## Dispatched Redux Actions
-* `POLICYHOLDER_POLICYHOLDERS_{REQ|RESP|ERR}`, fetching policy holders (as triggered by the searcher)
+* `POLICYHOLDER_POLICYHOLDERS_{REQ|RESP|ERR}`, fetching Policy Holders (as triggered by the searcher)
+* `POLICYHOLDER_POLICYHOLDER_{REQ|RESP|ERR}`, fetching Policy Holder
+* `POLICYHOLDER_POLICYHOLDERINSUREES_{REQ|RESP|ERR}`, fetching Policy Holder Insurees (as triggered by the searcher)
 * `POLICYHOLDER_MUTATION_{REQ|ERR}`, sending a mutation
 * `POLICYHOLDER_CREATE_POLICYHOLDER_RESP`, receiving a result of create Policy Holder mutation
+* `POLICYHOLDER_UPDATE_POLICYHOLDER_RESP`, receiving a result of update Policy Holder mutation
+* `POLICYHOLDER_DELETE_POLICYHOLDER_RESP`, receiving a result of delete Policy Holder mutation
+* `POLICYHOLDER_CREATE_POLICYHOLDERINSUREE_RESP`, receiving a result of create Policy Holder Insuree mutation
+* `POLICYHOLDER_UPDATE_POLICYHOLDERINSUREE_RESP`, receiving a result of update Policy Holder Insuree mutation
+* `POLICYHOLDER_DELETE_POLICYHOLDERINSUREE_RESP`, receiving a result of delete Policy Holder Insuree mutation
+* `POLICYHOLDER_REPLACE_POLICYHOLDERINSUREE_RESP`, receiving a result of replace Policy Holder Insuree mutation
 
 ## Other Modules Listened Redux Actions
 None
