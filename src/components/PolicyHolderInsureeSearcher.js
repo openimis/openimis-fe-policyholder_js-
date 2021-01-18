@@ -9,8 +9,8 @@ import { connect } from "react-redux";
 import UpdatePolicyHolderInsureeDialog from "../dialogs/UpdatePolicyHolderInsureeDialog"
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
-import { DATE_TO_DATETIME_SUFFIX, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS,
-    RIGHT_POLICYHOLDERINSUREE_UPDATE, RIGHT_POLICYHOLDERINSUREE_DELETE, RIGHT_POLICYHOLDERINSUREE_REPLACE } from "../constants"
+import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, RIGHT_POLICYHOLDERINSUREE_UPDATE,
+    RIGHT_POLICYHOLDERINSUREE_DELETE, RIGHT_POLICYHOLDERINSUREE_REPLACE } from "../constants"
 
 const DEFAULT_ORDER_BY = "insuree";
 
@@ -47,20 +47,6 @@ class PolicyHolderInsureeSearcher extends Component {
         params.push(`policyHolder_Id: "${decodeId(this.props.policyHolder.id)}"`);
         if (!state.filters.hasOwnProperty('isDeleted')) {
             params.push("isDeleted: false");
-        }
-        if (!state.filters.hasOwnProperty('dateValidTo')) {
-            let dateValidAt = formatDateFromISO(this.props.modulesManager, this.props.intl, new Date());
-            if (state.filters.hasOwnProperty('dateValidFrom')) {
-                /**
-                 * If @see dateValidTo is not set but @see dateValidFrom is set,
-                 * then all @see PolicyHolderInsuree valid at @see dateValidFrom are shown.
-                 * Default filter on @see dateValidFrom has to be removed from query params. 
-                 */
-                dateValidAt = state.filters['dateValidFrom']['value'];
-                params = params.filter(f => !f.startsWith('dateValidFrom'));
-            }
-            params.push(`dateValidFrom_Lte: "${dateValidAt}${DATE_TO_DATETIME_SUFFIX}"`);
-            params.push(`dateValidTo_Gte: "${dateValidAt}${DATE_TO_DATETIME_SUFFIX}"`);
         }
         if (!!state.afterCursor) {
             params.push(`after: "${state.afterCursor}"`);

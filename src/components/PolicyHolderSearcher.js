@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { IconButton, Tooltip } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { RIGHT_POLICYHOLDER_UPDATE, RIGHT_POLICYHOLDER_DELETE, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, DATE_TO_DATETIME_SUFFIX } from "../constants"
+import { RIGHT_POLICYHOLDER_UPDATE, RIGHT_POLICYHOLDER_DELETE, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS } from "../constants"
 
 class PolicyHolderSearcher extends Component {
     constructor(props) {
@@ -42,20 +42,6 @@ class PolicyHolderSearcher extends Component {
         params.push(`first: ${state.pageSize}`);
         if (!state.filters.hasOwnProperty('isDeleted')) {
             params.push("isDeleted: false");
-        }
-        if (!state.filters.hasOwnProperty('dateValidTo')) {
-            let dateValidAt = formatDateFromISO(this.props.modulesManager, this.props.intl, new Date());
-            if (state.filters.hasOwnProperty('dateValidFrom')) {
-                /**
-                 * If @see dateValidTo is not set but @see dateValidFrom is set,
-                 * then all @see PolicyHolder valid at @see dateValidFrom are shown.
-                 * Default filter on @see dateValidFrom has to be removed from query params. 
-                 */
-                dateValidAt = state.filters['dateValidFrom']['value'];
-                params = params.filter(f => !f.startsWith('dateValidFrom'));
-            }
-            params.push(`dateValidFrom_Lte: "${dateValidAt}${DATE_TO_DATETIME_SUFFIX}"`);
-            params.push(`dateValidTo_Gte: "${dateValidAt}${DATE_TO_DATETIME_SUFFIX}"`);
         }
         if (!!state.afterCursor) {
             params.push(`after: "${state.afterCursor}"`);
