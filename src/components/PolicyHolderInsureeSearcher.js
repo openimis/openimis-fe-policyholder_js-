@@ -19,7 +19,8 @@ class PolicyHolderInsureeSearcher extends Component {
         super(props);
         this.state = {
             toDelete: null,
-            deleted: []
+            deleted: [],
+            queryParams: null
         }
         this.rowsPerPageOptions = props.modulesManager.getConf("fe-policyHolder", "policyHolderFilter.rowsPerPageOptions", ROWS_PER_PAGE_OPTIONS);
         this.defaultPageSize = props.modulesManager.getConf("fe-policyHolder", "policyHolderFilter.defaultPageSize", DEFAULT_PAGE_SIZE);
@@ -37,7 +38,7 @@ class PolicyHolderInsureeSearcher extends Component {
 
     fetch = params => this.props.fetchPolicyHolderInsurees(this.props.modulesManager, params);
 
-    refetch = () => this.fetch(this.filtersToQueryParams({ filters: {}, pageSize: this.defaultPageSize, orderBy: [DEFAULT_ORDER_BY] }));
+    refetch = () => this.fetch(this.state.queryParams);
 
     filtersToQueryParams = state => {
         let params = Object.keys(state.filters)
@@ -57,6 +58,7 @@ class PolicyHolderInsureeSearcher extends Component {
         if (!!state.orderBy) {
             params.push(`orderBy: ["${state.orderBy}"]`);
         }
+        this.setState({ queryParams: params });
         return params;
     }
 
@@ -108,35 +110,39 @@ class PolicyHolderInsureeSearcher extends Component {
         ];
         if (rights.includes(RIGHT_POLICYHOLDERINSUREE_REPLACE)) {
             result.push(
-                policyHolderInsuree =>
+                policyHolderInsuree => !this.isDeletedFilterEnabled(policyHolderInsuree) && (
                     <UpdatePolicyHolderInsureeDialog
                         policyHolder={policyHolder}
                         policyHolderInsuree={policyHolderInsuree}
                         onSave={this.props.onSave}
-                        disabled={this.state.deleted.includes(policyHolderInsuree.id)}
+                        disabled={this.state.deleted.includes(policyHolderInsuree.id) || this.isReplaced(policyHolderInsuree)}
                         isReplacing={true}
                     />
+                )
             );
         }
         if (rights.includes(RIGHT_POLICYHOLDERINSUREE_UPDATE)) {
             result.push(
-                policyHolderInsuree =>
+                policyHolderInsuree => !this.isDeletedFilterEnabled(policyHolderInsuree) && (
                     <UpdatePolicyHolderInsureeDialog
                         policyHolder={policyHolder}
                         policyHolderInsuree={policyHolderInsuree}
                         onSave={this.props.onSave}
-                        disabled={this.state.deleted.includes(policyHolderInsuree.id)}
+                        disabled={this.state.deleted.includes(policyHolderInsuree.id) || this.isReplaced(policyHolderInsuree)}
                     />
+                )
             );
         }
         if (rights.includes(RIGHT_POLICYHOLDERINSUREE_DELETE)) {
             result.push(
-                policyHolderInsuree => withTooltip(
-                    <IconButton
-                        onClick={() => this.onDelete(policyHolderInsuree)}
-                        disabled={this.state.deleted.includes(policyHolderInsuree.id)}>
-                        <DeleteIcon />
-                    </IconButton>,
+                policyHolderInsuree => !this.isDeletedFilterEnabled(policyHolderInsuree) && withTooltip(
+                    <div>
+                        <IconButton
+                            onClick={() => this.onDelete(policyHolderInsuree)}
+                            disabled={this.state.deleted.includes(policyHolderInsuree.id)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </div>,
                     formatMessage(this.props.intl, "policyHolder", "deleteButton.tooltip")
                 )
             )
@@ -185,7 +191,12 @@ class PolicyHolderInsureeSearcher extends Component {
         )
     }
 
-    rowDeleted = (_, policyHolderInsuree) => this.state.deleted.includes(policyHolderInsuree.id);
+    isReplaced = policyHolderInsuree => !!policyHolderInsuree.replacementUuid;
+
+    isDeletedFilterEnabled = policyHolderInsuree => policyHolderInsuree.isDeleted;
+
+    isRowDisabled = (_, policyHolderInsuree) => this.state.deleted.includes(policyHolderInsuree.id)
+        && !this.isDeletedFilterEnabled(policyHolderInsuree);
 
     sorts = () => {
         return [
@@ -219,8 +230,8 @@ class PolicyHolderInsureeSearcher extends Component {
                     rowsPerPageOptions={this.rowsPerPageOptions}
                     defaultPageSize={this.defaultPageSize}
                     defaultOrderBy={DEFAULT_ORDER_BY}
-                    rowLocked={this.rowDeleted}
-                    rowDisabled={this.rowDeleted}
+                    rowLocked={this.isRowDisabled}
+                    rowDisabled={this.isRowDisabled}
                 />
             </Fragment>
         )
