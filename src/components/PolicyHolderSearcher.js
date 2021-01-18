@@ -110,13 +110,13 @@ class PolicyHolderSearcher extends Component {
         ];
         if (rights.includes(RIGHT_POLICYHOLDER_UPDATE)) {
             result.push(
-                policyHolder => (
-                    <Tooltip title={formatMessage(this.props.intl, "policyHolder", "editButton.tooltip")}>
+                policyHolder => !this.isDeletedFilterEnabled(policyHolder) && (
+                    <Tooltip title={formatMessage(intl, "policyHolder", "editButton.tooltip")}>
                         <IconButton
                             href={policyHolderPageLink(policyHolder)}
                             onClick={e => e.stopPropagation() && !policyHolder.clientMutationId && onDoubleClick(policyHolder)}
                             disabled={this.state.deleted.includes(policyHolder.id)}>
-                                <EditIcon />
+                            <EditIcon />
                         </IconButton>
                     </Tooltip>
                 )
@@ -124,12 +124,12 @@ class PolicyHolderSearcher extends Component {
         }
         if (rights.includes(RIGHT_POLICYHOLDER_DELETE)) {
             result.push(
-                policyHolder => (
-                    <Tooltip title={formatMessage(this.props.intl, "policyHolder", "deleteButton.tooltip")}>
+                policyHolder => !this.isDeletedFilterEnabled(policyHolder) && (
+                    <Tooltip title={formatMessage(intl, "policyHolder", "deleteButton.tooltip")}>
                         <IconButton
                             onClick={() => this.onDelete(policyHolder)}
                             disabled={this.state.deleted.includes(policyHolder.id)}>
-                                <DeleteIcon />
+                            <DeleteIcon />
                         </IconButton>
                     </Tooltip>
                 )
@@ -175,7 +175,13 @@ class PolicyHolderSearcher extends Component {
         )
     }
 
-    rowDeleted = (_, policyHolder) => this.state.deleted.includes(policyHolder.id);
+    isDeletedFilterEnabled = policyHolder => policyHolder.isDeleted;
+
+    isRowDisabled = (_, policyHolder) => this.state.deleted.includes(policyHolder.id)
+        && !this.isDeletedFilterEnabled(policyHolder);
+
+    isOnDoubleClickEnabled = policyHolder => !this.state.deleted.includes(policyHolder.id)
+        && !this.isDeletedFilterEnabled(policyHolder);
 
     sorts = () => {
         return [
@@ -210,9 +216,9 @@ class PolicyHolderSearcher extends Component {
                     rowsPerPageOptions={this.rowsPerPageOptions}
                     defaultPageSize={this.defaultPageSize}
                     defaultOrderBy="code"
-                    onDoubleClick={policyHolder => !policyHolder.clientMutationId && onDoubleClick(policyHolder)}
-                    rowDisabled={this.rowDeleted}
-                    rowLocked={this.rowDeleted}
+                    onDoubleClick={policyHolder => this.isOnDoubleClickEnabled(policyHolder) && onDoubleClick(policyHolder)}
+                    rowDisabled={this.isRowDisabled}
+                    rowLocked={this.isRowDisabled}
                 />
             </Fragment>
         )

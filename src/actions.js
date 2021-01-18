@@ -5,14 +5,15 @@ import {
 const POLICYHOLDER_FULL_PROJECTION = modulesManager => [
     "id", "code", "tradeName", "locations" + modulesManager.getProjection("location.Location.FlatProjection"),
     "address", "phone", "fax", "email", "contactName", "legalForm", "activityCode",
-    "accountancyAccount", "bankAccount", "paymentReference", "dateValidFrom", "dateValidTo"
+    "accountancyAccount", "bankAccount", "paymentReference", "dateValidFrom", "dateValidTo", "isDeleted"
 ];
 
 const POLICYHOLDERINSUREE_FULL_PROJECTION = modulesManager => [
     "id", "dateValidFrom", "dateValidTo", "jsonExt",
     "policyHolder{id}",
     "insuree" + modulesManager.getProjection("insuree.InsureePicker.projection"),
-    "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection")
+    "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection"),
+    "isDeleted", "replacementUuid"
 ];
 
 function dateTimeToDate(date) {
@@ -168,7 +169,6 @@ export function deletePolicyHolderInsuree(policyHolderInsuree, clientMutationLab
 export function replacePolicyHolderInsuree(policyHolderInsuree, clientMutationLabel) {
     let mutation = formatMutation("replacePolicyHolderInsuree", formatPolicyHolderInsureeGQL(policyHolderInsuree, true), clientMutationLabel);
     var requestedDateTime = new Date();
-    console.log(mutation.payload);
     return graphql(
         mutation.payload,
         ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_REPLACE_POLICYHOLDERINSUREE_RESP", "POLICYHOLDER_MUTATION_ERR"],

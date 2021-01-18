@@ -93,19 +93,23 @@ class UpdatePolicyHolderInsureeDialog extends Component {
             <Fragment>
                 {isReplacing ? (
                     <Tooltip title={formatMessage(intl, "policyHolder", "replaceButton.tooltip")}>
-                        <IconButton
-                            onClick={this.handleOpen}
-                            disabled={disabled}>
-                            <NoteAddIcon />
-                        </IconButton>
+                        <div>
+                            <IconButton
+                                onClick={this.handleOpen}
+                                disabled={disabled}>
+                                <NoteAddIcon />
+                            </IconButton>
+                        </div>
                     </Tooltip>
                 ) : (
                     <Tooltip title={formatMessage(intl, "policyHolder", "editButton.tooltip")}>
-                        <IconButton
-                            onClick={this.handleOpen}
-                            disabled={disabled}>
-                            <EditIcon />
-                        </IconButton>
+                        <div>
+                            <IconButton
+                                onClick={this.handleOpen}
+                                disabled={disabled}>
+                                <EditIcon />
+                            </IconButton>
+                        </div>
                     </Tooltip>
                 )}
                 <Dialog open={open} onClose={this.handleClose}>

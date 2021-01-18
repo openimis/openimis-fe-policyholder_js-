@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { injectIntl } from 'react-intl';
-import { withModulesManager, formatMessage, TextInput, PublishedComponent } from "@openimis/fe-core";
+import { withModulesManager, formatMessage, TextInput, PublishedComponent, decodeId } from "@openimis/fe-core";
 import { Grid, FormControlLabel, Checkbox } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { GREATER_OR_EQUAL_LOOKUP, LESS_OR_EQUAL_LOOKUP, STARTS_WITH_LOOKUP, DATE_TO_DATETIME_SUFFIX } from "../constants"
@@ -30,14 +30,12 @@ class PolicyHolderInsureeFilter extends Component {
         ])
     }
 
-    _onChangeStringFilter = (k, v, lookup = null) => {
+    _onChangeStringFilter = (k, v, lookup) => {
         this.props.onChangeFilters([
             {
                 id: k,
                 value: v,
-                filter: !!lookup
-                    ? `${k}_${lookup}: "${v}"`
-                    : `${k}: "${v}"`
+                filter: `${k}_${lookup}: "${v}"`
             }
         ])
     }
@@ -53,7 +51,7 @@ class PolicyHolderInsureeFilter extends Component {
     }
 
     render() {
-        const { intl, classes } = this.props;
+        const { intl, classes, onChangeFilters } = this.props;
         return (
             <Grid container className={classes.form}>
                 <Grid item xs={3} className={classes.item}>
@@ -70,7 +68,11 @@ class PolicyHolderInsureeFilter extends Component {
                         withNull={true}
                         nullLabel={formatMessage(intl, "contributionPlan", "any")}
                         value={this._filterValue('contributionPlanBundle_Id')}
-                        onChange={v => this._onChangeStringFilter('contributionPlanBundle_Id', v)}
+                        onChange={v => onChangeFilters([{
+                            id: 'contributionPlanBundle_Id',
+                            value: v,
+                            filter: `contributionPlanBundle_Id: "${!!v && decodeId(v.id)}"`
+                        }])}
                     />
                 </Grid>
                 <Grid item xs={2} className={classes.item}>
