@@ -22,7 +22,13 @@ function reducer(
         fetchedPolicyHolderInsurees: false,
         policyHolderInsurees: [],
         policyHolderInsureesPageInfo: {},
-        policyHolderInsureesTotalCount: 0
+        policyHolderInsureesTotalCount: 0,
+        fetchingPolicyHolderContributionPlanBundles: false,
+        errorPolicyHolderContributionPlanBundles: null,
+        fetchedPolicyHolderContributionPlanBundles: false,
+        policyHolderContributionPlanBundles: [],
+        policyHolderContributionPlanBundlesPageInfo: {},
+        policyHolderContributionPlanBundlesTotalCount: 0
     },
     action
 ) {
@@ -100,7 +106,33 @@ function reducer(
             return {
                 ...state,
                 fetchingPolicyHolderInsurees: false,
-                errorPolicyHolders: formatServerError(action.payload)
+                errorPolicyHolderInsurees: formatServerError(action.payload)
+            };
+        case "POLICYHOLDER_POLICYHOLDERCONTRIBUTIONPLANBUNDLES_REQ":
+            return {
+                ...state,
+                fetchingPolicyHolderContributionPlanBundles: true,
+                fetchedPolicyHolderContributionPlanBundles: false,
+                policyHolderContributionPlanBundles: [],
+                policyHolderContributionPlanBundlesPageInfo: {},
+                policyHolderContributionPlanBundlesTotalCount: 0,
+                errorPolicyHolderContributionPlanBundles: null
+            };
+        case "POLICYHOLDER_POLICYHOLDERCONTRIBUTIONPLANBUNDLES_RESP":
+            return {
+                ...state,
+                fetchingPolicyHolderContributionPlanBundles: false,
+                fetchedPolicyHolderContributionPlanBundles: true,
+                policyHolderContributionPlanBundles: parseData(action.payload.data.policyHolderContributionPlanBundle),
+                policyHolderContributionPlanBundlesPageInfo: pageInfo(action.payload.data.policyHolderContributionPlanBundle),
+                policyHolderContributionPlanBundlesTotalCount: !!action.payload.data.policyHolderContributionPlanBundle ? action.payload.data.policyHolderContributionPlanBundle.totalCount : null,
+                errorPolicyHolderContributionPlanBundles: formatGraphQLError(action.payload)
+            };
+        case "POLICYHOLDER_POLICYHOLDERCONTRIBUTIONPLANBUNDLES_ERR":
+            return {
+                ...state,
+                fetchingPolicyHolderContributionPlanBundles: false,
+                errorPolicyHolderContributionPlanBundles: formatServerError(action.payload)
             };
         case "POLICYHOLDER_MUTATION_REQ":
             return dispatchMutationReq(state, action);

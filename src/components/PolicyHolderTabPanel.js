@@ -1,7 +1,10 @@
 import React from "react";
 import { Paper, Grid } from "@material-ui/core";
-import { withModulesManager, FormPanel, Contributions } from "@openimis/fe-core";
+import { withModulesManager, FormPanel, Contributions, decodeId } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { fetchPolicyHolderContributionPlanBundles } from "../actions"
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { RIGHT_POLICYHOLDERINSUREE_SEARCH, POLICYHOLDERINSUREE_TAB_VALUE } from "../constants"
 
@@ -27,6 +30,17 @@ class PolicyHolderTabPanel extends FormPanel {
         super(props);
         this.state = {
             value: props.rights.includes(RIGHT_POLICYHOLDERINSUREE_SEARCH) ? POLICYHOLDERINSUREE_TAB_VALUE : undefined
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        /** 
+         * Fetching Policy Holder Contribution Plan Bundle entities
+         * at this point is necessary as they are shared by two tabs:
+         * @see PolicyHolderInsureesTab and @see PolicyHolderContributionPlanBundlesTab
+         */
+        if (prevProps.edited !== this.props.edited) {
+            this.props.fetchPolicyHolderContributionPlanBundles(this.props.modulesManager, [`policyHolder_Id: "${decodeId(this.props.edited.id)}"`]);
         }
     }
 
@@ -66,4 +80,8 @@ class PolicyHolderTabPanel extends FormPanel {
     }
 }
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(PolicyHolderTabPanel))))
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({ fetchPolicyHolderContributionPlanBundles }, dispatch);
+};
+
+export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(null, mapDispatchToProps)(PolicyHolderTabPanel)))));

@@ -13,6 +13,7 @@ import { updatePolicyHolderInsuree, replacePolicyHolderInsuree } from "../action
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import PolicyHolderContributionPlanBundlePicker from '../pickers/PolicyHolderContributionPlanBundlePicker';
 
 const styles = theme => ({
     item: theme.paper.item
@@ -130,8 +131,7 @@ class UpdatePolicyHolderInsureeDialog extends Component {
                                 />
                             </Grid>
                             <Grid item className={classes.item}>
-                                <PublishedComponent
-                                    pubRef="contributionPlan.ContributionPlanBundlePicker"
+                                <PolicyHolderContributionPlanBundlePicker
                                     required
                                     value={!!policyHolderInsuree.contributionPlanBundle && policyHolderInsuree.contributionPlanBundle}
                                     onChange={v => this.updateAttribute('contributionPlanBundle', v)}
