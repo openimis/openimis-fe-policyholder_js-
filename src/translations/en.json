@@ -68,5 +68,8 @@
     "policyHolder.CreatePolicyHolderInsuree.mutationLabel": "Create Policy Holder Insuree for {code} - {tradeName}",
     "policyHolder.UpdatePolicyHolderInsuree.mutationLabel": "Update Policy Holder Insuree of {code} - {tradeName}",
     "policyHolder.DeletePolicyHolderInsuree.mutationLabel": "Delete Policy Holder Insuree from {code} - {tradeName}",
-    "policyHolder.ReplacePolicyHolderInsuree.mutationLabel": "Replace Policy Holder Insuree of {code} - {tradeName}"
+    "policyHolder.ReplacePolicyHolderInsuree.mutationLabel": "Replace Policy Holder Insuree of {code} - {tradeName}",
+    "policyHolder.policyHolderContributionPlanBundle.isDeleted": "Show Deleted Contribution Plan Bundles",
+    "policyHolder.policyHolderContributionPlanBundle.searcher.title": "{policyHolderContributionPlanBundlesTotalCount} Contribution Plan Bundles Found",
+    "policyHolder.policyHolderContributionPlanBundle.any": "Any"
 }

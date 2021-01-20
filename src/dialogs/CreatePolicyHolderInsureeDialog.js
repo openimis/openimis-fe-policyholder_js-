@@ -12,6 +12,7 @@ import { createPolicyHolderInsuree } from "../actions";
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import PolicyHolderContributionPlanBundlePicker from '../pickers/PolicyHolderContributionPlanBundlePicker';
 
 const styles = theme => ({
     item: theme.paper.item
@@ -97,8 +98,7 @@ class CreatePolicyHolderInsureeDialog extends Component {
                                 />
                             </Grid>
                             <Grid item className={classes.item}>
-                                <PublishedComponent
-                                    pubRef="contributionPlan.ContributionPlanBundlePicker"
+                                <PolicyHolderContributionPlanBundlePicker
                                     withNull={true}
                                     required
                                     value={!!policyHolderInsuree.contributionPlanBundle && policyHolderInsuree.contributionPlanBundle}

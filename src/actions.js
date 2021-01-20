@@ -16,6 +16,11 @@ const POLICYHOLDERINSUREE_FULL_PROJECTION = modulesManager => [
     "isDeleted", "replacementUuid"
 ];
 
+const POLICYHOLDERCONTRIBUTIONPLANBUNDLE_FULL_PROJECTION = modulesManager => [
+    "id", "dateValidFrom", "dateValidTo", "jsonExt",
+    "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection")
+]
+
 function dateTimeToDate(date) {
     return date.split('T')[0];
 }
@@ -46,6 +51,15 @@ export function fetchPolicyHolderInsurees(modulesManager, params) {
         POLICYHOLDERINSUREE_FULL_PROJECTION(modulesManager)
     );
     return graphql(payload, "POLICYHOLDER_POLICYHOLDERINSUREES");
+}
+
+export function fetchPolicyHolderContributionPlanBundles(modulesManager, params) {
+    const payload = formatPageQueryWithCount(
+        "policyHolderContributionPlanBundle",
+        params,
+        POLICYHOLDERCONTRIBUTIONPLANBUNDLE_FULL_PROJECTION(modulesManager)
+    );
+    return graphql(payload, "POLICYHOLDER_POLICYHOLDERCONTRIBUTIONPLANBUNDLES");
 }
 
 function formatPolicyHolderGQL(policyHolder) {

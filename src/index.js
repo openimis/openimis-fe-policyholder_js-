@@ -10,6 +10,7 @@ import reducer from "./reducer";
 import { RIGHT_POLICYHOLDER_SEARCH } from "./constants"
 import TabPanel from "./components/TabPanel";
 import { PolicyHolderInsureesTabLabel, PolicyHolderInsureesTabPanel } from "./components/PolicyHolderInsureesTab";
+import { PolicyHolderContributionPlanBundlesTabLabel, PolicyHolderContributionPlanBundlesTabPanel } from "./components/PolicyHolderContributionPlanBundlesTab";
 
 const ROUTE_POLICY_HOLDERS = "policyHolders";
 const ROUTE_POLICY_HOLDER = "policyHolders/policyHolder";
@@ -36,8 +37,8 @@ const DEFAULT_CONFIG = {
       filter: rights => rights.includes(RIGHT_POLICYHOLDER_SEARCH)
     }
   ],
-  "policyHolder.TabPanel.label": [PolicyHolderInsureesTabLabel],
-  "policyHolder.TabPanel.panel": [PolicyHolderInsureesTabPanel]
+  "policyHolder.TabPanel.label": [PolicyHolderInsureesTabLabel, PolicyHolderContributionPlanBundlesTabLabel],
+  "policyHolder.TabPanel.panel": [PolicyHolderInsureesTabPanel, PolicyHolderContributionPlanBundlesTabPanel]
 }
 
 export const PolicyHolderModule = (cfg) => {

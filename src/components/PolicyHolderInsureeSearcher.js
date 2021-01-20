@@ -11,6 +11,7 @@ import { IconButton } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, RIGHT_POLICYHOLDERINSUREE_UPDATE,
     RIGHT_POLICYHOLDERINSUREE_DELETE, RIGHT_POLICYHOLDERINSUREE_REPLACE } from "../constants"
+import PolicyHolderContributionPlanBundlePicker from "../pickers/PolicyHolderContributionPlanBundlePicker";
 
 const DEFAULT_ORDER_BY = "insuree";
 
@@ -22,8 +23,6 @@ class PolicyHolderInsureeSearcher extends Component {
             deleted: [],
             queryParams: null
         }
-        this.rowsPerPageOptions = props.modulesManager.getConf("fe-policyHolder", "policyHolderFilter.rowsPerPageOptions", ROWS_PER_PAGE_OPTIONS);
-        this.defaultPageSize = props.modulesManager.getConf("fe-policyHolder", "policyHolderFilter.defaultPageSize", DEFAULT_PAGE_SIZE);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -94,10 +93,9 @@ class PolicyHolderInsureeSearcher extends Component {
                     readOnly />
                 : "",
             policyHolderInsuree => !!policyHolderInsuree.contributionPlanBundle
-                ? <PublishedComponent
-                    pubRef="contributionPlan.ContributionPlanBundlePicker"
-                    withLabel={false}
+                ? <PolicyHolderContributionPlanBundlePicker
                     value={policyHolderInsuree.contributionPlanBundle}
+                    withLabel={false}
                     readOnly />
                 : "",
             policyHolderInsuree => !!policyHolderInsuree.jsonExt ? policyHolderInsuree.jsonExt : "",
@@ -227,8 +225,8 @@ class PolicyHolderInsureeSearcher extends Component {
                     itemFormatters={this.itemFormatters}
                     filtersToQueryParams={this.filtersToQueryParams}
                     sorts={this.sorts}
-                    rowsPerPageOptions={this.rowsPerPageOptions}
-                    defaultPageSize={this.defaultPageSize}
+                    rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+                    defaultPageSize={DEFAULT_PAGE_SIZE}
                     defaultOrderBy={DEFAULT_ORDER_BY}
                     rowLocked={this.isRowDisabled}
                     rowDisabled={this.isRowDisabled}
