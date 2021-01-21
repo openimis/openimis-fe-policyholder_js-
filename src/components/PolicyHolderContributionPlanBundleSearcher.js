@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_REPLACE,
     RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_UPDATE, RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_DELETE } from "../constants"
 import PolicyHolderContributionPlanBundlePicker from "../pickers/PolicyHolderContributionPlanBundlePicker";
+import UpdatePolicyHolderContributionPlanBundleDialog from "../dialogs/UpdatePolicyHolderContributionPlanBundleDialog";
 
 const DEFAULT_ORDER_BY = "contributionPlanBundle";
 
@@ -73,23 +74,37 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
     }
 
     itemFormatters = () => {
-        const { intl, modulesManager } = this.props;
-        return [
+        const { intl, modulesManager, rights, policyHolder, onSave } = this.props;
+        let result = [
             policyHolderContributionPlanBundle => !!policyHolderContributionPlanBundle.contributionPlanBundle
                 ? <PolicyHolderContributionPlanBundlePicker
                     value={policyHolderContributionPlanBundle.contributionPlanBundle}
                     withLabel={false}
                     readOnly />
                 : "",
-            policyHolderInsuree => !!policyHolderInsuree.jsonExt ? policyHolderInsuree.jsonExt : "",
-            policyHolderInsuree => !!policyHolderInsuree.dateValidFrom
-                ? formatDateFromISO(modulesManager, intl, policyHolderInsuree.dateValidFrom)
+            policyHolderContributionPlanBundle => !!policyHolderContributionPlanBundle.jsonExt ? policyHolderContributionPlanBundle.jsonExt : "",
+            policyHolderContributionPlanBundle => !!policyHolderContributionPlanBundle.dateValidFrom
+                ? formatDateFromISO(modulesManager, intl, policyHolderContributionPlanBundle.dateValidFrom)
                 : "",
-            policyHolderInsuree => !!policyHolderInsuree.dateValidTo
-                ? formatDateFromISO(modulesManager, intl, policyHolderInsuree.dateValidTo)
+            policyHolderContributionPlanBundle => !!policyHolderContributionPlanBundle.dateValidTo
+                ? formatDateFromISO(modulesManager, intl, policyHolderContributionPlanBundle.dateValidTo)
                 : ""
         ];
+        if (rights.includes(RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_UPDATE)) {
+            result.push(
+                policyHolderContributionPlanBundle => !this.isDeletedFilterEnabled(policyHolderContributionPlanBundle) && (
+                    <UpdatePolicyHolderContributionPlanBundleDialog
+                        policyHolder={policyHolder}
+                        policyHolderContributionPlanBundle={policyHolderContributionPlanBundle}
+                        onSave={onSave}
+                    />
+                )
+            );
+        }
+        return result;
     }
+
+    isDeletedFilterEnabled = policyHolderContributionPlanBundle => policyHolderContributionPlanBundle.isDeleted;
 
     sorts = () => {
         return [

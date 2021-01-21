@@ -24,12 +24,15 @@ class UpdatePolicyHolderInsureeDialog extends Component {
         super(props);
         this.state = {
             open: false,
-            policyHolderInsuree: props.policyHolderInsuree
+            policyHolderInsuree: {}
         }
     }
 
     handleOpen = () => {
-        this.setState({ open: true });
+        this.setState((_, props) => ({
+            open: true,
+            policyHolderInsuree: props.policyHolderInsuree
+        }));
     };
 
     handleClose = () => {
@@ -162,13 +165,13 @@ class UpdatePolicyHolderInsureeDialog extends Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClose} variant="outlined">
-                            <FormattedMessage module="policyHolder" id="policyHolderInsuree.dialog.cancel" />
+                            <FormattedMessage module="policyHolder" id="dialog.cancel" />
                         </Button>
                         <Button onClick={this.handleSave} disabled={!this.canSave()} variant="contained" color="primary" autoFocus>
                             {isReplacing ? (
                                 <FormattedMessage module="policyHolder" id="policyHolderInsuree.dialog.replace" />
                             ) : (
-                                <FormattedMessage module="policyHolder" id="policyHolderInsuree.dialog.update" />
+                                <FormattedMessage module="policyHolder" id="dialog.update" />
                             )}
                         </Button>
                     </DialogActions>

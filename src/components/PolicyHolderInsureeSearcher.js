@@ -83,7 +83,7 @@ class PolicyHolderInsureeSearcher extends Component {
     }
 
     itemFormatters = () => {
-        const { intl, modulesManager, rights, policyHolder } = this.props;
+        const { intl, modulesManager, rights, policyHolder, onSave } = this.props;
         let result = [
             policyHolderInsuree => !!policyHolderInsuree.insuree
                 ? <PublishedComponent
@@ -112,7 +112,7 @@ class PolicyHolderInsureeSearcher extends Component {
                     <UpdatePolicyHolderInsureeDialog
                         policyHolder={policyHolder}
                         policyHolderInsuree={policyHolderInsuree}
-                        onSave={this.props.onSave}
+                        onSave={onSave}
                         disabled={this.state.deleted.includes(policyHolderInsuree.id) || this.isReplaced(policyHolderInsuree)}
                         isReplacing={true}
                     />
@@ -125,7 +125,7 @@ class PolicyHolderInsureeSearcher extends Component {
                     <UpdatePolicyHolderInsureeDialog
                         policyHolder={policyHolder}
                         policyHolderInsuree={policyHolderInsuree}
-                        onSave={this.props.onSave}
+                        onSave={onSave}
                         disabled={this.state.deleted.includes(policyHolderInsuree.id) || this.isReplaced(policyHolderInsuree)}
                     />
                 )
