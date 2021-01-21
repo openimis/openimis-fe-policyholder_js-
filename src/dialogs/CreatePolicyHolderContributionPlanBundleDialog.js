@@ -8,45 +8,44 @@ import AddIcon from '@material-ui/icons/Add';
 import { FormattedMessage, formatMessageWithValues, PublishedComponent } from "@openimis/fe-core";
 import { Fab, Grid } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { createPolicyHolderInsuree } from "../actions";
+import { createPolicyHolderContributionPlanBundle } from "../actions";
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import PolicyHolderContributionPlanBundlePicker from '../pickers/PolicyHolderContributionPlanBundlePicker';
 
 const styles = theme => ({
     item: theme.paper.item
 });
 
-class CreatePolicyHolderInsureeDialog extends Component {
+class CreatePolicyHolderContributionPlanBundleDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
             open: false,
-            policyHolderInsuree: {}
+            policyHolderContributionPlanBundle: {}
         }
     }
 
     handleOpen = () => {
         this.setState((_, props) => ({
             open: true,
-            policyHolderInsuree: {
+            policyHolderContributionPlanBundle: {
                 policyHolder: props.policyHolder
             }
         }));
     };
 
     handleClose = () => {
-        this.setState({ open: false, policyHolderInsuree: {} });
+        this.setState({ open: false, policyHolderContributionPlanBundle: {} });
     };
 
     handleSave = () => {
-        this.props.createPolicyHolderInsuree(
-            this.state.policyHolderInsuree,
+        this.props.createPolicyHolderContributionPlanBundle(
+            this.state.policyHolderContributionPlanBundle,
             formatMessageWithValues(
                 this.props.intl,
                 "policyHolder",
-                "CreatePolicyHolderInsuree.mutationLabel",
+                "CreatePolicyHolderContributionPlanBundle.mutationLabel",
                 {
                     code: this.props.policyHolder.code,
                     tradeName: this.props.policyHolder.tradeName
@@ -59,24 +58,23 @@ class CreatePolicyHolderInsureeDialog extends Component {
 
     updateAttribute = (attribute, value) => {
         this.setState(state => ({
-            policyHolderInsuree: {
-                ...state.policyHolderInsuree,
+            policyHolderContributionPlanBundle: {
+                ...state.policyHolderContributionPlanBundle,
                 [attribute]: value
             }
         }));
     }
 
     canSave = () => {
-        const { policyHolderInsuree } = this.state;
-        return !!policyHolderInsuree.policyHolder
-            && !!policyHolderInsuree.insuree
-            && !!policyHolderInsuree.contributionPlanBundle
-            && !!policyHolderInsuree.dateValidFrom;
+        const { policyHolderContributionPlanBundle } = this.state;
+        return !!policyHolderContributionPlanBundle.policyHolder
+            && !!policyHolderContributionPlanBundle.contributionPlanBundle
+            && !!policyHolderContributionPlanBundle.dateValidFrom;
     }
 
     render() {
         const { classes } = this.props;
-        const { open, policyHolderInsuree } = this.state;
+        const { open, policyHolderContributionPlanBundle } = this.state;
         return (
             <Fragment>
                 <Fab
@@ -87,23 +85,16 @@ class CreatePolicyHolderInsureeDialog extends Component {
                 </Fab>
                 <Dialog open={open} onClose={this.handleClose}>
                     <DialogTitle>
-                        <FormattedMessage module="policyHolder" id="policyHolderInsuree.createPolicyHolderInsuree" />
+                        <FormattedMessage module="policyHolder" id="policyHolderContributionPlanBundle.createPolicyHolderContributionPlanBundle" />
                     </DialogTitle>
                     <DialogContent>
                         <Grid container direction="column" className={classes.item}>
                             <Grid item className={classes.item}>
                                 <PublishedComponent
-                                    pubRef="insuree.InsureeChfIdPicker"
-                                    required
-                                    value={!!policyHolderInsuree.insuree && policyHolderInsuree.insuree}
-                                    onChange={v => this.updateAttribute('insuree', v)}
-                                />
-                            </Grid>
-                            <Grid item className={classes.item}>
-                                <PolicyHolderContributionPlanBundlePicker
+                                    pubRef="contributionPlan.ContributionPlanBundlePicker"
                                     withNull={true}
                                     required
-                                    value={!!policyHolderInsuree.contributionPlanBundle && policyHolderInsuree.contributionPlanBundle}
+                                    value={!!policyHolderContributionPlanBundle.contributionPlanBundle && policyHolderContributionPlanBundle.contributionPlanBundle}
                                     onChange={v => this.updateAttribute('contributionPlanBundle', v)}
                                 />
                             </Grid>
@@ -141,7 +132,7 @@ class CreatePolicyHolderInsureeDialog extends Component {
 }
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ createPolicyHolderInsuree }, dispatch);
+    return bindActionCreators({ createPolicyHolderContributionPlanBundle }, dispatch);
 };
 
-export default injectIntl(withTheme(withStyles(styles)(connect(null, mapDispatchToProps)(CreatePolicyHolderInsureeDialog))));
+export default injectIntl(withTheme(withStyles(styles)(connect(null, mapDispatchToProps)(CreatePolicyHolderContributionPlanBundleDialog))));

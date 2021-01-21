@@ -152,6 +152,8 @@ function reducer(
             return dispatchMutationResp(state, "deletePolicyHolderInsuree", action);
         case "POLICYHOLDER_REPLACE_POLICYHOLDERINSUREE_RESP":
             return dispatchMutationResp(state, "replacePolicyHolderInsuree", action);
+        case "POLICYHOLDER_CREATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
+            return dispatchMutationResp(state, "createPolicyHolderContributionPlanBundle", action);
         default:
             return state;
     }
