@@ -94,6 +94,16 @@ function formatPolicyHolderInsureeGQL(policyHolderInsuree, isReplaceMutation = f
     `;
 }
 
+function formatPolicyHolderContributionPlanBundleGQL(policyHolderContributionPlanBundle) {
+    return `
+        ${!!policyHolderContributionPlanBundle.id ? `id: "${decodeId(policyHolderContributionPlanBundle.id)}"` : ''}
+        ${!!policyHolderContributionPlanBundle.policyHolder ? `policyHolderId: "${decodeId(policyHolderContributionPlanBundle.policyHolder.id)}"` : ''}
+        ${!!policyHolderContributionPlanBundle.contributionPlanBundle ? `contributionPlanBundleId: "${decodeId(policyHolderContributionPlanBundle.contributionPlanBundle.id)}"` : ""}
+        ${!!policyHolderContributionPlanBundle.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderContributionPlanBundle.dateValidFrom)}"` : ""}
+        ${!!policyHolderContributionPlanBundle.dateValidTo ? `dateValidTo: "${dateTimeToDate(policyHolderContributionPlanBundle.dateValidTo)}"` : ""}
+    `;
+}
+
 export function createPolicyHolder(policyHolder, clientMutationLabel) {
     let mutation = formatMutation("createPolicyHolder", formatPolicyHolderGQL(policyHolder), clientMutationLabel);
     var requestedDateTime = new Date();
@@ -186,6 +196,20 @@ export function replacePolicyHolderInsuree(policyHolderInsuree, clientMutationLa
     return graphql(
         mutation.payload,
         ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_REPLACE_POLICYHOLDERINSUREE_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}
+
+export function createPolicyHolderContributionPlanBundle(policyHolderContributionPlanBundle, clientMutationLabel) {
+    let mutation = formatMutation("createPolicyHolderContributionPlanBundle", formatPolicyHolderContributionPlanBundleGQL(policyHolderContributionPlanBundle), clientMutationLabel);
+    var requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_CREATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP", "POLICYHOLDER_MUTATION_ERR"],
         {
             clientMutationId: mutation.clientMutationId,
             clientMutationLabel,

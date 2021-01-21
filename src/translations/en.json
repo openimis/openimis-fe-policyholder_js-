@@ -61,8 +61,8 @@
     "policyHolder.policyHolderInsuree.deleteDialog.title": "Are you sure you want to delete {otherNames} {lastName}?",
     "policyHolder.policyHolderInsuree.deleteDialog.message": "Deleting the insuree will not erase them from OpenIMIS database. The insuree will be deactivated from the {code} {tradeName} list.",
     "policyHolder.policyHolderInsuree.replaceDialog.title": "Add new version of Policy Holder Insuree",
-    "policyHolder.policyHolderInsuree.dialog.cancel": "Cancel",
-    "policyHolder.policyHolderInsuree.dialog.create": "Create",
+    "policyHolder.dialog.cancel": "Cancel",
+    "policyHolder.dialog.create": "Create",
     "policyHolder.policyHolderInsuree.dialog.update": "Save",
     "policyHolder.policyHolderInsuree.dialog.replace": "Add",
     "policyHolder.CreatePolicyHolderInsuree.mutationLabel": "Create Policy Holder Insuree for {code} - {tradeName}",
@@ -71,5 +71,7 @@
     "policyHolder.ReplacePolicyHolderInsuree.mutationLabel": "Replace Policy Holder Insuree of {code} - {tradeName}",
     "policyHolder.policyHolderContributionPlanBundle.isDeleted": "Show Deleted Contribution Plan Bundles",
     "policyHolder.policyHolderContributionPlanBundle.searcher.title": "{policyHolderContributionPlanBundlesTotalCount} Contribution Plan Bundles Found",
-    "policyHolder.policyHolderContributionPlanBundle.any": "Any"
+    "policyHolder.policyHolderContributionPlanBundle.any": "Any",
+    "policyHolder.policyHolderContributionPlanBundle.createPolicyHolderContributionPlanBundle": "Create new Contribution Plan Bundle",
+    "policyHolder.CreatePolicyHolderContributionPlanBundle.mutationLabel": "Create Contribution Plan Bundle for {code} - {tradeName}"
 }

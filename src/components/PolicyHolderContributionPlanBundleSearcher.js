@@ -13,7 +13,22 @@ import PolicyHolderContributionPlanBundlePicker from "../pickers/PolicyHolderCon
 const DEFAULT_ORDER_BY = "contributionPlanBundle";
 
 class PolicyHolderContributionPlanBundleSearcher extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            queryParams: null
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.reset !== this.props.reset) {
+            this.refetch();
+        }
+    }
+    
     fetch = params => this.props.fetchPolicyHolderContributionPlanBundles(this.props.modulesManager, params);
+
+    refetch = () => this.fetch(this.state.queryParams);
 
     filtersToQueryParams = state => {
         let params = Object.keys(state.filters)
@@ -33,6 +48,7 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
         if (!!state.orderBy) {
             params.push(`orderBy: ["${state.orderBy}"]`);
         }
+        this.setState({ queryParams: params });
         return params;
     }
 
