@@ -65,6 +65,7 @@ class PolicyHolderContributionPlanBundlesTabPanel extends Component {
                                 policyHolder={policyHolder}
                                 rights={rights}
                                 reset={this.state.reset}
+                                onSave={this.onSave}
                             />
                         </Fragment>
                     )}

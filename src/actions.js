@@ -17,7 +17,8 @@ const POLICYHOLDERINSUREE_FULL_PROJECTION = modulesManager => [
 ];
 
 const POLICYHOLDERCONTRIBUTIONPLANBUNDLE_FULL_PROJECTION = modulesManager => [
-    "id", "dateValidFrom", "dateValidTo", "jsonExt",
+    "id", "dateValidFrom", "dateValidTo", "jsonExt", "isDeleted",
+    "policyHolder{id}",
     "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection")
 ]
 
@@ -210,6 +211,20 @@ export function createPolicyHolderContributionPlanBundle(policyHolderContributio
     return graphql(
         mutation.payload,
         ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_CREATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}
+
+export function updatePolicyHolderContributionPlanBundle(policyHolderContributionPlanBundle, clientMutationLabel) {
+    let mutation = formatMutation("updatePolicyHolderContributionPlanBundle", formatPolicyHolderContributionPlanBundleGQL(policyHolderContributionPlanBundle), clientMutationLabel);
+    var requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_UPDATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP", "POLICYHOLDER_MUTATION_ERR"],
         {
             clientMutationId: mutation.clientMutationId,
             clientMutationLabel,
