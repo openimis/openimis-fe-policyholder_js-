@@ -1,38 +1,17 @@
 import React, { Component } from "react";
 import { withModulesManager, FormattedMessage, SelectInput } from "@openimis/fe-core";
 import { connect } from "react-redux";
+import _ from "lodash";
 
 class PolicyHolderContributionPlanBundlePicker extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            policyHolderContributionPlanBundles: []
-        }
-    }
-
-    componentDidMount() {
-        this.setState((_, props) => ({ policyHolderContributionPlanBundles: props.policyHolderContributionPlanBundles }));
-    }
-
-    componentDidUpdate() {
-        /**
-         * When Policy Holder Contribution Plan Bundle entities are filtered, they are refetched and
-         * the number of options provided to @see PolicyHolderContributionPlanBundlePicker changes.
-         * In order to have all Policy Holder Contribution Plan Bundle entities in the picker,
-         * the biggest number of entities fetched will be provided to the picker as its options.
-         */
-        if (this.props.policyHolderContributionPlanBundles.length > this.state.policyHolderContributionPlanBundles.length) {
-            this.setState((_, props) => ({ policyHolderContributionPlanBundles: props.policyHolderContributionPlanBundles }));
-        }
-    }
-
     render() {
-        const { value, onChange, required = false, withNull = false, nullLabel = null, withLabel = true, readOnly = false } = this.props;
-        const { policyHolderContributionPlanBundles } = this.state;
+        const { value, onChange, required = false, withNull = false, nullLabel = null,
+            withLabel = true, readOnly = false, pickerPolicyHolderContributionPlanBundles } = this.props;
+        let distinctContributionPlanBundles = _.uniqWith(pickerPolicyHolderContributionPlanBundles.map(v => v.contributionPlanBundle), _.isEqual);
         let options = [
-            ...policyHolderContributionPlanBundles.map(v => ({
-                value: v.contributionPlanBundle,
-                label: `${v.contributionPlanBundle.code} - ${v.contributionPlanBundle.name}`
+            ...distinctContributionPlanBundles.map(v => ({
+                value: v,
+                label: `${v.code} - ${v.name}`
             }))
         ];
         if (withNull) {
@@ -56,7 +35,7 @@ class PolicyHolderContributionPlanBundlePicker extends Component {
 }
 
 const mapStateToProps = state => ({
-    policyHolderContributionPlanBundles: state.policyHolder.policyHolderContributionPlanBundles
+    pickerPolicyHolderContributionPlanBundles: state.policyHolder.pickerPolicyHolderContributionPlanBundles
 });
 
 export default withModulesManager(connect(mapStateToProps, null)(PolicyHolderContributionPlanBundlePicker));

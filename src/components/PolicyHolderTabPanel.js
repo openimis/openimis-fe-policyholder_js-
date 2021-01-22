@@ -4,7 +4,7 @@ import { withModulesManager, FormPanel, Contributions, decodeId } from "@openimi
 import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { fetchPolicyHolderContributionPlanBundles } from "../actions"
+import { fetchPickerPolicyHolderContributionPlanBundles } from "../actions"
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { RIGHT_POLICYHOLDERINSUREE_SEARCH, POLICYHOLDERINSUREE_TAB_VALUE } from "../constants"
 
@@ -40,7 +40,7 @@ class PolicyHolderTabPanel extends FormPanel {
          * @see PolicyHolderInsureesTab and @see PolicyHolderContributionPlanBundlesTab
          */
         if (prevProps.edited !== this.props.edited) {
-            this.props.fetchPolicyHolderContributionPlanBundles(this.props.modulesManager, [`policyHolder_Id: "${decodeId(this.props.edited.id)}"`]);
+            this.props.fetchPickerPolicyHolderContributionPlanBundles(this.props.modulesManager, [`policyHolder_Id: "${decodeId(this.props.edited.id)}"`]);
         }
     }
 
@@ -81,7 +81,7 @@ class PolicyHolderTabPanel extends FormPanel {
 }
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ fetchPolicyHolderContributionPlanBundles }, dispatch);
+    return bindActionCreators({ fetchPickerPolicyHolderContributionPlanBundles }, dispatch);
 };
 
 export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(null, mapDispatchToProps)(PolicyHolderTabPanel)))));

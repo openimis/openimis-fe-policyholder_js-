@@ -63,7 +63,7 @@
     "policyHolder.dialog.cancel": "Cancel",
     "policyHolder.dialog.create": "Create",
     "policyHolder.dialog.update": "Save",
-    "policyHolder.policyHolderInsuree.dialog.replace": "Add",
+    "policyHolder.dialog.replace": "Add",
     "policyHolder.CreatePolicyHolderInsuree.mutationLabel": "Create Policy Holder Insuree for {code} - {tradeName}",
     "policyHolder.UpdatePolicyHolderInsuree.mutationLabel": "Update Policy Holder Insuree of {code} - {tradeName}",
     "policyHolder.DeletePolicyHolderInsuree.mutationLabel": "Delete Policy Holder Insuree from {code} - {tradeName}",
@@ -74,5 +74,7 @@
     "policyHolder.policyHolderContributionPlanBundle.createPolicyHolderContributionPlanBundle": "Create new Contribution Plan Bundle",
     "policyHolder.CreatePolicyHolderContributionPlanBundle.mutationLabel": "Create Contribution Plan Bundle for {code} - {tradeName}",
     "policyHolder.UpdatePolicyHolderContributionPlanBundle.mutationLabel": "Update Contribution Plan Bundle of {code} - {tradeName}",
-    "policyHolder.policyHolderContributionPlanBundle.editDialog.title": "Edit Contribution Plan Bundle"
+    "policyHolder.ReplacePolicyHolderContributionPlanBundle.mutationLabel": "Replace Contribution Plan Bundle of {code} - {tradeName}",
+    "policyHolder.policyHolderContributionPlanBundle.editDialog.title": "Edit Contribution Plan Bundle",
+    "policyHolder.policyHolderContributionPlanBundle.replaceDialog.title": "Add new version of Contribution Plan Bundle"
 }

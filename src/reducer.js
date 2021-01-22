@@ -28,7 +28,13 @@ function reducer(
         fetchedPolicyHolderContributionPlanBundles: false,
         policyHolderContributionPlanBundles: [],
         policyHolderContributionPlanBundlesPageInfo: {},
-        policyHolderContributionPlanBundlesTotalCount: 0
+        policyHolderContributionPlanBundlesTotalCount: 0,
+        fetchingPickerPolicyHolderContributionPlanBundles: false,
+        errorPickerPolicyHolderContributionPlanBundles: null,
+        fetchedPickerPolicyHolderContributionPlanBundles: false,
+        pickerPolicyHolderContributionPlanBundles: [],
+        pickerPolicyHolderContributionPlanBundlesPageInfo: {},
+        pickerPolicyHolderContributionPlanBundlesTotalCount: 0
     },
     action
 ) {
@@ -134,6 +140,32 @@ function reducer(
                 fetchingPolicyHolderContributionPlanBundles: false,
                 errorPolicyHolderContributionPlanBundles: formatServerError(action.payload)
             };
+        case "POLICYHOLDER_PICKERPOLICYHOLDERCONTRIBUTIONPLANBUNDLES_REQ":
+            return {
+                ...state,
+                fetchingPickerPolicyHolderContributionPlanBundles: true,
+                fetchedPickerPolicyHolderContributionPlanBundles: false,
+                pickerPolicyHolderContributionPlanBundles: [],
+                pickerPolicyHolderContributionPlanBundlesPageInfo: {},
+                pickerPolicyHolderContributionPlanBundlesTotalCount: 0,
+                errorPickerPolicyHolderContributionPlanBundles: null
+            };
+        case "POLICYHOLDER_PICKERPOLICYHOLDERCONTRIBUTIONPLANBUNDLES_RESP":
+            return {
+                ...state,
+                fetchingPickerPolicyHolderContributionPlanBundles: false,
+                fetchedPickerPolicyHolderContributionPlanBundles: true,
+                pickerPolicyHolderContributionPlanBundles: parseData(action.payload.data.policyHolderContributionPlanBundle),
+                pickerPolicyHolderContributionPlanBundlesPageInfo: pageInfo(action.payload.data.policyHolderContributionPlanBundle),
+                pickerPolicyHolderContributionPlanBundlesTotalCount: !!action.payload.data.policyHolderContributionPlanBundle ? action.payload.data.policyHolderContributionPlanBundle.totalCount : null,
+                errorPickerPolicyHolderContributionPlanBundles: formatGraphQLError(action.payload)
+            };
+        case "POLICYHOLDER_PICKERPOLICYHOLDERCONTRIBUTIONPLANBUNDLES_ERR":
+            return {
+                ...state,
+                fetchingPickerPolicyHolderContributionPlanBundles: false,
+                errorPickerPolicyHolderContributionPlanBundles: formatServerError(action.payload)
+            };
         case "POLICYHOLDER_MUTATION_REQ":
             return dispatchMutationReq(state, action);
         case "POLICYHOLDER_MUTATION_ERR":
@@ -156,6 +188,8 @@ function reducer(
             return dispatchMutationResp(state, "createPolicyHolderContributionPlanBundle", action);
         case "POLICYHOLDER_UPDATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
             return dispatchMutationResp(state, "updatePolicyHolderContributionPlanBundle", action);
+        case "POLICYHOLDER_REPLACE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
+            return dispatchMutationResp(state, "replacePolicyHolderContributionPlanBundle", action);
         default:
             return state;
     }

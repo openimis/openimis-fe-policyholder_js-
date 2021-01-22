@@ -40,7 +40,7 @@ class UpdatePolicyHolderInsureeDialog extends Component {
     };
 
     handleSave = () => {
-        const { intl, policyHolder, isReplacing = false,
+        const { intl, policyHolder, isReplacing = false, onSave,
             updatePolicyHolderInsuree, replacePolicyHolderInsuree } = this.props;
         if (isReplacing) {
             replacePolicyHolderInsuree(
@@ -69,7 +69,7 @@ class UpdatePolicyHolderInsureeDialog extends Component {
                 )
             );
         }
-        this.props.onSave();
+        onSave();
         this.handleClose();
     };
 
@@ -169,7 +169,7 @@ class UpdatePolicyHolderInsureeDialog extends Component {
                         </Button>
                         <Button onClick={this.handleSave} disabled={!this.canSave()} variant="contained" color="primary" autoFocus>
                             {isReplacing ? (
-                                <FormattedMessage module="policyHolder" id="policyHolderInsuree.dialog.replace" />
+                                <FormattedMessage module="policyHolder" id="dialog.replace" />
                             ) : (
                                 <FormattedMessage module="policyHolder" id="dialog.update" />
                             )}
