@@ -39,7 +39,7 @@ class PolicyHolderTabPanel extends FormPanel {
          * at this point is necessary as they are shared by two tabs:
          * @see PolicyHolderInsureesTab and @see PolicyHolderContributionPlanBundlesTab
          */
-        if (prevProps.edited !== this.props.edited) {
+        if (prevProps.edited !== this.props.edited && !!this.props.edited.id) {
             this.props.fetchPickerPolicyHolderContributionPlanBundles(this.props.modulesManager, [`policyHolder_Id: "${decodeId(this.props.edited.id)}"`]);
         }
     }
