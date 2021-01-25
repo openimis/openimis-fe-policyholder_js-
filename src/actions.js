@@ -242,6 +242,21 @@ export function updatePolicyHolderContributionPlanBundle(policyHolderContributio
     );
 }
 
+export function deletePolicyHolderContributionPlanBundle(policyHolderContributionPlanBundle, clientMutationLabel, clientMutationDetails = null) {
+    let policyHolderContributionPlanBundleUuids = `uuids: ["${decodeId(policyHolderContributionPlanBundle.id)}"]`;
+    let mutation = formatMutation("deletePolicyHolderContributionPlanBundle", policyHolderContributionPlanBundleUuids, clientMutationLabel, clientMutationDetails);
+    var requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_DELETE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}
+
 export function replacePolicyHolderContributionPlanBundle(policyHolderContributionPlanBundle, clientMutationLabel) {
     let mutation = formatMutation("replacePolicyHolderContributionPlanBundle", formatPolicyHolderContributionPlanBundleGQL(policyHolderContributionPlanBundle, true), clientMutationLabel);
     var requestedDateTime = new Date();

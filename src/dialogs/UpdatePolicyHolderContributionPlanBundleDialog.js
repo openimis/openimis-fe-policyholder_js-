@@ -117,9 +117,9 @@ class UpdatePolicyHolderContributionPlanBundleDialog extends Component {
                 <Dialog open={open} onClose={this.handleClose}>
                     <DialogTitle>
                         {isReplacing ? (
-                            <FormattedMessage module="policyHolder" id="policyHolderContributionPlanBundle.replaceDialog.title" />
+                            <FormattedMessage module="policyHolder" id="policyHolderContributionPlanBundle.dialog.replace.title" />
                         ) : (
-                            <FormattedMessage module="policyHolder" id="policyHolderContributionPlanBundle.editDialog.title" />
+                            <FormattedMessage module="policyHolder" id="policyHolderContributionPlanBundle.dialog.edit.title" />
                         )}
                     </DialogTitle>
                     <DialogContent>

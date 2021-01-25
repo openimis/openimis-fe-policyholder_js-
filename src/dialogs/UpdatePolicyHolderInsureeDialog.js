@@ -119,9 +119,9 @@ class UpdatePolicyHolderInsureeDialog extends Component {
                 <Dialog open={open} onClose={this.handleClose}>
                     <DialogTitle>
                         {isReplacing ? (
-                            <FormattedMessage module="policyHolder" id="policyHolderInsuree.replaceDialog.title" />
+                            <FormattedMessage module="policyHolder" id="policyHolderInsuree.dialog.replace.title" />
                         ) : (
-                            <FormattedMessage module="policyHolder" id="policyHolderInsuree.editDialog.title" />
+                            <FormattedMessage module="policyHolder" id="policyHolderInsuree.dialog.edit.title" />
                         )}
                     </DialogTitle>
                     <DialogContent>

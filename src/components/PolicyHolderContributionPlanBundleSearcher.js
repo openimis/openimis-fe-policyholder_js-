@@ -1,11 +1,14 @@
 import React, { Component, Fragment } from "react"
 import { injectIntl } from 'react-intl';
 import { withModulesManager, formatMessageWithValues, formatDateFromISO,
-    Searcher, decodeId, PublishedComponent } from "@openimis/fe-core";
+    Searcher, decodeId, PublishedComponent, withTooltip, formatMessage, coreConfirm } from "@openimis/fe-core";
     import PolicyHolderContributionPlanBundleFilter from "./PolicyHolderContributionPlanBundleFilter";
-import { fetchPolicyHolderContributionPlanBundles, fetchPickerPolicyHolderContributionPlanBundles } from "../actions"
+import { fetchPolicyHolderContributionPlanBundles, fetchPickerPolicyHolderContributionPlanBundles,
+    deletePolicyHolderContributionPlanBundle } from "../actions"
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import { IconButton } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
 import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_REPLACE,
     RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_UPDATE, RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_DELETE } from "../constants"
 import UpdatePolicyHolderContributionPlanBundleDialog from "../dialogs/UpdatePolicyHolderContributionPlanBundleDialog";
@@ -16,12 +19,18 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            toDelete: null,
+            deleted: [],
             queryParams: null
         }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.reset !== this.props.reset) {
+        if (prevProps.confirmed !== this.props.confirmed && !!this.props.confirmed && !!this.state.confirmedAction) {
+            this.state.confirmedAction();
+        } else if (prevState.toDelete !== this.state.toDelete) {
+            this.setState(state => ({ deleted: state.deleted.concat(state.toDelete) }));
+        } else if (prevState.deleted !== this.state.deleted || prevProps.reset !== this.props.reset) {
             this.refetch();
             this.props.fetchPickerPolicyHolderContributionPlanBundles(this.props.modulesManager, [`policyHolder_Id: "${decodeId(this.props.policyHolder.id)}"`]);
         }
@@ -98,7 +107,7 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
                         policyHolder={policyHolder}
                         policyHolderContributionPlanBundle={policyHolderContributionPlanBundle}
                         onSave={onSave}
-                        disabled={this.isReplaced(policyHolderContributionPlanBundle)}
+                        disabled={this.state.deleted.includes(policyHolderContributionPlanBundle.id) || this.isReplaced(policyHolderContributionPlanBundle)}
                         isReplacing={true}
                     />
                 )
@@ -111,17 +120,75 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
                         policyHolder={policyHolder}
                         policyHolderContributionPlanBundle={policyHolderContributionPlanBundle}
                         onSave={onSave}
-                        disabled={this.isReplaced(policyHolderContributionPlanBundle)}
+                        disabled={this.state.deleted.includes(policyHolderContributionPlanBundle.id) || this.isReplaced(policyHolderContributionPlanBundle)}
                     />
+                )
+            );
+        }
+        if (rights.includes(RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_DELETE)) {
+            result.push(
+                policyHolderContributionPlanBundle => !this.isDeletedFilterEnabled(policyHolderContributionPlanBundle) && withTooltip(
+                    <div>
+                        <IconButton
+                            onClick={() => this.onDelete(policyHolderContributionPlanBundle)}
+                            disabled={this.state.deleted.includes(policyHolderContributionPlanBundle.id)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </div>,
+                    formatMessage(this.props.intl, "policyHolder", "deleteButton.tooltip")
                 )
             );
         }
         return result;
     }
 
+    onDelete = policyHolderContributionPlanBundle => {
+        const { intl, coreConfirm, deletePolicyHolderContributionPlanBundle, policyHolder } = this.props;
+        let confirm = () => coreConfirm(
+            formatMessageWithValues(
+                intl,
+                "policyHolder",
+                "policyHolderContributionPlanBundle.dialog.delete.title",
+                {
+                    code: policyHolderContributionPlanBundle.contributionPlanBundle.code,
+                    name: policyHolderContributionPlanBundle.contributionPlanBundle.name
+                }),
+            formatMessageWithValues(
+                intl,
+                "policyHolder",
+                "dialog.delete.message",
+                {
+                    code: policyHolder.code,
+                    tradeName: policyHolder.tradeName
+                })
+        );
+        let confirmedAction = () => {
+            deletePolicyHolderContributionPlanBundle(
+                policyHolderContributionPlanBundle,
+                formatMessageWithValues(
+                    intl,
+                    "policyHolder",
+                    "DeletePolicyHolderContributionPlanBundle.mutationLabel",
+                    {
+                        code: policyHolder.code,
+                        tradeName: policyHolder.tradeName
+                    }
+                )
+            );
+            this.setState({ toDelete: policyHolderContributionPlanBundle.id });
+        }
+        this.setState(
+            { confirmedAction },
+            confirm
+        )
+    }
+
     isReplaced = policyHolderContributionPlanBundle => !!policyHolderContributionPlanBundle.replacementUuid;
 
     isDeletedFilterEnabled = policyHolderContributionPlanBundle => policyHolderContributionPlanBundle.isDeleted;
+
+    isRowDisabled = (_, policyHolderContributionPlanBundle) => this.state.deleted.includes(policyHolderContributionPlanBundle.id)
+        && !this.isDeletedFilterEnabled(policyHolderContributionPlanBundle);
 
     sorts = () => {
         return [
@@ -154,6 +221,8 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
                     rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
                     defaultPageSize={DEFAULT_PAGE_SIZE}
                     defaultOrderBy={DEFAULT_ORDER_BY}
+                    rowLocked={this.isRowDisabled}
+                    rowDisabled={this.isRowDisabled}
                 />
             </Fragment>
         )
@@ -166,11 +235,13 @@ const mapStateToProps = state => ({
     errorPolicyHolderContributionPlanBundles: state.policyHolder.errorPolicyHolderContributionPlanBundles,
     policyHolderContributionPlanBundles: state.policyHolder.policyHolderContributionPlanBundles,
     policyHolderContributionPlanBundlesPageInfo: state.policyHolder.policyHolderContributionPlanBundlesPageInfo,
-    policyHolderContributionPlanBundlesTotalCount: state.policyHolder.policyHolderContributionPlanBundlesTotalCount
+    policyHolderContributionPlanBundlesTotalCount: state.policyHolder.policyHolderContributionPlanBundlesTotalCount,
+    confirmed: state.core.confirmed
 });
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ fetchPolicyHolderContributionPlanBundles, fetchPickerPolicyHolderContributionPlanBundles }, dispatch);
+    return bindActionCreators({ fetchPolicyHolderContributionPlanBundles, fetchPickerPolicyHolderContributionPlanBundles,
+        deletePolicyHolderContributionPlanBundle, coreConfirm }, dispatch);
 };
 
 export default withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PolicyHolderContributionPlanBundleSearcher)));

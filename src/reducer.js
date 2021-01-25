@@ -188,6 +188,8 @@ function reducer(
             return dispatchMutationResp(state, "createPolicyHolderContributionPlanBundle", action);
         case "POLICYHOLDER_UPDATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
             return dispatchMutationResp(state, "updatePolicyHolderContributionPlanBundle", action);
+        case "POLICYHOLDER_DELETE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
+            return dispatchMutationResp(state, "deletePolicyHolderContributionPlanBundle", action);
         case "POLICYHOLDER_REPLACE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
             return dispatchMutationResp(state, "replacePolicyHolderContributionPlanBundle", action);
         default:
