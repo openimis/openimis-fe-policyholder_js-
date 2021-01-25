@@ -17,10 +17,10 @@ const POLICYHOLDERINSUREE_FULL_PROJECTION = modulesManager => [
 ];
 
 const POLICYHOLDERCONTRIBUTIONPLANBUNDLE_FULL_PROJECTION = modulesManager => [
-    "id", "dateValidFrom", "dateValidTo", "jsonExt", "isDeleted",
+    "id", "dateValidFrom", "dateValidTo", "jsonExt", "isDeleted", "replacementUuid",
     "policyHolder{id}",
     "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection")
-]
+];
 
 function dateTimeToDate(date) {
     return date.split('T')[0];
@@ -63,6 +63,15 @@ export function fetchPolicyHolderContributionPlanBundles(modulesManager, params)
     return graphql(payload, "POLICYHOLDER_POLICYHOLDERCONTRIBUTIONPLANBUNDLES");
 }
 
+export function fetchPickerPolicyHolderContributionPlanBundles(modulesManager, params) {
+    const payload = formatPageQueryWithCount(
+        "policyHolderContributionPlanBundle",
+        params,
+        POLICYHOLDERCONTRIBUTIONPLANBUNDLE_FULL_PROJECTION(modulesManager)
+    );
+    return graphql(payload, "POLICYHOLDER_PICKERPOLICYHOLDERCONTRIBUTIONPLANBUNDLES");
+}
+
 function formatPolicyHolderGQL(policyHolder) {
     return `
         ${!!policyHolder.id ? `id: "${decodeId(policyHolder.id)}"` : ''}
@@ -95,10 +104,10 @@ function formatPolicyHolderInsureeGQL(policyHolderInsuree, isReplaceMutation = f
     `;
 }
 
-function formatPolicyHolderContributionPlanBundleGQL(policyHolderContributionPlanBundle) {
+function formatPolicyHolderContributionPlanBundleGQL(policyHolderContributionPlanBundle, isReplaceMutation = false) {
     return `
-        ${!!policyHolderContributionPlanBundle.id ? `id: "${decodeId(policyHolderContributionPlanBundle.id)}"` : ''}
-        ${!!policyHolderContributionPlanBundle.policyHolder ? `policyHolderId: "${decodeId(policyHolderContributionPlanBundle.policyHolder.id)}"` : ''}
+        ${!!policyHolderContributionPlanBundle.id ? `${isReplaceMutation ? 'uuid' : 'id'}: "${decodeId(policyHolderContributionPlanBundle.id)}"` : ''}
+        ${!!policyHolderContributionPlanBundle.policyHolder && !isReplaceMutation ? `policyHolderId: "${decodeId(policyHolderContributionPlanBundle.policyHolder.id)}"` : ''}
         ${!!policyHolderContributionPlanBundle.contributionPlanBundle ? `contributionPlanBundleId: "${decodeId(policyHolderContributionPlanBundle.contributionPlanBundle.id)}"` : ""}
         ${!!policyHolderContributionPlanBundle.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderContributionPlanBundle.dateValidFrom)}"` : ""}
         ${!!policyHolderContributionPlanBundle.dateValidTo ? `dateValidTo: "${dateTimeToDate(policyHolderContributionPlanBundle.dateValidTo)}"` : ""}
@@ -225,6 +234,20 @@ export function updatePolicyHolderContributionPlanBundle(policyHolderContributio
     return graphql(
         mutation.payload,
         ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_UPDATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}
+
+export function replacePolicyHolderContributionPlanBundle(policyHolderContributionPlanBundle, clientMutationLabel) {
+    let mutation = formatMutation("replacePolicyHolderContributionPlanBundle", formatPolicyHolderContributionPlanBundleGQL(policyHolderContributionPlanBundle, true), clientMutationLabel);
+    var requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_REPLACE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP", "POLICYHOLDER_MUTATION_ERR"],
         {
             clientMutationId: mutation.clientMutationId,
             clientMutationLabel,

@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from "react"
 import { injectIntl } from 'react-intl';
 import { withModulesManager, formatMessageWithValues, formatDateFromISO,
-    Searcher, decodeId } from "@openimis/fe-core";
+    Searcher, decodeId, PublishedComponent } from "@openimis/fe-core";
     import PolicyHolderContributionPlanBundleFilter from "./PolicyHolderContributionPlanBundleFilter";
-import { fetchPolicyHolderContributionPlanBundles } from "../actions"
+import { fetchPolicyHolderContributionPlanBundles, fetchPickerPolicyHolderContributionPlanBundles } from "../actions"
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_REPLACE,
     RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_UPDATE, RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_DELETE } from "../constants"
-import PolicyHolderContributionPlanBundlePicker from "../pickers/PolicyHolderContributionPlanBundlePicker";
 import UpdatePolicyHolderContributionPlanBundleDialog from "../dialogs/UpdatePolicyHolderContributionPlanBundleDialog";
 
 const DEFAULT_ORDER_BY = "contributionPlanBundle";
@@ -24,6 +23,7 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.reset !== this.props.reset) {
             this.refetch();
+            this.props.fetchPickerPolicyHolderContributionPlanBundles(this.props.modulesManager, [`policyHolder_Id: "${decodeId(this.props.policyHolder.id)}"`]);
         }
     }
     
@@ -77,7 +77,8 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
         const { intl, modulesManager, rights, policyHolder, onSave } = this.props;
         let result = [
             policyHolderContributionPlanBundle => !!policyHolderContributionPlanBundle.contributionPlanBundle
-                ? <PolicyHolderContributionPlanBundlePicker
+                ? <PublishedComponent
+                    pubRef="contributionPlan.ContributionPlanBundlePicker"
                     value={policyHolderContributionPlanBundle.contributionPlanBundle}
                     withLabel={false}
                     readOnly />
@@ -90,6 +91,19 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
                 ? formatDateFromISO(modulesManager, intl, policyHolderContributionPlanBundle.dateValidTo)
                 : ""
         ];
+        if (rights.includes(RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_REPLACE)) {
+            result.push(
+                policyHolderContributionPlanBundle => !this.isDeletedFilterEnabled(policyHolderContributionPlanBundle) && (
+                    <UpdatePolicyHolderContributionPlanBundleDialog
+                        policyHolder={policyHolder}
+                        policyHolderContributionPlanBundle={policyHolderContributionPlanBundle}
+                        onSave={onSave}
+                        disabled={this.isReplaced(policyHolderContributionPlanBundle)}
+                        isReplacing={true}
+                    />
+                )
+            );
+        }
         if (rights.includes(RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_UPDATE)) {
             result.push(
                 policyHolderContributionPlanBundle => !this.isDeletedFilterEnabled(policyHolderContributionPlanBundle) && (
@@ -97,12 +111,15 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
                         policyHolder={policyHolder}
                         policyHolderContributionPlanBundle={policyHolderContributionPlanBundle}
                         onSave={onSave}
+                        disabled={this.isReplaced(policyHolderContributionPlanBundle)}
                     />
                 )
             );
         }
         return result;
     }
+
+    isReplaced = policyHolderContributionPlanBundle => !!policyHolderContributionPlanBundle.replacementUuid;
 
     isDeletedFilterEnabled = policyHolderContributionPlanBundle => policyHolderContributionPlanBundle.isDeleted;
 
@@ -153,7 +170,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ fetchPolicyHolderContributionPlanBundles }, dispatch);
+    return bindActionCreators({ fetchPolicyHolderContributionPlanBundles, fetchPickerPolicyHolderContributionPlanBundles }, dispatch);
 };
 
 export default withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PolicyHolderContributionPlanBundleSearcher)));
