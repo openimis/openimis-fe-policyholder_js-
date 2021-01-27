@@ -143,7 +143,7 @@ class PolicyHolderInsureeSearcher extends Component {
                     </div>,
                     formatMessage(this.props.intl, "policyHolder", "deleteButton.tooltip")
                 )
-            )
+            );
         }
         return result;
     }
@@ -154,7 +154,7 @@ class PolicyHolderInsureeSearcher extends Component {
             formatMessageWithValues(
                 intl,
                 "policyHolder",
-                "policyHolderInsuree.deleteDialog.title",
+                "policyHolderInsuree.dialog.delete.title",
                 {
                     otherNames: policyHolderInsuree.insuree.otherNames,
                     lastName: policyHolderInsuree.insuree.lastName
@@ -162,7 +162,7 @@ class PolicyHolderInsureeSearcher extends Component {
             formatMessageWithValues(
                 intl,
                 "policyHolder",
-                "policyHolderInsuree.deleteDialog.message",
+                "dialog.delete.message",
                 {
                     code: policyHolder.code,
                     tradeName: policyHolder.tradeName

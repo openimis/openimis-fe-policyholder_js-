@@ -147,7 +147,7 @@ class PolicyHolderSearcher extends Component {
                     tradeName: policyHolder.tradeName
                 }
             ),
-            formatMessageWithValues(intl, "policyHolder", "deletePolicyHolder.confirm.message",
+            formatMessageWithValues(intl, "policyHolder", "dialog.delete.message",
                 {
                     code: policyHolder.code,
                     tradeName: policyHolder.tradeName
