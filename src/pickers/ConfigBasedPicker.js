@@ -5,7 +5,7 @@ import { injectIntl } from "react-intl";
 
 class ConfigBasedPicker extends Component {
     render() {
-        const { intl, module, label, configOptions, disabled, value, onChange } = this.props;
+        const { intl, module, label, configOptions, readOnly = false, value, onChange } = this.props;
         const options = [{
             value: null,
             label: formatMessage(intl, module, `${label}.null`)
@@ -19,11 +19,11 @@ class ConfigBasedPicker extends Component {
         return (
             <SelectInput
                 module={module}
-                label={!!disabled ? 'emptyLabel' : label}
+                label={readOnly ? null : label}
                 options={options}
                 value={value}
                 onChange={onChange}
-                disabled={disabled} />
+                readOnly={readOnly} />
         );
     }
 }

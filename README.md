@@ -14,16 +14,20 @@ None
     **Policy Holders** (`menu.policyHolders` translation key)
 
 ## Available Contribution Points
-None
+* `policyHolder.TabPanel.label` ability to extend Policy Holder tab panel with a label
+* `policyHolder.TabPanel.panel` ability to extend Policy Holder tab panel with a panel displayed on click on an appropriate label
 
 ## Published Components
-* `policyHolder.LegalFormPicker`, picker for legal form (from JSON stored in the module configuration)
-* `policyHolder.ActivityCodePicker`, picker for activity code (from JSON stored in the module configuration)
+* `policyHolder.ConfigBasedPicker`, generic picker, which can display options from JSON object 
+* `policyHolder.LegalFormPicker`, picker for Legal Form (from JSON stored in the module configuration)
+* `policyHolder.ActivityCodePicker`, picker for Activity Code (from JSON stored in the module configuration)
+* `policyHolder.PolicyHolderPicker`, picker for Policy Holder
 
 ## Dispatched Redux Actions
 * `POLICYHOLDER_POLICYHOLDERS_{REQ|RESP|ERR}`, fetching Policy Holders (as triggered by the searcher)
 * `POLICYHOLDER_POLICYHOLDER_{REQ|RESP|ERR}`, fetching Policy Holder
 * `POLICYHOLDER_POLICYHOLDERINSUREES_{REQ|RESP|ERR}`, fetching Policy Holder Insurees (as triggered by the searcher)
+* `POLICYHOLDER_POLICYHOLDERCONTRIBUTIONPLANBUNDLES_{REQ|RESP|ERR}`, fetching Policy Holder Contribution Plan Bundles (as triggered by the searcher)
 * `POLICYHOLDER_MUTATION_{REQ|ERR}`, sending a mutation
 * `POLICYHOLDER_CREATE_POLICYHOLDER_RESP`, receiving a result of create Policy Holder mutation
 * `POLICYHOLDER_UPDATE_POLICYHOLDER_RESP`, receiving a result of update Policy Holder mutation
@@ -32,12 +36,18 @@ None
 * `POLICYHOLDER_UPDATE_POLICYHOLDERINSUREE_RESP`, receiving a result of update Policy Holder Insuree mutation
 * `POLICYHOLDER_DELETE_POLICYHOLDERINSUREE_RESP`, receiving a result of delete Policy Holder Insuree mutation
 * `POLICYHOLDER_REPLACE_POLICYHOLDERINSUREE_RESP`, receiving a result of replace Policy Holder Insuree mutation
+* `POLICYHOLDER_CREATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP`, receiving a result of create Policy Holder Contribution Plan Bundle mutation
+* `POLICYHOLDER_UPDATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP`, receiving a result of update Policy Holder Contribution Plan Bundle mutation
+* `POLICYHOLDER_DELETE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP`, receiving a result of delete Policy Holder Contribution Plan Bundle mutation
+* `POLICYHOLDER_REPLACE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP`, receiving a result of replace Policy Holder Contribution Plan Bundle mutation
 
 ## Other Modules Listened Redux Actions
 None
 
 ## Other Modules Redux State Bindings
 * `state.core.user`, to access user info (rights,...)
+* `state.insuree`, retrieving Insurees when creating Policy Holder Insuree
+* `state.contributionPlan`, retrieving Contribution Plan Bundles when creating Policy Holder Contribution Plan Bundle
 
 ## Configurations Options
 * `policyHolderFilter.rowsPerPageOptions`: pagination page size options in PolicyHolderSearcher component (Default: `[10, 20, 50, 100]`)
