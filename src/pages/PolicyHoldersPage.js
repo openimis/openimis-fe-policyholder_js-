@@ -45,7 +45,7 @@ class PolicyHoldersPage extends Component {
                         rights={rights}
                     />
                     {rights.includes(RIGHT_POLICYHOLDER_CREATE) && withTooltip(
-                        <div className={classes.fab} >
+                        <div className={classes.fab}>
                             <Fab color="primary" onClick={this.onAdd}>
                                 <AddIcon />
                             </Fab>

@@ -1,6 +1,7 @@
 {
     "policyHolder.menu.policyHolders": "Policy Holders",
     "policyHolder.policyHolders.page.title": "Policy Holders",
+    "policyHolder.policyHolder": "Policy Holder",
     "policyHolder.code": "Code",
     "policyHolder.tradeName": "Tradename",
     "policyHolder.mandatoryField.error": "This field is mandatory",

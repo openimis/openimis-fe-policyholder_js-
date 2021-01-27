@@ -83,7 +83,7 @@ class PolicyHolderSearcher extends Component {
                 <PublishedComponent
                     pubRef="location.DetailedLocation"
                     withNull={true}
-                    readOnly={true}
+                    readOnly
                     value={!!policyHolder.locations ? policyHolder.locations : null} />,
             policyHolder => !!policyHolder.legalForm
                 ? <PublishedComponent
@@ -91,7 +91,7 @@ class PolicyHolderSearcher extends Component {
                     module="policyHolder"
                     label="legalForm"
                     value={policyHolder.legalForm}
-                    disabled={true} />
+                    readOnly />
                 : "",
             policyHolder => !!policyHolder.activityCode
                 ? <PublishedComponent
@@ -99,7 +99,7 @@ class PolicyHolderSearcher extends Component {
                     module="policyHolder"
                     label="activityCode"
                     value={policyHolder.activityCode}
-                    disabled={true} />
+                    readOnly />
                 : "",
             policyHolder => !!policyHolder.dateValidFrom
                 ? formatDateFromISO(modulesManager, intl, policyHolder.dateValidFrom)

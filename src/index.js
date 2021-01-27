@@ -11,6 +11,8 @@ import { RIGHT_POLICYHOLDER_SEARCH } from "./constants"
 import TabPanel from "./components/TabPanel";
 import { PolicyHolderInsureesTabLabel, PolicyHolderInsureesTabPanel } from "./components/PolicyHolderInsureesTab";
 import { PolicyHolderContributionPlanBundlesTabLabel, PolicyHolderContributionPlanBundlesTabPanel } from "./components/PolicyHolderContributionPlanBundlesTab";
+import ConfigBasedPicker from "./pickers/ConfigBasedPicker";
+import PolicyHolderPicker from "./pickers/PolicyHolderPicker";
 
 const ROUTE_POLICY_HOLDERS = "policyHolders";
 const ROUTE_POLICY_HOLDER = "policyHolders/policyHolder";
@@ -21,7 +23,10 @@ const DEFAULT_CONFIG = {
   "refs": [
     { key: "policyHolder.LegalFormPicker", ref: LegalFormPicker },
     { key: "policyHolder.ActivityCodePicker", ref: ActivityCodePicker },
+    { key: "policyHolder.ConfigBasedPicker", ref: ConfigBasedPicker},
     { key: "policyHolder.TabPanel", ref: TabPanel },
+    { key: "policyHolder.PolicyHolderPicker", ref: PolicyHolderPicker },
+    { key: "policyHolder.PolicyHolderPicker.projection", ref: ["id", "code", "tradeName"] },
     { key: "policyHolder.route.policyHolders", ref: ROUTE_POLICY_HOLDERS },
     { key: "policyHolder.route.policyHolder", ref: ROUTE_POLICY_HOLDER }
   ],
