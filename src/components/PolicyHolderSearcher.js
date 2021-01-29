@@ -91,6 +91,7 @@ class PolicyHolderSearcher extends Component {
                     module="policyHolder"
                     label="legalForm"
                     value={policyHolder.legalForm}
+                    withLabel={false}
                     readOnly />
                 : "",
             policyHolder => !!policyHolder.activityCode
@@ -99,6 +100,7 @@ class PolicyHolderSearcher extends Component {
                     module="policyHolder"
                     label="activityCode"
                     value={policyHolder.activityCode}
+                    withLabel={false}
                     readOnly />
                 : "",
             policyHolder => !!policyHolder.dateValidFrom

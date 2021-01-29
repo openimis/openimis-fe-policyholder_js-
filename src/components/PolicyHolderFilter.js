@@ -84,6 +84,8 @@ class PolicyHolderFilter extends Component {
                         pubRef="policyHolder.LegalFormPicker"
                         module="policyHolder"
                         label="legalForm"
+                        withNull
+                        nullLabel={formatMessage(intl, "policyHolder", "any")}
                         value={this._filterValue('legalForm')}
                         onChange={v => this._onChangeFilter('legalForm', v)}
                     />
@@ -93,6 +95,8 @@ class PolicyHolderFilter extends Component {
                         pubRef="policyHolder.ActivityCodePicker"
                         module="policyHolder"
                         label="activityCode"
+                        withNull
+                        nullLabel={formatMessage(intl, "policyHolder", "any")}
                         value={this._filterValue('activityCode')}
                         onChange={v => this._onChangeFilter('activityCode', v)}
                     />
