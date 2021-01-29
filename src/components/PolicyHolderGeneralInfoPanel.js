@@ -79,7 +79,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
     }
 
     render() {
-        const { classes, edited, mandatoryFieldsEmpty } = this.props;
+        const { intl, classes, edited, mandatoryFieldsEmpty } = this.props;
         return (
             <Fragment>
                 <Grid container className={classes.tableTitle}>
@@ -125,7 +125,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                     <Grid item xs={8}>
                         <PublishedComponent
                             pubRef="location.DetailedLocation"
-                            withNull={true}
+                            withNull
                             required
                             filterLabels={false}
                             value={!!edited ? edited.locations : null}
@@ -180,6 +180,8 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             pubRef="policyHolder.LegalFormPicker"
                             module="policyHolder"
                             label="legalForm"
+                            withNull
+                            nullLabel={formatMessage(intl, "policyHolder", "emptyLabel")}
                             value={!!edited ? edited.legalForm : null}
                             onChange={v => this.updateAttribute('legalForm', v)}
                         />
@@ -189,6 +191,8 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             pubRef="policyHolder.ActivityCodePicker"
                             module="policyHolder"
                             label="activityCode"
+                            withNull
+                            nullLabel={formatMessage(intl, "policyHolder", "emptyLabel")}
                             value={!!edited ? edited.activityCode : null}
                             onChange={v => this.updateAttribute('activityCode', v)}
                         />
