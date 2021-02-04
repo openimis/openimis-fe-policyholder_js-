@@ -8,6 +8,10 @@ const POLICYHOLDER_FULL_PROJECTION = modulesManager => [
     "accountancyAccount", "bankAccount", "paymentReference", "dateValidFrom", "dateValidTo", "isDeleted"
 ];
 
+const POLICYHOLDER_PICKER_PROJECTION = () => [
+    "id", "code", "tradeName"
+];
+
 const POLICYHOLDERINSUREE_FULL_PROJECTION = modulesManager => [
     "id", "dateValidFrom", "dateValidTo", "jsonExt",
     "policyHolder{id}",
@@ -31,6 +35,15 @@ export function fetchPolicyHolders(modulesManager, params) {
         "policyHolder",
         params,
         POLICYHOLDER_FULL_PROJECTION(modulesManager)
+    );
+    return graphql(payload, "POLICYHOLDER_POLICYHOLDERS");
+}
+
+export function fetchPickerPolicyHolders(params) {
+    const payload = formatPageQuery(
+        "policyHolder",
+        params,
+        POLICYHOLDER_PICKER_PROJECTION()
     );
     return graphql(payload, "POLICYHOLDER_POLICYHOLDERS");
 }

@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { withModulesManager, FormattedMessage, SelectInput } from "@openimis/fe-core";
+import { FormattedMessage, SelectInput } from "@openimis/fe-core";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchPolicyHolders } from "../actions"
+import { fetchPickerPolicyHolders } from "../actions"
 
 class PolicyHolderPicker extends Component {
     componentDidMount() {
         const { withDeleted = false } = this.props;
-        this.props.fetchPolicyHolders(this.props.modulesManager, withDeleted ? [] : ["isDeleted: false"]);
+        this.props.fetchPickerPolicyHolders(withDeleted ? [] : ["isDeleted: false"]);
     }
 
     render() {
@@ -44,7 +44,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ fetchPolicyHolders }, dispatch);
+    return bindActionCreators({ fetchPickerPolicyHolders }, dispatch);
 };
 
-export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(PolicyHolderPicker));
+export default connect(mapStateToProps, mapDispatchToProps)(PolicyHolderPicker);
