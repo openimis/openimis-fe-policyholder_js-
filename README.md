@@ -22,12 +22,16 @@ None
 * `policyHolder.LegalFormPicker`, picker for Legal Form (from JSON stored in the module configuration)
 * `policyHolder.ActivityCodePicker`, picker for Activity Code (from JSON stored in the module configuration)
 * `policyHolder.PolicyHolderPicker`, picker for Policy Holder
+* `policyHolder.PolicyHolderInsureePicker`, picker for Policy Holder Insuree
+* `policyHolder.PolicyHolderContributionPlanBundlePicker`, picker for Policy Holder Contribution Plan Bundle
 
 ## Dispatched Redux Actions
 * `POLICYHOLDER_POLICYHOLDERS_{REQ|RESP|ERR}`, fetching Policy Holders (as triggered by the searcher)
 * `POLICYHOLDER_POLICYHOLDER_{REQ|RESP|ERR}`, fetching Policy Holder
 * `POLICYHOLDER_POLICYHOLDERINSUREES_{REQ|RESP|ERR}`, fetching Policy Holder Insurees (as triggered by the searcher)
+* `POLICYHOLDER_PICKERPOLICYHOLDERINSUREES_{REQ|RESP|ERR}`, fetching Policy Holder Insurees for Policy Holder Insurees Picker
 * `POLICYHOLDER_POLICYHOLDERCONTRIBUTIONPLANBUNDLES_{REQ|RESP|ERR}`, fetching Policy Holder Contribution Plan Bundles (as triggered by the searcher)
+* `POLICYHOLDER_PICKERPOLICYHOLDERCONTRIBUTIONPLANBUNDLES_{REQ|RESP|ERR}`, fetching Policy Holder Contribution Plan Bundles for Policy Holder Contribution Plan Bundle Picker
 * `POLICYHOLDER_MUTATION_{REQ|ERR}`, sending a mutation
 * `POLICYHOLDER_CREATE_POLICYHOLDER_RESP`, receiving a result of create Policy Holder mutation
 * `POLICYHOLDER_UPDATE_POLICYHOLDER_RESP`, receiving a result of update Policy Holder mutation

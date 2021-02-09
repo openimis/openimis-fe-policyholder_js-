@@ -23,6 +23,12 @@ function reducer(
         policyHolderInsurees: [],
         policyHolderInsureesPageInfo: {},
         policyHolderInsureesTotalCount: 0,
+        fetchingPickerPolicyHolderInsurees: false,
+        errorPickerPolicyHolderInsurees: null,
+        fetchedPickerPolicyHolderInsurees: false,
+        pickerPolicyHolderInsurees: [],
+        pickerPolicyHolderInsureesPageInfo: {},
+        pickerPolicyHolderInsureesTotalCount: 0,
         fetchingPolicyHolderContributionPlanBundles: false,
         errorPolicyHolderContributionPlanBundles: null,
         fetchedPolicyHolderContributionPlanBundles: false,
@@ -113,6 +119,32 @@ function reducer(
                 ...state,
                 fetchingPolicyHolderInsurees: false,
                 errorPolicyHolderInsurees: formatServerError(action.payload)
+            };
+        case "POLICYHOLDER_PICKERPOLICYHOLDERINSUREES_REQ":
+            return {
+                ...state,
+                fetchingPickerPolicyHolderInsurees: true,
+                fetchedPickerPolicyHolderInsurees: false,
+                pickerPolicyHolderInsurees: [],
+                pickerPolicyHolderInsureesPageInfo: {},
+                pickerPolicyHolderInsureesTotalCount: 0,
+                errorPickerPolicyHolderInsurees: null
+            };
+        case "POLICYHOLDER_PICKERPOLICYHOLDERINSUREES_RESP":
+            return {
+                ...state,
+                fetchingPickerPolicyHolderInsurees: false,
+                fetchedPickerPolicyHolderInsurees: true,
+                pickerPolicyHolderInsurees: parseData(action.payload.data.policyHolderInsuree),
+                pickerPolicyHolderInsureesPageInfo: pageInfo(action.payload.data.policyHolderInsuree),
+                pickerPolicyHolderInsureesTotalCount: !!action.payload.data.policyHolderInsuree ? action.payload.data.policyHolderInsuree.totalCount : null,
+                errorPickerPolicyHolderInsurees: formatGraphQLError(action.payload)
+            };
+        case "POLICYHOLDER_PICKERPOLICYHOLDERINSUREES_ERR":
+            return {
+                ...state,
+                fetchingPickerPolicyHolderInsurees: false,
+                errorPickerPolicyHolderInsurees: formatServerError(action.payload)
             };
         case "POLICYHOLDER_POLICYHOLDERCONTRIBUTIONPLANBUNDLES_REQ":
             return {
