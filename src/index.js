@@ -13,6 +13,8 @@ import { PolicyHolderInsureesTabLabel, PolicyHolderInsureesTabPanel } from "./co
 import { PolicyHolderContributionPlanBundlesTabLabel, PolicyHolderContributionPlanBundlesTabPanel } from "./components/PolicyHolderContributionPlanBundlesTab";
 import ConfigBasedPicker from "./pickers/ConfigBasedPicker";
 import PolicyHolderPicker from "./pickers/PolicyHolderPicker";
+import PolicyHolderContributionPlanBundlePicker from "./pickers/PolicyHolderContributionPlanBundlePicker";
+import PolicyHolderInsureePicker from "./pickers/PolicyHolderInsureePicker";
 
 const ROUTE_POLICY_HOLDERS = "policyHolders";
 const ROUTE_POLICY_HOLDER = "policyHolders/policyHolder";
@@ -27,6 +29,10 @@ const DEFAULT_CONFIG = {
     { key: "policyHolder.TabPanel", ref: TabPanel },
     { key: "policyHolder.PolicyHolderPicker", ref: PolicyHolderPicker },
     { key: "policyHolder.PolicyHolderPicker.projection", ref: ["id", "code", "tradeName"] },
+    { key: "policyHolder.PolicyHolderInsureePicker", ref: PolicyHolderInsureePicker },
+    { key: "policyHolder.PolicyHolderInsureePicker.projection", ref: ["id", "insuree{id,lastName,otherNames}", "contributionPlanBundle{id,code,name}"] },
+    { key: "policyHolder.PolicyHolderContributionPlanBundlePicker", ref: PolicyHolderContributionPlanBundlePicker },
+    { key: "policyHolder.PolicyHolderContributionPlanBundlePicker.projection", ref: ["id", "contributionPlanBundle{id,code,name}"] },
     { key: "policyHolder.route.policyHolders", ref: ROUTE_POLICY_HOLDERS },
     { key: "policyHolder.route.policyHolder", ref: ROUTE_POLICY_HOLDER }
   ],

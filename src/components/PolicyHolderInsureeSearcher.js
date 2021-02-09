@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react"
 import { injectIntl } from 'react-intl';
 import { withModulesManager, formatMessage, formatMessageWithValues, formatDateFromISO,
-    Searcher, PublishedComponent, withTooltip, coreConfirm, decodeId } from "@openimis/fe-core";
+    Searcher, withTooltip, coreConfirm, decodeId } from "@openimis/fe-core";
 import PolicyHolderInsureeFilter from "./PolicyHolderInsureeFilter";
 import { fetchPolicyHolderInsurees, deletePolicyHolderInsuree } from "../actions"
 import { bindActionCreators } from "redux";
@@ -12,6 +12,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, RIGHT_POLICYHOLDERINSUREE_UPDATE,
     RIGHT_POLICYHOLDERINSUREE_DELETE, RIGHT_POLICYHOLDERINSUREE_REPLACE } from "../constants"
 import PolicyHolderContributionPlanBundlePicker from "../pickers/PolicyHolderContributionPlanBundlePicker";
+import PolicyHolderInsureePicker from "../pickers/PolicyHolderInsureePicker";
 
 const DEFAULT_ORDER_BY = "insuree";
 
@@ -44,7 +45,6 @@ class PolicyHolderInsureeSearcher extends Component {
             .filter(f => !!state.filters[f]['filter'])
             .map(f => state.filters[f]['filter']);
         params.push(`first: ${state.pageSize}`);
-        params.push(`policyHolder_Id: "${decodeId(this.props.policyHolder.id)}"`);
         if (!state.filters.hasOwnProperty('isDeleted')) {
             params.push("isDeleted: false");
         }
@@ -86,17 +86,18 @@ class PolicyHolderInsureeSearcher extends Component {
         const { intl, modulesManager, rights, policyHolder, onSave } = this.props;
         let result = [
             policyHolderInsuree => !!policyHolderInsuree.insuree
-                ? <PublishedComponent
-                    pubRef="insuree.InsureePicker"
+                ? <PolicyHolderInsureePicker
                     value={policyHolderInsuree.insuree}
                     withLabel={false}
-                    readOnly />
+                    policyHolderId={decodeId(policyHolder.id)}
+                    readOnly/>
                 : "",
             policyHolderInsuree => !!policyHolderInsuree.contributionPlanBundle
                 ? <PolicyHolderContributionPlanBundlePicker
                     value={policyHolderInsuree.contributionPlanBundle}
                     withLabel={false}
-                    readOnly />
+                    policyHolderId={decodeId(policyHolder.id)}
+                    readOnly/>
                 : "",
             policyHolderInsuree => !!policyHolderInsuree.jsonExt ? policyHolderInsuree.jsonExt : "",
             policyHolderInsuree => !!policyHolderInsuree.dateValidFrom
@@ -206,6 +207,16 @@ class PolicyHolderInsureeSearcher extends Component {
         ]
     }
 
+    defaultFilters = () => {
+        const { policyHolder } = this.props;
+        return {
+            policyHolder_Id: {
+                value: decodeId(policyHolder.id),
+                filter: `policyHolder_Id: "${decodeId(policyHolder.id)}"`
+            }
+        };
+    }
+
     render() {
         const { intl, fetchingPolicyHolderInsurees, fetchedPolicyHolderInsurees, errorPolicyHolderInsurees, 
             policyHolderInsurees, policyHolderInsureesPageInfo, policyHolderInsureesTotalCount } = this.props;
@@ -230,6 +241,7 @@ class PolicyHolderInsureeSearcher extends Component {
                     defaultOrderBy={DEFAULT_ORDER_BY}
                     rowLocked={this.isRowDisabled}
                     rowDisabled={this.isRowDisabled}
+                    defaultFilters={this.defaultFilters()}
                 />
             </Fragment>
         )

@@ -1,9 +1,23 @@
 import React, { Component } from "react";
 import { withModulesManager, FormattedMessage, SelectInput } from "@openimis/fe-core";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import _ from "lodash";
+import { fetchPickerPolicyHolderContributionPlanBundles } from "../actions"
 
 class PolicyHolderContributionPlanBundlePicker extends Component {
+    componentDidMount() {
+        if (!!this.props.policyHolderId) {
+            this.props.fetchPickerPolicyHolderContributionPlanBundles(this.props.modulesManager, [`policyHolder_Id: "${this.props.policyHolderId}"`]);
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.policyHolderId !== this.props.policyHolderId && !!this.props.policyHolderId) {
+            this.props.fetchPickerPolicyHolderContributionPlanBundles(this.props.modulesManager, [`policyHolder_Id: "${this.props.policyHolderId}"`]);
+        }
+    }
+
     render() {
         const { value, onChange, required = false, withNull = false, nullLabel = null,
             withLabel = true, readOnly = false, pickerPolicyHolderContributionPlanBundles } = this.props;
@@ -17,7 +31,7 @@ class PolicyHolderContributionPlanBundlePicker extends Component {
         if (withNull) {
             options.unshift({
                 value: null,
-                label: nullLabel || <FormattedMessage module="policyHolder" id="policyHolder.emptyLabel" />
+                label: nullLabel || <FormattedMessage module="policyHolder" id="emptyLabel"/>
             })
         }
         return (
@@ -38,4 +52,8 @@ const mapStateToProps = state => ({
     pickerPolicyHolderContributionPlanBundles: state.policyHolder.pickerPolicyHolderContributionPlanBundles
 });
 
-export default withModulesManager(connect(mapStateToProps, null)(PolicyHolderContributionPlanBundlePicker));
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({ fetchPickerPolicyHolderContributionPlanBundles }, dispatch);
+}
+
+export default withModulesManager(connect(mapStateToProps, mapDispatchToProps)(PolicyHolderContributionPlanBundlePicker));

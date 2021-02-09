@@ -20,10 +20,20 @@ const POLICYHOLDERINSUREE_FULL_PROJECTION = modulesManager => [
     "isDeleted", "replacementUuid"
 ];
 
+const POLICYHOLDERINSUREE_PICKER_PROJECTION = modulesManager => [
+    "id",
+    "insuree" + modulesManager.getProjection("insuree.InsureePicker.projection"),
+    "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection")
+];
+
 const POLICYHOLDERCONTRIBUTIONPLANBUNDLE_FULL_PROJECTION = modulesManager => [
     "id", "dateValidFrom", "dateValidTo", "jsonExt", "isDeleted", "replacementUuid",
     "policyHolder{id}",
     "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection")
+];
+
+const POLICYHOLDERCONTRIBUTIONPLANBUNDLE_PICKER_PROJECTION = modulesManager => [
+    "id", "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection")
 ];
 
 function dateTimeToDate(date) {
@@ -67,6 +77,15 @@ export function fetchPolicyHolderInsurees(modulesManager, params) {
     return graphql(payload, "POLICYHOLDER_POLICYHOLDERINSUREES");
 }
 
+export function fetchPickerPolicyHolderInsurees(modulesManager, params) {
+    const payload = formatPageQueryWithCount(
+        "policyHolderInsuree",
+        params,
+        POLICYHOLDERINSUREE_PICKER_PROJECTION(modulesManager)
+    );
+    return graphql(payload, "POLICYHOLDER_PICKERPOLICYHOLDERINSUREES");
+}
+
 export function fetchPolicyHolderContributionPlanBundles(modulesManager, params) {
     const payload = formatPageQueryWithCount(
         "policyHolderContributionPlanBundle",
@@ -80,7 +99,7 @@ export function fetchPickerPolicyHolderContributionPlanBundles(modulesManager, p
     const payload = formatPageQueryWithCount(
         "policyHolderContributionPlanBundle",
         params,
-        POLICYHOLDERCONTRIBUTIONPLANBUNDLE_FULL_PROJECTION(modulesManager)
+        POLICYHOLDERCONTRIBUTIONPLANBUNDLE_PICKER_PROJECTION(modulesManager)
     );
     return graphql(payload, "POLICYHOLDER_PICKERPOLICYHOLDERCONTRIBUTIONPLANBUNDLES");
 }

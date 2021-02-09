@@ -52,7 +52,7 @@ class PolicyHolderInsureeFilter extends Component {
     }
 
     render() {
-        const { intl, classes, onChangeFilters } = this.props;
+        const { intl, classes, filters, onChangeFilters } = this.props;
         return (
             <Grid container className={classes.form}>
                 <Grid item xs={3} className={classes.item}>
@@ -65,8 +65,9 @@ class PolicyHolderInsureeFilter extends Component {
                 </Grid>
                 <Grid item xs={3} className={classes.item}>
                     <PolicyHolderContributionPlanBundlePicker
-                        withNull={true}
+                        withNull
                         nullLabel={formatMessage(intl, "policyHolder", "policyHolderContributionPlanBundle.any")}
+                        policyHolderId={!!filters['policyHolder_Id'] && filters['policyHolder_Id'].value}
                         value={this._filterValue('contributionPlanBundle_Id')}
                         onChange={v => onChangeFilters([{
                             id: 'contributionPlanBundle_Id',
