@@ -208,11 +208,10 @@ class PolicyHolderInsureeSearcher extends Component {
     }
 
     defaultFilters = () => {
-        const { policyHolder } = this.props;
         return {
             policyHolder_Id: {
-                value: decodeId(policyHolder.id),
-                filter: `policyHolder_Id: "${decodeId(policyHolder.id)}"`
+                value: decodeId(this.props.policyHolder.id),
+                filter: `policyHolder_Id: "${decodeId(this.props.policyHolder.id)}"`
             }
         };
     }

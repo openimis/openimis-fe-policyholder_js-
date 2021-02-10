@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { injectIntl } from 'react-intl';
+import { connect } from "react-redux";
 import { withModulesManager, formatMessage, TextInput, PublishedComponent, decodeId } from "@openimis/fe-core";
 import { Grid, FormControlLabel, Checkbox } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
@@ -52,7 +53,7 @@ class PolicyHolderInsureeFilter extends Component {
     }
 
     render() {
-        const { intl, classes, filters, onChangeFilters } = this.props;
+        const { intl, classes, onChangeFilters, policyHolder } = this.props;
         return (
             <Grid container className={classes.form}>
                 <Grid item xs={3} className={classes.item}>
@@ -67,7 +68,7 @@ class PolicyHolderInsureeFilter extends Component {
                     <PolicyHolderContributionPlanBundlePicker
                         withNull
                         nullLabel={formatMessage(intl, "policyHolder", "policyHolderContributionPlanBundle.any")}
-                        policyHolderId={!!filters['policyHolder_Id'] && filters['policyHolder_Id'].value}
+                        policyHolderId={!!policyHolder && decodeId(policyHolder.id)}
                         value={this._filterValue('contributionPlanBundle_Id')}
                         onChange={v => onChangeFilters([{
                             id: 'contributionPlanBundle_Id',
@@ -109,4 +110,8 @@ class PolicyHolderInsureeFilter extends Component {
     }
 }
 
-export default withModulesManager(injectIntl(withTheme(withStyles(styles)(PolicyHolderInsureeFilter))));
+const mapStateToProps = state => ({
+    policyHolder: !!state.policyHolder.policyHolder ? state.policyHolder.policyHolder : null
+});
+
+export default withModulesManager(injectIntl(withTheme(withStyles(styles)(connect(mapStateToProps, null)(PolicyHolderInsureeFilter)))));

@@ -19,15 +19,15 @@ class PolicyHolderContributionPlanBundlePicker extends Component {
     }
 
     render() {
-        const { value, onChange, required = false, withNull = false, nullLabel = null,
-            withLabel = true, readOnly = false, pickerPolicyHolderContributionPlanBundles } = this.props;
+        const { value, onChange, required = false, withNull = false, nullLabel = null, withLabel = true,
+            readOnly = false, policyHolderId, pickerPolicyHolderContributionPlanBundles } = this.props;
         let distinctContributionPlanBundles = _.uniqWith(pickerPolicyHolderContributionPlanBundles.map(v => v.contributionPlanBundle), _.isEqual);
-        let options = [
+        let options = !!policyHolderId ? [
             ...distinctContributionPlanBundles.map(v => ({
                 value: v,
                 label: `${v.code} - ${v.name}`
             }))
-        ];
+        ] : [];
         if (withNull) {
             options.unshift({
                 value: null,
