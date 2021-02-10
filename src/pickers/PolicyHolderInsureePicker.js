@@ -28,13 +28,13 @@ class PolicyHolderInsureePicker extends Component {
 
     render() {
         const { value, onChange, required = false, withNull = false, nullLabel = null,
-            withLabel = true, readOnly = false, pickerPolicyHolderInsurees } = this.props;
-        let options = [
+            withLabel = true, readOnly = false, policyHolderId, pickerPolicyHolderInsurees } = this.props;
+        let options = !!policyHolderId ? [
             ...pickerPolicyHolderInsurees.map(v => ({
                 value: v.insuree,
                 label: `${v.insuree.lastName} ${v.insuree.otherNames}`
             }))
-        ];
+        ] : [];
         if (withNull) {
             options.unshift({
                 value: null,

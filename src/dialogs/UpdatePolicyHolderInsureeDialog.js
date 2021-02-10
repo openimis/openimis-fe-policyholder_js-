@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import EditIcon from '@material-ui/icons/Edit';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
-import { FormattedMessage, formatMessage, formatMessageWithValues, PublishedComponent } from "@openimis/fe-core";
+import { FormattedMessage, formatMessage, formatMessageWithValues, PublishedComponent, decodeId } from "@openimis/fe-core";
 import { Tooltip, Grid, IconButton } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { updatePolicyHolderInsuree, replacePolicyHolderInsuree } from "../actions";
@@ -136,6 +136,7 @@ class UpdatePolicyHolderInsureeDialog extends Component {
                             <Grid item className={classes.item}>
                                 <PolicyHolderContributionPlanBundlePicker
                                     required
+                                    policyHolderId={!!policyHolderInsuree.policyHolder && decodeId(policyHolderInsuree.policyHolder.id)}
                                     value={!!policyHolderInsuree.contributionPlanBundle && policyHolderInsuree.contributionPlanBundle}
                                     onChange={v => this.updateAttribute('contributionPlanBundle', v)}
                                     readOnly={!isReplacing}
