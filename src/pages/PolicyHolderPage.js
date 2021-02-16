@@ -18,30 +18,21 @@ class PolicyHolderPage extends Component {
     }
 
     save = (policyHolder) => {
+        const { intl, createPolicyHolder, updatePolicyHolder } = this.props;
         if (!!policyHolder.id) {
-            this.props.updatePolicyHolder(
+            updatePolicyHolder(
                 policyHolder,
-                formatMessageWithValues(
-                    this.props.intl,
-                    "policyHolder",
-                    "UpdatePolicyHolder.mutationLabel",
-                    { label: this.titleParams(policyHolder).label }
-                )
+                formatMessageWithValues(intl, "policyHolder", "UpdatePolicyHolder.mutationLabel", this.titleParams(policyHolder))
             );
         } else {
-            this.props.createPolicyHolder(
+            createPolicyHolder(
                 policyHolder,
-                formatMessageWithValues(
-                    this.props.intl,
-                    "policyHolder",
-                    "CreatePolicyHolder.mutationLabel",
-                    { label: this.titleParams(policyHolder).label }
-                )
+                formatMessageWithValues(intl, "policyHolder", "CreatePolicyHolder.mutationLabel", this.titleParams(policyHolder))
             );
         }
     }
 
-    titleParams = (policyHolder) => {
+    titleParams = policyHolder => {
         var params = { label: null };
         if (!!policyHolder.code && !!policyHolder.tradeName) {
             params.label = `${policyHolder.code} - ${policyHolder.tradeName}`

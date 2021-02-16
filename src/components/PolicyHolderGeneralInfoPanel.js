@@ -229,6 +229,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             module="policyHolder"
                             label="dateValidFrom"
                             required
+                            maxDate={!!edited && !!edited.dateValidTo && edited.dateValidTo}
                             value={!!edited && !!edited.dateValidFrom ? edited.dateValidFrom : null}
                             onChange={v => this.updateAttribute('dateValidFrom', v)}
                             readOnly={!!edited && !!edited.id ? true : false}
@@ -239,6 +240,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             pubRef="core.DatePicker"
                             module="policyHolder"
                             label="dateValidTo"
+                            minDate={!!edited && !!edited.dateValidFrom && edited.dateValidFrom}
                             value={!!edited && !!edited.dateValidTo ? edited.dateValidTo : null}
                             onChange={v => this.updateAttribute('dateValidTo', v)}
                         />

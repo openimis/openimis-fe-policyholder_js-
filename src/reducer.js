@@ -80,12 +80,11 @@ function reducer(
                 errorPolicyHolder: null,
             };
         case 'POLICYHOLDER_POLICYHOLDER_RESP':
-            var policyHolders = parseData(action.payload.data.policyHolder);
             return {
                 ...state,
                 fetchingPolicyHolder: false,
                 fetchedPolicyHolder: true,
-                policyHolder: (!!policyHolders && policyHolders.length > 0) ? policyHolders[0] : null,
+                policyHolder: parseData(action.payload.data.policyHolder).find(policyHolder => !!policyHolder),
                 errorPolicyHolder: formatGraphQLError(action.payload)
             };
         case 'POLICYHOLDER_POLICYHOLDER_ERR':
