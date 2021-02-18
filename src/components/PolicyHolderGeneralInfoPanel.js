@@ -3,6 +3,8 @@ import { Grid, Divider, Typography } from "@material-ui/core";
 import { withModulesManager, formatMessage, FormPanel, TextInput, TextAreaInput, FormattedMessage, PublishedComponent } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
+import { MAX_ACCOUNTANCYACCOUNT_LENGTH, MAX_ADDRESS_LENGTH, MAX_CODE_LENGTH, MAX_EMAIL_LENGTH,
+    MAX_FAX_LENGTH, MAX_PAYMENTREFERENCE_LENGTH, MAX_PHONE_LENGTH, MAX_TRADENAME_LENGTH } from "../constants";
 
 const styles = theme => ({
     tableTitle: theme.table.title,
@@ -108,6 +110,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             module="policyHolder"
                             label="code"
                             required
+                            inputProps={{ maxLength: MAX_CODE_LENGTH }}
                             value={!!edited && !!edited.code ? edited.code : ""}
                             onChange={v => this.updateAttribute('code', v)}
                             readOnly={!!edited && !!edited.id ? true : false}
@@ -118,6 +121,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             module="policyHolder"
                             label="tradeName"
                             required
+                            inputProps={{ maxLength: MAX_TRADENAME_LENGTH }}
                             value={!!edited && !!edited.tradeName ? edited.tradeName : ""}
                             onChange={v => this.updateAttribute('tradeName', v)}
                         />
@@ -136,6 +140,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <TextAreaInput
                             module="policyHolder"
                             label="address"
+                            inputProps={{ maxLength: MAX_ADDRESS_LENGTH }}
                             value={!!edited && !!edited.address ? edited.address : ""}
                             onChange={v => this.updateAttribute('address', v)}
                         />
@@ -144,6 +149,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <TextInput
                             module="policyHolder"
                             label="phone"
+                            inputProps={{ maxLength: MAX_PHONE_LENGTH }}
                             value={!!edited && !!edited.phone ? edited.phone : ""}
                             error={this.regexError('phone', edited.phone)}
                             onChange={v => this.updateAttribute('phone', v)}
@@ -153,6 +159,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <TextInput
                             module="policyHolder"
                             label="fax"
+                            inputProps={{ maxLength: MAX_FAX_LENGTH }}
                             value={!!edited && !!edited.fax ? edited.fax : ""}
                             error={this.regexError('fax', edited.fax)}
                             onChange={v => this.updateAttribute('fax', v)}
@@ -162,6 +169,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <TextInput
                             module="policyHolder"
                             label="email"
+                            inputProps={{ maxLength: MAX_EMAIL_LENGTH }}
                             value={!!edited && !!edited.email ? edited.email : ""}
                             error={this.regexError('email', edited.email)}
                             onChange={v => this.updateAttribute('email', v)}
@@ -201,6 +209,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <TextInput
                             module="policyHolder"
                             label="accountancyAccount"
+                            inputProps={{ maxLength: MAX_ACCOUNTANCYACCOUNT_LENGTH }}
                             value={!!edited && !!edited.accountancyAccount ? edited.accountancyAccount : ""}
                             error={this.regexError('accountancyAccount', edited.accountancyAccount)}
                             onChange={v => this.updateAttribute('accountancyAccount', v)}
@@ -218,6 +227,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                         <TextInput
                             module="policyHolder"
                             label="paymentReference"
+                            inputProps={{ maxLength: MAX_PAYMENTREFERENCE_LENGTH }}
                             value={!!edited && !!edited.paymentReference ? edited.paymentReference : ""}
                             error={this.regexError('paymentReference', edited.paymentReference)}
                             onChange={v => this.updateAttribute('paymentReference', v)}
