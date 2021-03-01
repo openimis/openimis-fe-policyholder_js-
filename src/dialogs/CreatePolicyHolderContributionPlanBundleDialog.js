@@ -12,6 +12,7 @@ import { createPolicyHolderContributionPlanBundle } from "../actions";
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH } from "../constants"
 
 const styles = theme => ({
     item: theme.paper.item
@@ -50,7 +51,7 @@ class CreatePolicyHolderContributionPlanBundleDialog extends Component {
                     code: this.props.policyHolder.code,
                     tradeName: this.props.policyHolder.tradeName
                 }
-            )
+            ).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
         );
         this.props.onSave();
         this.handleClose();

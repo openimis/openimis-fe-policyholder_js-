@@ -13,6 +13,7 @@ import { updatePolicyHolderContributionPlanBundle, replacePolicyHolderContributi
 import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH } from "../constants"
 
 const styles = theme => ({
     item: theme.paper.item
@@ -52,7 +53,7 @@ class UpdatePolicyHolderContributionPlanBundleDialog extends Component {
                         code: policyHolder.code,
                         tradeName: policyHolder.tradeName
                     }
-                )
+                ).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );
         } else {
             updatePolicyHolderContributionPlanBundle(
@@ -65,7 +66,7 @@ class UpdatePolicyHolderContributionPlanBundleDialog extends Component {
                         code: policyHolder.code,
                         tradeName: policyHolder.tradeName
                     }
-                )
+                ).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );
         }
         onSave();

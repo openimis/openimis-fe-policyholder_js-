@@ -1,16 +1,35 @@
-import React, { Component, Fragment } from "react"
-import { injectIntl } from 'react-intl';
-import { withModulesManager, formatMessageWithValues, formatDateFromISO,
-    Searcher, decodeId, PublishedComponent, withTooltip, formatMessage, coreConfirm } from "@openimis/fe-core";
-    import PolicyHolderContributionPlanBundleFilter from "./PolicyHolderContributionPlanBundleFilter";
-import { fetchPolicyHolderContributionPlanBundles, fetchPickerPolicyHolderContributionPlanBundles,
-    deletePolicyHolderContributionPlanBundle } from "../actions"
+import React, { Component, Fragment } from "react";
+import { injectIntl } from "react-intl";
+import {
+    withModulesManager,
+    formatMessageWithValues,
+    formatDateFromISO,
+    Searcher,
+    decodeId,
+    PublishedComponent,
+    withTooltip,
+    formatMessage,
+    coreConfirm
+} from "@openimis/fe-core";
+import PolicyHolderContributionPlanBundleFilter from "./PolicyHolderContributionPlanBundleFilter";
+import {
+    fetchPolicyHolderContributionPlanBundles,
+    fetchPickerPolicyHolderContributionPlanBundles,
+    deletePolicyHolderContributionPlanBundle
+} from "../actions";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { IconButton } from "@material-ui/core";
-import DeleteIcon from '@material-ui/icons/Delete';
-import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_REPLACE,
-    RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_UPDATE, RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_DELETE } from "../constants"
+import DeleteIcon from "@material-ui/icons/Delete";
+import {
+    ZERO,
+    MAX_CLIENTMUTATIONLABEL_LENGTH,
+    DEFAULT_PAGE_SIZE,
+    ROWS_PER_PAGE_OPTIONS,
+    RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_REPLACE,
+    RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_UPDATE,
+    RIGHT_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_DELETE
+} from "../constants";
 import UpdatePolicyHolderContributionPlanBundleDialog from "../dialogs/UpdatePolicyHolderContributionPlanBundleDialog";
 
 const DEFAULT_ORDER_BY = "contributionPlanBundle";
@@ -173,7 +192,7 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
                         code: policyHolder.code,
                         tradeName: policyHolder.tradeName
                     }
-                )
+                ).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );
             this.setState({ toDelete: policyHolderContributionPlanBundle.id });
         }

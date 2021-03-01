@@ -1,16 +1,31 @@
-import React, { Component, Fragment } from "react"
-import { injectIntl } from 'react-intl';
-import { withModulesManager, formatMessage, formatMessageWithValues, formatDateFromISO,
-    Searcher, withTooltip, coreConfirm, decodeId } from "@openimis/fe-core";
+import React, { Component, Fragment } from "react";
+import { injectIntl } from "react-intl";
+import {
+    withModulesManager,
+    formatMessage,
+    formatMessageWithValues,
+    formatDateFromISO,
+    Searcher,
+    withTooltip,
+    coreConfirm,
+    decodeId
+} from "@openimis/fe-core";
 import PolicyHolderInsureeFilter from "./PolicyHolderInsureeFilter";
-import { fetchPolicyHolderInsurees, deletePolicyHolderInsuree } from "../actions"
+import { fetchPolicyHolderInsurees, deletePolicyHolderInsuree } from "../actions";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import UpdatePolicyHolderInsureeDialog from "../dialogs/UpdatePolicyHolderInsureeDialog"
+import UpdatePolicyHolderInsureeDialog from "../dialogs/UpdatePolicyHolderInsureeDialog";
 import { IconButton } from "@material-ui/core";
-import DeleteIcon from '@material-ui/icons/Delete';
-import { DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS, RIGHT_POLICYHOLDERINSUREE_UPDATE,
-    RIGHT_POLICYHOLDERINSUREE_DELETE, RIGHT_POLICYHOLDERINSUREE_REPLACE } from "../constants"
+import DeleteIcon from "@material-ui/icons/Delete";
+import {
+    ZERO,
+    MAX_CLIENTMUTATIONLABEL_LENGTH,
+    DEFAULT_PAGE_SIZE,
+    ROWS_PER_PAGE_OPTIONS,
+    RIGHT_POLICYHOLDERINSUREE_UPDATE,
+    RIGHT_POLICYHOLDERINSUREE_DELETE,
+    RIGHT_POLICYHOLDERINSUREE_REPLACE
+} from "../constants";
 import PolicyHolderContributionPlanBundlePicker from "../pickers/PolicyHolderContributionPlanBundlePicker";
 import PolicyHolderInsureePicker from "../pickers/PolicyHolderInsureePicker";
 
@@ -180,7 +195,7 @@ class PolicyHolderInsureeSearcher extends Component {
                         code: policyHolder.code,
                         tradeName: policyHolder.tradeName
                     }
-                )
+                ).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );
             this.setState({ toDelete: policyHolderInsuree.id });
         }

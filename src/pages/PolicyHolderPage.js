@@ -1,12 +1,17 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import { withModulesManager, formatMessageWithValues, withHistory, historyPush } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import PolicyHolderForm from "../components/PolicyHolderForm";
-import { createPolicyHolder, updatePolicyHolder } from "../actions"
-import { RIGHT_POLICYHOLDER_CREATE, RIGHT_POLICYHOLDER_UPDATE } from "../constants"
+import { createPolicyHolder, updatePolicyHolder } from "../actions";
+import {
+    ZERO,
+    MAX_CLIENTMUTATIONLABEL_LENGTH,
+    RIGHT_POLICYHOLDER_CREATE,
+    RIGHT_POLICYHOLDER_UPDATE
+} from "../constants";
 
 const styles = theme => ({
     page: theme.page,
@@ -22,12 +27,22 @@ class PolicyHolderPage extends Component {
         if (!!policyHolder.id) {
             updatePolicyHolder(
                 policyHolder,
-                formatMessageWithValues(intl, "policyHolder", "UpdatePolicyHolder.mutationLabel", this.titleParams(policyHolder))
+                formatMessageWithValues(
+                    intl,
+                    "policyHolder",
+                    "UpdatePolicyHolder.mutationLabel",
+                    this.titleParams(policyHolder)
+                ).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );
         } else {
             createPolicyHolder(
                 policyHolder,
-                formatMessageWithValues(intl, "policyHolder", "CreatePolicyHolder.mutationLabel", this.titleParams(policyHolder))
+                formatMessageWithValues(
+                    intl,
+                    "policyHolder",
+                    "CreatePolicyHolder.mutationLabel",
+                    this.titleParams(policyHolder)
+                ).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );
         }
     }
