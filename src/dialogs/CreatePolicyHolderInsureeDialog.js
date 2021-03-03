@@ -13,6 +13,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PolicyHolderContributionPlanBundlePicker from '../pickers/PolicyHolderContributionPlanBundlePicker';
+import { ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH } from "../constants"
 
 const styles = theme => ({
     item: theme.paper.item
@@ -41,19 +42,15 @@ class CreatePolicyHolderInsureeDialog extends Component {
     };
 
     handleSave = () => {
-        this.props.createPolicyHolderInsuree(
+        const { intl, policyHolder, onSave, createPolicyHolderInsuree } = this.props;
+        createPolicyHolderInsuree(
             this.state.policyHolderInsuree,
-            formatMessageWithValues(
-                this.props.intl,
-                "policyHolder",
-                "CreatePolicyHolderInsuree.mutationLabel",
-                {
-                    code: this.props.policyHolder.code,
-                    tradeName: this.props.policyHolder.tradeName
-                }
-            )
+            formatMessageWithValues(intl, "policyHolder", "CreatePolicyHolderInsuree.mutationLabel", {
+                code: policyHolder.code,
+                tradeName: policyHolder.tradeName
+            }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
         );
-        this.props.onSave();
+        onSave();
         this.handleClose();
     };
 

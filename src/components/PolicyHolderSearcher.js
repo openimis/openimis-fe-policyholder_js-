@@ -1,15 +1,30 @@
-import React, { Component, Fragment } from "react"
-import { injectIntl } from 'react-intl';
-import { withModulesManager, formatMessage, formatMessageWithValues, formatDateFromISO, coreConfirm, journalize,
-    Searcher, PublishedComponent } from "@openimis/fe-core";
+import React, { Component, Fragment } from "react";
+import { injectIntl } from "react-intl";
+import {
+    withModulesManager,
+    formatMessage,
+    formatMessageWithValues,
+    formatDateFromISO,
+    coreConfirm,
+    journalize,
+    Searcher,
+    PublishedComponent
+} from "@openimis/fe-core";
 import PolicyHolderFilter from "./PolicyHolderFilter";
-import { fetchPolicyHolders, deletePolicyHolder } from "../actions"
+import { fetchPolicyHolders, deletePolicyHolder } from "../actions";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { IconButton, Tooltip } from "@material-ui/core";
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { RIGHT_POLICYHOLDER_UPDATE, RIGHT_POLICYHOLDER_DELETE, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS } from "../constants"
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import {
+    ZERO,
+    MAX_CLIENTMUTATIONLABEL_LENGTH,
+    RIGHT_POLICYHOLDER_UPDATE,
+    RIGHT_POLICYHOLDER_DELETE,
+    DEFAULT_PAGE_SIZE,
+    ROWS_PER_PAGE_OPTIONS
+} from "../constants";
 
 class PolicyHolderSearcher extends Component {
     constructor(props) {
@@ -142,39 +157,28 @@ class PolicyHolderSearcher extends Component {
 
     onDelete = policyHolder => {
         const { intl, coreConfirm, deletePolicyHolder } = this.props;
-        let confirm = () => coreConfirm(
-            formatMessageWithValues(intl, "policyHolder", "deletePolicyHolder.confirm.title",
-                {
+        let confirm = () =>
+            coreConfirm(
+                formatMessageWithValues(intl, "policyHolder", "deletePolicyHolder.confirm.title", {
                     code: policyHolder.code,
                     tradeName: policyHolder.tradeName
-                }
-            ),
-            formatMessageWithValues(intl, "policyHolder", "dialog.delete.message",
-                {
+                }),
+                formatMessageWithValues(intl, "policyHolder", "dialog.delete.message", {
                     code: policyHolder.code,
                     tradeName: policyHolder.tradeName
-                }
-            )
-        );
+                })
+            );
         let confirmedAction = () => {
             deletePolicyHolder(
                 policyHolder,
-                formatMessageWithValues(
-                    intl,
-                    "policyHolder",
-                    "DeletePolicyHolder.mutationLabel",
-                    { 
-                        code: policyHolder.code,
-                        tradeName: policyHolder.tradeName
-                    }
-                )
+                formatMessageWithValues(intl, "policyHolder", "DeletePolicyHolder.mutationLabel", {
+                    code: policyHolder.code,
+                    tradeName: policyHolder.tradeName
+                }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );
             this.setState({ toDelete: policyHolder.id });
-        }
-        this.setState(
-            { confirmedAction },
-            confirm
-        )
+        };
+        this.setState({ confirmedAction }, confirm);
     }
 
     isDeletedFilterEnabled = policyHolder => policyHolder.isDeleted;

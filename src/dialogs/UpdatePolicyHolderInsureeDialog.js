@@ -14,6 +14,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PolicyHolderContributionPlanBundlePicker from '../pickers/PolicyHolderContributionPlanBundlePicker';
+import { ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH } from "../constants"
 
 const styles = theme => ({
     item: theme.paper.item
@@ -53,7 +54,7 @@ class UpdatePolicyHolderInsureeDialog extends Component {
                         code: policyHolder.code,
                         tradeName: policyHolder.tradeName
                     }
-                )
+                ).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );
         } else {
             updatePolicyHolderInsuree(
@@ -66,7 +67,7 @@ class UpdatePolicyHolderInsureeDialog extends Component {
                         code: policyHolder.code,
                         tradeName: policyHolder.tradeName
                     }
-                )
+                ).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );
         }
         onSave();
