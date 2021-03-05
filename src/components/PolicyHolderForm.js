@@ -15,6 +15,8 @@ const styles = theme => ({
     item: theme.paper.item,
 });
 
+const jsonFields = ['address', 'contactName', 'bankAccount']
+
 class PolicyHolderForm extends Component {
     constructor(props) {
         super(props);
@@ -22,6 +24,24 @@ class PolicyHolderForm extends Component {
             policyHolder: {},
             isFormValid: true
         };
+    }
+
+    wrapJSONFields = (policyHolder) => {
+        jsonFields.forEach(item => {
+            if (!!policyHolder[item]) {
+                var key = `"${item}"`
+                var value = `${JSON.stringify(policyHolder[item]).replace(/\\n/g, "\\n")}`
+                policyHolder[item] = `{${key}: ${value}}`
+            } 
+        });
+    }
+
+    unwrapJSONFields = (policyHolder) => {
+        jsonFields.forEach(item => {
+            if (!!policyHolder[item]) {
+                policyHolder[item] = JSON.parse(policyHolder[item])[item]
+            } 
+        });
     }
 
     componentDidMount() {
@@ -40,6 +60,7 @@ class PolicyHolderForm extends Component {
                 (state, props) => ({ policyHolder: props.policyHolder, policyHolderId: props.policyHolderId }),
                 () => document.title = formatMessageWithValues(this.props.intl, "policyHolder", "policyHolder.page.title", { label: this.titleParams().label })
             );
+            this.unwrapJSONFields(this.props.policyHolder)
         }
         if (prevProps.submittingMutation && !this.props.submittingMutation) {
             this.props.journalize(this.props.mutation);
@@ -62,7 +83,9 @@ class PolicyHolderForm extends Component {
     }
 
     save = (policyHolder) => {
+        this.wrapJSONFields(policyHolder);
         this.props.save(policyHolder);
+        this.unwrapJSONFields(policyHolder);
     }
 
     onEditedChanged = policyHolder => {
