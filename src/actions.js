@@ -13,7 +13,7 @@ const POLICYHOLDER_PICKER_PROJECTION = () => [
 ];
 
 const POLICYHOLDERINSUREE_FULL_PROJECTION = modulesManager => [
-    "id", "dateValidFrom", "dateValidTo", "jsonExt",
+    "id", "dateValidFrom", "dateValidTo", "jsonExt", "lastPolicy{id}",
     "policyHolder{id}",
     "insuree" + modulesManager.getProjection("insuree.InsureePicker.projection"),
     "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection"),
@@ -131,6 +131,7 @@ function formatPolicyHolderInsureeGQL(policyHolderInsuree, isReplaceMutation = f
         ${!!policyHolderInsuree.policyHolder && !isReplaceMutation ? `policyHolderId: "${decodeId(policyHolderInsuree.policyHolder.id)}"` : ''}
         ${!!policyHolderInsuree.insuree ? `insureeId: ${decodeId(policyHolderInsuree.insuree.id)}` : ""}
         ${!!policyHolderInsuree.contributionPlanBundle ? `contributionPlanBundleId: "${decodeId(policyHolderInsuree.contributionPlanBundle.id)}"` : ""}
+        ${!!policyHolderInsuree.jsonExt && !isReplaceMutation ? `jsonExt: ${JSON.stringify(policyHolderInsuree.jsonExt)}` : ""}
         ${!!policyHolderInsuree.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderInsuree.dateValidFrom)}"` : ""}
         ${!!policyHolderInsuree.dateValidTo ? `dateValidTo: "${dateTimeToDate(policyHolderInsuree.dateValidTo)}"` : ""}
     `;

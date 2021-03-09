@@ -16,6 +16,7 @@ None
 ## Available Contribution Points
 * `policyHolder.TabPanel.label` ability to extend Policy Holder tab panel with a label
 * `policyHolder.TabPanel.panel` ability to extend Policy Holder tab panel with a panel displayed on click on an appropriate label
+* `policyHolder.PolicyHolderInsuree.calculation` placeholder for `Calculation` module contributions
 
 ## Published Components
 * `policyHolder.ConfigBasedPicker`, generic picker, which can display options from JSON object 

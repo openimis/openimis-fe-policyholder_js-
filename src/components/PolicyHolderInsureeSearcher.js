@@ -8,7 +8,8 @@ import {
     Searcher,
     withTooltip,
     coreConfirm,
-    decodeId
+    decodeId,
+    Contributions
 } from "@openimis/fe-core";
 import PolicyHolderInsureeFilter from "./PolicyHolderInsureeFilter";
 import { fetchPolicyHolderInsurees, deletePolicyHolderInsuree } from "../actions";
@@ -24,7 +25,9 @@ import {
     ROWS_PER_PAGE_OPTIONS,
     RIGHT_POLICYHOLDERINSUREE_UPDATE,
     RIGHT_POLICYHOLDERINSUREE_DELETE,
-    RIGHT_POLICYHOLDERINSUREE_REPLACE
+    RIGHT_POLICYHOLDERINSUREE_REPLACE,
+    POLICYHOLDERINSUREE_CALCULATION_CONTRIBUTION_KEY,
+    POLICYHOLDERINSUREE_CLASSNAME
 } from "../constants";
 import PolicyHolderContributionPlanBundlePicker from "../pickers/PolicyHolderContributionPlanBundlePicker";
 import PolicyHolderInsureePicker from "../pickers/PolicyHolderInsureePicker";
@@ -114,7 +117,24 @@ class PolicyHolderInsureeSearcher extends Component {
                     policyHolderId={decodeId(policyHolder.id)}
                     readOnly/>
                 : "",
-            policyHolderInsuree => !!policyHolderInsuree.jsonExt ? policyHolderInsuree.jsonExt : "",
+            policyHolderInsuree => {
+                /**
+                 * Mapping @see lastPolicy property into @see policy property is required
+                 * because property names of @see PolicyHolderInsuree object on frontend
+                 * have to match property names of a corresponding object on backend
+                 */
+                const { lastPolicy, ...others } = policyHolderInsuree;
+                const policy = !!lastPolicy ? lastPolicy : {};
+                return !!policyHolderInsuree.jsonExt
+                    ? <Contributions
+                        contributionKey={POLICYHOLDERINSUREE_CALCULATION_CONTRIBUTION_KEY}
+                        intl={this.props.intl}
+                        className={POLICYHOLDERINSUREE_CLASSNAME}
+                        entity={{ policy, ...others }}
+                        value={policyHolderInsuree.jsonExt}
+                        readOnly/>
+                    : ""
+            },
             policyHolderInsuree => !!policyHolderInsuree.dateValidFrom
                 ? formatDateFromISO(modulesManager, intl, policyHolderInsuree.dateValidFrom)
                 : "",

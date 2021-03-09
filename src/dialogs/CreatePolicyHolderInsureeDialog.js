@@ -1,19 +1,31 @@
-import React, { Component, Fragment } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import AddIcon from '@material-ui/icons/Add';
-import { FormattedMessage, formatMessageWithValues, PublishedComponent, decodeId } from "@openimis/fe-core";
+import React, { Component, Fragment } from "react";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import AddIcon from "@material-ui/icons/Add";
+import {
+    FormattedMessage,
+    formatMessageWithValues,
+    PublishedComponent,
+    decodeId,
+    Contributions
+} from "@openimis/fe-core";
 import { Fab, Grid } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { createPolicyHolderInsuree } from "../actions";
-import { injectIntl } from 'react-intl';
+import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import PolicyHolderContributionPlanBundlePicker from '../pickers/PolicyHolderContributionPlanBundlePicker';
-import { ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH } from "../constants"
+import PolicyHolderContributionPlanBundlePicker from "../pickers/PolicyHolderContributionPlanBundlePicker";
+import {
+    ZERO,
+    MAX_CLIENTMUTATIONLABEL_LENGTH,
+    POLICYHOLDERINSUREE_CALCULATION_CONTRIBUTION_KEY,
+    POLICYHOLDERINSUREE_CLASSNAME,
+    RIGHT_CALCULATION_WRITE
+} from "../constants";
 
 const styles = theme => ({
     item: theme.paper.item
@@ -32,7 +44,8 @@ class CreatePolicyHolderInsureeDialog extends Component {
         this.setState((_, props) => ({
             open: true,
             policyHolderInsuree: {
-                policyHolder: props.policyHolder
+                policyHolder: props.policyHolder,
+                policy: {}
             }
         }));
     };
@@ -72,7 +85,7 @@ class CreatePolicyHolderInsureeDialog extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { intl, classes } = this.props;
         const { open, policyHolderInsuree } = this.state;
         return (
             <Fragment>
@@ -105,6 +118,16 @@ class CreatePolicyHolderInsureeDialog extends Component {
                                     onChange={v => this.updateAttribute('contributionPlanBundle', v)}
                                 />
                             </Grid>
+                            <Contributions
+                                contributionKey={POLICYHOLDERINSUREE_CALCULATION_CONTRIBUTION_KEY}
+                                intl={intl}
+                                className={POLICYHOLDERINSUREE_CLASSNAME}
+                                entity={policyHolderInsuree}
+                                requiredRights={[RIGHT_CALCULATION_WRITE]}
+                                value={!!policyHolderInsuree.jsonExt && policyHolderInsuree.jsonExt}
+                                onChange={this.updateAttribute}
+                                gridItemStyle={classes.item}
+                            />
                             <Grid item className={classes.item}>
                                 <PublishedComponent
                                     pubRef="core.DatePicker"
