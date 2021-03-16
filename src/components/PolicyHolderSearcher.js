@@ -50,26 +50,6 @@ class PolicyHolderSearcher extends Component {
         this.props.fetchPolicyHolders(this.props.modulesManager, params);
     }
 
-    filtersToQueryParams = state => {
-        let params = Object.keys(state.filters)
-            .filter(f => !!state.filters[f]['filter'])
-            .map(f => state.filters[f]['filter']);
-        params.push(`first: ${state.pageSize}`);
-        if (!state.filters.hasOwnProperty('isDeleted')) {
-            params.push("isDeleted: false");
-        }
-        if (!!state.afterCursor) {
-            params.push(`after: "${state.afterCursor}"`);
-        }
-        if (!!state.beforeCursor) {
-            params.push(`before: "${state.beforeCursor}"`);
-        }
-        if (!!state.orderBy) {
-            params.push(`orderBy: ["${state.orderBy}"]`);
-        }
-        return params;
-    }
-
     headers = () => {
         const { rights } = this.props;
         let result = [
@@ -200,6 +180,19 @@ class PolicyHolderSearcher extends Component {
         ]
     }
 
+    defaultFilters = () => {
+        return {
+            isDeleted: {
+                value: false,
+                filter: "isDeleted: false"
+            },
+            applyDefaultValidityFilter: {
+                value: true,
+                filter: "applyDefaultValidityFilter: true"
+            }
+        };
+    }
+
     render() {
         const { intl, fetchingPolicyHolders, fetchedPolicyHolders, errorPolicyHolders, policyHolders, policyHoldersPageInfo,
             policyHoldersTotalCount, onDoubleClick } = this.props;
@@ -217,7 +210,6 @@ class PolicyHolderSearcher extends Component {
                     tableTitle={formatMessageWithValues(intl, "policyHolder", "policyHolders.searcher.results.title", { policyHoldersTotalCount })}
                     headers={this.headers}
                     itemFormatters={this.itemFormatters}
-                    filtersToQueryParams={this.filtersToQueryParams}
                     sorts={this.sorts}
                     rowsPerPageOptions={this.rowsPerPageOptions}
                     defaultPageSize={this.defaultPageSize}
@@ -225,6 +217,7 @@ class PolicyHolderSearcher extends Component {
                     onDoubleClick={policyHolder => this.isOnDoubleClickEnabled(policyHolder) && onDoubleClick(policyHolder)}
                     rowDisabled={this.isRowDisabled}
                     rowLocked={this.isRowDisabled}
+                    defaultFilters={this.defaultFilters()}
                 />
             </Fragment>
         )
