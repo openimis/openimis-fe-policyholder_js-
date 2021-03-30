@@ -3,8 +3,16 @@ import { Grid, Divider, Typography } from "@material-ui/core";
 import { withModulesManager, formatMessage, FormPanel, TextInput, TextAreaInput, FormattedMessage, PublishedComponent } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { MAX_ACCOUNTANCYACCOUNT_LENGTH, MAX_ADDRESS_LENGTH, MAX_CODE_LENGTH, MAX_EMAIL_LENGTH,
-    MAX_FAX_LENGTH, MAX_PAYMENTREFERENCE_LENGTH, MAX_PHONE_LENGTH, MAX_TRADENAME_LENGTH } from "../constants";
+import {
+    MAX_ACCOUNTANCYACCOUNT_LENGTH,
+    MAX_ADDRESS_LENGTH,
+    MAX_CODE_LENGTH,
+    MAX_EMAIL_LENGTH,
+    MAX_FAX_LENGTH,
+    MAX_PAYMENTREFERENCE_LENGTH,
+    MAX_PHONE_LENGTH,
+    MAX_TRADENAME_LENGTH
+} from "../constants";
 
 const styles = theme => ({
     tableTitle: theme.table.title,
@@ -81,7 +89,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
     }
 
     render() {
-        const { intl, classes, edited, mandatoryFieldsEmpty } = this.props;
+        const { intl, classes, edited, mandatoryFieldsEmpty, isPolicyHolderPortalUser } = this.props;
         return (
             <Fragment>
                 <Grid container className={classes.tableTitle}>
@@ -113,7 +121,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             inputProps={{ maxLength: MAX_CODE_LENGTH }}
                             value={!!edited && !!edited.code ? edited.code : ""}
                             onChange={v => this.updateAttribute('code', v)}
-                            readOnly={!!edited && !!edited.id ? true : false}
+                            readOnly={(!!edited && !!edited.id) || isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -124,6 +132,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             inputProps={{ maxLength: MAX_TRADENAME_LENGTH }}
                             value={!!edited && !!edited.tradeName ? edited.tradeName : ""}
                             onChange={v => this.updateAttribute('tradeName', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={8}>
@@ -134,6 +143,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             filterLabels={false}
                             value={!!edited ? edited.locations : null}
                             onChange={v => this.updateAttribute('locations', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -143,6 +153,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             inputProps={{ maxLength: MAX_ADDRESS_LENGTH }}
                             value={!!edited && !!edited.address ? edited.address : ""}
                             onChange={v => this.updateAttribute('address', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -153,6 +164,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             value={!!edited && !!edited.phone ? edited.phone : ""}
                             error={this.regexError('phone', edited.phone)}
                             onChange={v => this.updateAttribute('phone', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -163,6 +175,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             value={!!edited && !!edited.fax ? edited.fax : ""}
                             error={this.regexError('fax', edited.fax)}
                             onChange={v => this.updateAttribute('fax', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -173,6 +186,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             value={!!edited && !!edited.email ? edited.email : ""}
                             error={this.regexError('email', edited.email)}
                             onChange={v => this.updateAttribute('email', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -181,6 +195,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             label="contactName"
                             value={!!edited && !!edited.contactName ? edited.contactName : ""}
                             onChange={v => this.updateAttribute('contactName', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -192,6 +207,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             nullLabel={formatMessage(intl, "policyHolder", "emptyLabel")}
                             value={!!edited ? edited.legalForm : null}
                             onChange={v => this.updateAttribute('legalForm', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -203,6 +219,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             nullLabel={formatMessage(intl, "policyHolder", "emptyLabel")}
                             value={!!edited ? edited.activityCode : null}
                             onChange={v => this.updateAttribute('activityCode', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -213,6 +230,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             value={!!edited && !!edited.accountancyAccount ? edited.accountancyAccount : ""}
                             error={this.regexError('accountancyAccount', edited.accountancyAccount)}
                             onChange={v => this.updateAttribute('accountancyAccount', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -221,6 +239,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             label="bankAccount"
                             value={!!edited && !!edited.bankAccount ? edited.bankAccount : ""}
                             onChange={v => this.updateAttribute('bankAccount', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -231,6 +250,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             value={!!edited && !!edited.paymentReference ? edited.paymentReference : ""}
                             error={this.regexError('paymentReference', edited.paymentReference)}
                             onChange={v => this.updateAttribute('paymentReference', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -242,7 +262,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             maxDate={!!edited && !!edited.dateValidTo && edited.dateValidTo}
                             value={!!edited && !!edited.dateValidFrom ? edited.dateValidFrom : null}
                             onChange={v => this.updateAttribute('dateValidFrom', v)}
-                            readOnly={!!edited && !!edited.id ? true : false}
+                            readOnly={(!!edited && !!edited.id) || isPolicyHolderPortalUser}
                         />
                     </Grid>
                     <Grid item xs={2} className={classes.item}>
@@ -253,6 +273,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
                             minDate={!!edited && !!edited.dateValidFrom && edited.dateValidFrom}
                             value={!!edited && !!edited.dateValidTo ? edited.dateValidTo : null}
                             onChange={v => this.updateAttribute('dateValidTo', v)}
+                            readOnly={isPolicyHolderPortalUser}
                         />
                     </Grid>
                 </Grid>

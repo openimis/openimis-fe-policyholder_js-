@@ -41,3 +41,4 @@ export const POLICYHOLDERINSUREE_CLASSNAME = "PolicyHolderInsuree"
 export const RIGHT_CALCULATION_WRITE = "write"
 export const RIGHT_CALCULATION_UPDATE = "update"
 export const RIGHT_CALCULATION_REPLACE = "replace"
+export const RIGHT_PORTALPOLICYHOLDER_SEARCH = 154001

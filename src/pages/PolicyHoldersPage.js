@@ -4,7 +4,12 @@ import { withModulesManager, formatMessage, withTooltip, historyPush } from "@op
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { RIGHT_POLICYHOLDER_SEARCH, RIGHT_POLICYHOLDER_CREATE, RIGHT_POLICYHOLDER_UPDATE } from "../constants"
+import {
+    RIGHT_POLICYHOLDER_SEARCH,
+    RIGHT_POLICYHOLDER_CREATE,
+    RIGHT_POLICYHOLDER_UPDATE,
+    RIGHT_PORTALPOLICYHOLDER_SEARCH
+} from "../constants"
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { decodeId } from "@openimis/fe-core";
@@ -29,7 +34,7 @@ class PolicyHoldersPage extends Component {
 
     onDoubleClick = (policyHolder, newTab = false) => {
         const { rights, modulesManager, history } = this.props;
-        if (rights.includes(RIGHT_POLICYHOLDER_UPDATE)) {
+        if (rights.includes(RIGHT_POLICYHOLDER_UPDATE) || rights.includes(RIGHT_PORTALPOLICYHOLDER_SEARCH)) {
             historyPush(modulesManager, history, "policyHolder.route.policyHolder", [decodeId(policyHolder.id)], newTab);
         }
     }
@@ -37,7 +42,8 @@ class PolicyHoldersPage extends Component {
     render() {
         const { intl, classes, rights } = this.props;
         return (
-            rights.includes(RIGHT_POLICYHOLDER_SEARCH) && (
+            (rights.includes(RIGHT_POLICYHOLDER_SEARCH) ||
+                rights.includes(RIGHT_PORTALPOLICYHOLDER_SEARCH)) && (
                 <div className={classes.page}>
                     <PolicyHolderSearcher
                         onDoubleClick={this.onDoubleClick}

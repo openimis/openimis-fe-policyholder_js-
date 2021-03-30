@@ -7,6 +7,11 @@ import { connect } from "react-redux";
 import { fetchPolicyHolder } from "../actions"
 import PolicyHolderGeneralInfoPanel from "./PolicyHolderGeneralInfoPanel";
 import PolicyHolderTabPanel from "./PolicyHolderTabPanel";
+import {
+    RIGHT_PORTALPOLICYHOLDER_SEARCH,
+    RIGHT_POLICYHOLDER_CREATE,
+    RIGHT_POLICYHOLDER_UPDATE
+} from "../constants";
 
 const styles = theme => ({
     paper: theme.paper.paper,
@@ -29,38 +34,38 @@ class PolicyHolderForm extends Component {
     wrapJSONFields = (policyHolder) => {
         jsonFields.forEach(item => {
             if (!!policyHolder[item]) {
-                var key = `"${item}"`
-                var value = `${JSON.stringify(policyHolder[item]).replace(/\\n/g, "\\n")}`
-                policyHolder[item] = `{${key}: ${value}}`
-            } 
+                const key = `"${item}"`;
+                const value = `${JSON.stringify(policyHolder[item]).replace(/\\n/g, "\\n")}`;
+                policyHolder[item] = `{${key}: ${value}}`;
+            }
         });
     }
 
     unwrapJSONFields = (policyHolder) => {
         jsonFields.forEach(item => {
             if (!!policyHolder[item]) {
-                policyHolder[item] = JSON.parse(policyHolder[item])[item]
-            } 
+                policyHolder[item] = JSON.parse(policyHolder[item])[item];
+            }
         });
     }
 
     componentDidMount() {
-        document.title = formatMessageWithValues(this.props.intl, "policyHolder", "policyHolder.page.title", { label: "" })
+        document.title = formatMessageWithValues(this.props.intl, "policyHolder", "policyHolder.page.title", { label: "" });
         if (!!this.props.policyHolderId) {
             this.setState(
-                (state, props) => ({ policyHolderId: props.policyHolderId }),
+                (_, props) => ({ policyHolderId: props.policyHolderId }),
                 () => this.props.fetchPolicyHolder(this.props.modulesManager, this.props.policyHolderId)
-            )
+            );
         }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.fetchedPolicyHolder !== this.props.fetchedPolicyHolder && !!this.props.fetchedPolicyHolder) {
+            this.unwrapJSONFields(this.props.policyHolder);
             this.setState(
-                (state, props) => ({ policyHolder: props.policyHolder, policyHolderId: props.policyHolderId }),
-                () => document.title = formatMessageWithValues(this.props.intl, "policyHolder", "policyHolder.page.title", { label: this.titleParams().label })
+                (_, props) => ({ policyHolder: props.policyHolder, policyHolderId: props.policyHolderId }),
+                () => document.title = formatMessageWithValues(this.props.intl, "policyHolder", "policyHolder.page.title", this.titleParams())
             );
-            this.unwrapJSONFields(this.props.policyHolder)
         }
         if (prevProps.submittingMutation && !this.props.submittingMutation) {
             this.props.journalize(this.props.mutation);
@@ -78,9 +83,7 @@ class PolicyHolderForm extends Component {
         return true;
     }
 
-    canSave = () => {
-        return !this.isMandatoryFieldsEmpty() && this.state.isFormValid
-    }
+    canSave = () => !this.isMandatoryFieldsEmpty() && this.state.isFormValid;
 
     save = (policyHolder) => {
         this.wrapJSONFields(policyHolder);
@@ -88,19 +91,20 @@ class PolicyHolderForm extends Component {
         this.unwrapJSONFields(policyHolder);
     }
 
-    onEditedChanged = policyHolder => {
-        this.setState({ policyHolder })
-    }
+    onEditedChanged = (policyHolder) => this.setState({ policyHolder });
 
-    titleParams = () => {
-        return this.props.titleParams(this.state.policyHolder);
-    }
+    titleParams = () => this.props.titleParams(this.state.policyHolder);
 
-    onValidation = isFormValid => {
-        if(this.state.isFormValid !== isFormValid) {
+    onValidation = (isFormValid) => {
+        if (this.state.isFormValid !== isFormValid) {
             this.setState({ isFormValid });
         }
     }
+
+    isPolicyHolderPortalUser = () =>
+        this.props.rights.includes(RIGHT_PORTALPOLICYHOLDER_SEARCH) &&
+        !this.props.rights.includes(RIGHT_POLICYHOLDER_CREATE) &&
+        !this.props.rights.includes(RIGHT_POLICYHOLDER_UPDATE);
 
     render() {
         const { intl, rights, back } = this.props;
@@ -121,6 +125,7 @@ class PolicyHolderForm extends Component {
                     onValidation={this.onValidation}
                     Panels={[PolicyHolderTabPanel]}
                     rights={rights}
+                    isPolicyHolderPortalUser={this.isPolicyHolderPortalUser()}
                 />
             </Fragment>
         )
