@@ -37,31 +37,33 @@ class PolicyHolderTabPanel extends FormPanel {
     handleChange = (_, value) => this.setState({ value });
 
     render() {
-        const { intl, rights, classes, edited, mandatoryFieldsEmpty } = this.props;
+        const { intl, rights, classes, edited, mandatoryFieldsEmpty, isPolicyHolderPortalUser } = this.props;
         const { value } = this.state;
         const isTabsEnabled = !!edited && !!edited.id && !mandatoryFieldsEmpty;
         return (
-            <Paper className={classes.paper}>
-                <Grid container className={`${classes.tableTitle} ${classes.tabs}`}>
+            !isPolicyHolderPortalUser && (
+                <Paper className={classes.paper}>
+                    <Grid container className={`${classes.tableTitle} ${classes.tabs}`}>
+                        <Contributions
+                            contributionKey={POLICYHOLDER_TABS_LABEL_CONTRIBUTION_KEY}
+                            intl={intl}
+                            rights={rights}
+                            value={value}
+                            onChange={this.handleChange}
+                            isSelected={this.isSelected}
+                            tabStyle={this.tabStyle}
+                            disabled={!isTabsEnabled}
+                        />
+                    </Grid>
                     <Contributions
-                        contributionKey={POLICYHOLDER_TABS_LABEL_CONTRIBUTION_KEY}
-                        intl={intl}
+                        contributionKey={POLICYHOLDER_TABS_PANEL_CONTRIBUTION_KEY}
                         rights={rights}
                         value={value}
-                        onChange={this.handleChange}
-                        isSelected={this.isSelected}
-                        tabStyle={this.tabStyle}
-                        disabled={!isTabsEnabled}
+                        isTabsEnabled={isTabsEnabled}
+                        policyHolder={edited}
                     />
-                </Grid>
-                <Contributions
-                    contributionKey={POLICYHOLDER_TABS_PANEL_CONTRIBUTION_KEY}
-                    rights={rights}
-                    value={value}
-                    isTabsEnabled={isTabsEnabled}
-                    policyHolder={edited}
-                />
-            </Paper>
+                </Paper>
+            )
         )
     }
 }

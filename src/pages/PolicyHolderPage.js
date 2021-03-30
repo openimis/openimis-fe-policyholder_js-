@@ -10,7 +10,8 @@ import {
     ZERO,
     MAX_CLIENTMUTATIONLABEL_LENGTH,
     RIGHT_POLICYHOLDER_CREATE,
-    RIGHT_POLICYHOLDER_UPDATE
+    RIGHT_POLICYHOLDER_UPDATE,
+    RIGHT_PORTALPOLICYHOLDER_SEARCH
 } from "../constants";
 
 const styles = theme => ({
@@ -64,7 +65,8 @@ class PolicyHolderPage extends Component {
     render() {
         const { classes, rights, policyHolderId } = this.props;
         return (
-            rights.includes(RIGHT_POLICYHOLDER_CREATE) && rights.includes(RIGHT_POLICYHOLDER_UPDATE) && (
+            (rights.includes(!!policyHolderId ? RIGHT_POLICYHOLDER_UPDATE : RIGHT_POLICYHOLDER_CREATE) ||
+                rights.includes(RIGHT_PORTALPOLICYHOLDER_SEARCH)) && (
                 <div className={classes.page}>
                     <PolicyHolderForm
                         policyHolderId={policyHolderId}

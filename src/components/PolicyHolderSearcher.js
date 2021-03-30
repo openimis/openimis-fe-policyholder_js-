@@ -23,7 +23,8 @@ import {
     RIGHT_POLICYHOLDER_UPDATE,
     RIGHT_POLICYHOLDER_DELETE,
     DEFAULT_PAGE_SIZE,
-    ROWS_PER_PAGE_OPTIONS
+    ROWS_PER_PAGE_OPTIONS,
+    RIGHT_PORTALPOLICYHOLDER_SEARCH
 } from "../constants";
 
 class PolicyHolderSearcher extends Component {
@@ -105,7 +106,7 @@ class PolicyHolderSearcher extends Component {
                 ? formatDateFromISO(modulesManager, intl, policyHolder.dateValidTo)
                 : ""
         ];
-        if (rights.includes(RIGHT_POLICYHOLDER_UPDATE)) {
+        if (rights.includes(RIGHT_POLICYHOLDER_UPDATE) || rights.includes(RIGHT_PORTALPOLICYHOLDER_SEARCH)) {
             result.push(
                 policyHolder => !this.isDeletedFilterEnabled(policyHolder) && (
                     <Tooltip title={formatMessage(intl, "policyHolder", "editButton.tooltip")}>
