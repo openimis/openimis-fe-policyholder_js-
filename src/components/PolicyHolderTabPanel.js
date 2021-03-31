@@ -3,7 +3,11 @@ import { Paper, Grid } from "@material-ui/core";
 import { withModulesManager, FormPanel, Contributions } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { RIGHT_POLICYHOLDERINSUREE_SEARCH, POLICYHOLDERINSUREE_TAB_VALUE } from "../constants"
+import {
+    RIGHT_POLICYHOLDERINSUREE_SEARCH,
+    POLICYHOLDERINSUREE_TAB_VALUE,
+    RIGHT_PORTALPOLICYHOLDERINSUREE_SEARCH
+} from "../constants";
 
 const styles = theme => ({
     paper: theme.paper.paper,
@@ -26,8 +30,12 @@ class PolicyHolderTabPanel extends FormPanel {
     constructor(props) {
         super(props);
         this.state = {
-            value: props.rights.includes(RIGHT_POLICYHOLDERINSUREE_SEARCH) ? POLICYHOLDERINSUREE_TAB_VALUE : undefined
-        }
+            value:
+                (props.rights.includes(RIGHT_POLICYHOLDERINSUREE_SEARCH) ||
+                    props.rights.includes(RIGHT_PORTALPOLICYHOLDERINSUREE_SEARCH))
+                    ? POLICYHOLDERINSUREE_TAB_VALUE
+                    : undefined
+        };
     }
 
     isSelected = value => value === this.state.value;
@@ -37,33 +45,31 @@ class PolicyHolderTabPanel extends FormPanel {
     handleChange = (_, value) => this.setState({ value });
 
     render() {
-        const { intl, rights, classes, edited, mandatoryFieldsEmpty, isPolicyHolderPortalUser } = this.props;
+        const { intl, rights, classes, edited, mandatoryFieldsEmpty } = this.props;
         const { value } = this.state;
         const isTabsEnabled = !!edited && !!edited.id && !mandatoryFieldsEmpty;
         return (
-            !isPolicyHolderPortalUser && (
-                <Paper className={classes.paper}>
-                    <Grid container className={`${classes.tableTitle} ${classes.tabs}`}>
-                        <Contributions
-                            contributionKey={POLICYHOLDER_TABS_LABEL_CONTRIBUTION_KEY}
-                            intl={intl}
-                            rights={rights}
-                            value={value}
-                            onChange={this.handleChange}
-                            isSelected={this.isSelected}
-                            tabStyle={this.tabStyle}
-                            disabled={!isTabsEnabled}
-                        />
-                    </Grid>
+            <Paper className={classes.paper}>
+                <Grid container className={`${classes.tableTitle} ${classes.tabs}`}>
                     <Contributions
-                        contributionKey={POLICYHOLDER_TABS_PANEL_CONTRIBUTION_KEY}
+                        contributionKey={POLICYHOLDER_TABS_LABEL_CONTRIBUTION_KEY}
+                        intl={intl}
                         rights={rights}
                         value={value}
-                        isTabsEnabled={isTabsEnabled}
-                        policyHolder={edited}
+                        onChange={this.handleChange}
+                        isSelected={this.isSelected}
+                        tabStyle={this.tabStyle}
+                        disabled={!isTabsEnabled}
                     />
-                </Paper>
-            )
+                </Grid>
+                <Contributions
+                    contributionKey={POLICYHOLDER_TABS_PANEL_CONTRIBUTION_KEY}
+                    rights={rights}
+                    value={value}
+                    isTabsEnabled={isTabsEnabled}
+                    policyHolder={edited}
+                />
+            </Paper>
         )
     }
 }
