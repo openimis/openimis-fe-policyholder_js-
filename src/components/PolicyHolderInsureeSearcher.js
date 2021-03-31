@@ -27,7 +27,10 @@ import {
     RIGHT_POLICYHOLDERINSUREE_DELETE,
     RIGHT_POLICYHOLDERINSUREE_REPLACE,
     POLICYHOLDERINSUREE_CALCULATION_CONTRIBUTION_KEY,
-    POLICYHOLDERINSUREE_CLASSNAME
+    POLICYHOLDERINSUREE_CLASSNAME,
+    RIGHT_PORTALPOLICYHOLDERINSUREE_REPLACE,
+    RIGHT_PORTALPOLICYHOLDERINSUREE_UPDATE,
+    RIGHT_PORTALPOLICYHOLDERINSUREE_DELETE
 } from "../constants";
 import PolicyHolderContributionPlanBundlePicker from "../pickers/PolicyHolderContributionPlanBundlePicker";
 import PolicyHolderInsureePicker from "../pickers/PolicyHolderInsureePicker";
@@ -88,13 +91,22 @@ class PolicyHolderInsureeSearcher extends Component {
             "policyHolder.dateValidFrom",
             "policyHolder.dateValidTo"
         ];
-        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_REPLACE)) {
+        if (
+            rights.includes(RIGHT_POLICYHOLDERINSUREE_REPLACE) ||
+            rights.includes(RIGHT_PORTALPOLICYHOLDERINSUREE_REPLACE)
+        ) {
             result.push("policyHolder.emptyLabel");
         }
-        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_UPDATE)) {
+        if (
+            rights.includes(RIGHT_POLICYHOLDERINSUREE_UPDATE) ||
+            rights.includes(RIGHT_PORTALPOLICYHOLDERINSUREE_UPDATE)
+        ) {
             result.push("policyHolder.emptyLabel");
         }
-        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_DELETE)) {
+        if (
+            rights.includes(RIGHT_POLICYHOLDERINSUREE_DELETE) ||
+            rights.includes(RIGHT_PORTALPOLICYHOLDERINSUREE_DELETE)
+        ) {
             result.push("policyHolder.emptyLabel");
         }
         return result;
@@ -142,7 +154,10 @@ class PolicyHolderInsureeSearcher extends Component {
                 ? formatDateFromISO(modulesManager, intl, policyHolderInsuree.dateValidTo)
                 : ""
         ];
-        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_REPLACE)) {
+        if (
+            rights.includes(RIGHT_POLICYHOLDERINSUREE_REPLACE) ||
+            rights.includes(RIGHT_PORTALPOLICYHOLDERINSUREE_REPLACE)
+        ) {
             result.push(
                 policyHolderInsuree => !this.isDeletedFilterEnabled(policyHolderInsuree) && (
                     <UpdatePolicyHolderInsureeDialog
@@ -155,7 +170,10 @@ class PolicyHolderInsureeSearcher extends Component {
                 )
             );
         }
-        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_UPDATE)) {
+        if (
+            rights.includes(RIGHT_POLICYHOLDERINSUREE_UPDATE) ||
+            rights.includes(RIGHT_PORTALPOLICYHOLDERINSUREE_UPDATE)
+        ) {
             result.push(
                 policyHolderInsuree => !this.isDeletedFilterEnabled(policyHolderInsuree) && (
                     <UpdatePolicyHolderInsureeDialog
@@ -167,7 +185,10 @@ class PolicyHolderInsureeSearcher extends Component {
                 )
             );
         }
-        if (rights.includes(RIGHT_POLICYHOLDERINSUREE_DELETE)) {
+        if (
+            rights.includes(RIGHT_POLICYHOLDERINSUREE_DELETE) ||
+            rights.includes(RIGHT_PORTALPOLICYHOLDERINSUREE_DELETE)
+        ) {
             result.push(
                 policyHolderInsuree => !this.isDeletedFilterEnabled(policyHolderInsuree) && withTooltip(
                     <div>
