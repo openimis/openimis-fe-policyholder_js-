@@ -24,6 +24,10 @@ import ConfigBasedPicker from "./pickers/ConfigBasedPicker";
 import PolicyHolderPicker from "./pickers/PolicyHolderPicker";
 import PolicyHolderContributionPlanBundlePicker from "./pickers/PolicyHolderContributionPlanBundlePicker";
 import PolicyHolderInsureePicker from "./pickers/PolicyHolderInsureePicker";
+import {
+    PolicyHolderPaymentsTabLabel,
+    PolicyHolderPaymentsTabPanel
+} from "./components/PolicyHolderPaymentsTab";
 
 const ROUTE_POLICY_HOLDERS = "policyHolders";
 const ROUTE_POLICY_HOLDER = "policyHolders/policyHolder";
@@ -79,11 +83,13 @@ const DEFAULT_CONFIG = {
     ],
     "policyHolder.TabPanel.label": [
         PolicyHolderInsureesTabLabel,
-        PolicyHolderContributionPlanBundlesTabLabel
+        PolicyHolderContributionPlanBundlesTabLabel,
+        PolicyHolderPaymentsTabLabel
     ],
     "policyHolder.TabPanel.panel": [
         PolicyHolderInsureesTabPanel,
-        PolicyHolderContributionPlanBundlesTabPanel
+        PolicyHolderContributionPlanBundlesTabPanel,
+        PolicyHolderPaymentsTabPanel
     ]
 };
 
