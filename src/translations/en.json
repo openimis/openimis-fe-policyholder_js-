@@ -78,5 +78,11 @@
     "policyHolder.ReplacePolicyHolderContributionPlanBundle.mutationLabel": "Replace Contribution Plan Bundle of {code} - {tradeName}",
     "policyHolder.policyHolderContributionPlanBundle.dialog.edit.title": "Edit Contribution Plan Bundle",
     "policyHolder.policyHolderContributionPlanBundle.dialog.delete.title": "Are you sure you want to delete {code} - {name}?",
-    "policyHolder.policyHolderContributionPlanBundle.dialog.replace.title": "Add new version of Contribution Plan Bundle"
+    "policyHolder.policyHolderContributionPlanBundle.dialog.replace.title": "Add new version of Contribution Plan Bundle",
+    "policyHolder.menu.policyHolderUsers": "Policy Holder Users",
+    "policyHolder.policyHolderUser.userName": "User Name",
+    "policyHolder.policyHolderUser.dateValidFrom": "Date Valid From",
+    "policyHolder.policyHolderUser.dateValidTo": "Date Valid To",
+    "policyHolder.policyHolderUser.isDeleted": "Show Deleted Users",
+    "policyHolder.policyHolderUsers.searcher.results.title": "{policyHolderUsersTotalCount} Policy Holder Users Found"
 }

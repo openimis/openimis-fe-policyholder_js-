@@ -36,6 +36,10 @@ const POLICYHOLDERCONTRIBUTIONPLANBUNDLE_PICKER_PROJECTION = modulesManager => [
     "id", "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection")
 ];
 
+const POLICYHOLDERUSER_FULL_PROJECTION = () => [
+    "id", "dateValidFrom", "dateValidTo"
+];
+
 function dateTimeToDate(date) {
     return date.split('T')[0];
 }
@@ -102,6 +106,15 @@ export function fetchPickerPolicyHolderContributionPlanBundles(modulesManager, p
         POLICYHOLDERCONTRIBUTIONPLANBUNDLE_PICKER_PROJECTION(modulesManager)
     );
     return graphql(payload, "POLICYHOLDER_PICKERPOLICYHOLDERCONTRIBUTIONPLANBUNDLES");
+}
+
+export function fetchPolicyHolderUsers(params) {
+    const payload = formatPageQueryWithCount(
+        "policyHolderUser",
+        params,
+        POLICYHOLDERUSER_FULL_PROJECTION()
+    );
+    return graphql(payload, "POLICYHOLDER_POLICYHOLDERUSERS");
 }
 
 function formatPolicyHolderGQL(policyHolder) {
