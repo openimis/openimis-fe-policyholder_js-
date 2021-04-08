@@ -9,6 +9,7 @@ import LegalFormPicker from "./pickers/LegalFormPicker";
 import ActivityCodePicker from "./pickers/ActivityCodePicker";
 import reducer from "./reducer";
 import {
+    RIGHT_POLICYHOLDERUSER_SEARCH,
     RIGHT_POLICYHOLDER_SEARCH,
     RIGHT_PORTALPOLICYHOLDERUSER_SEARCH,
     RIGHT_PORTALPOLICYHOLDER_SEARCH
@@ -96,7 +97,11 @@ const DEFAULT_CONFIG = {
             ),
             icon: <SupervisorAccountIcon />,
             route: "/" + ROUTE_POLICY_HOLDER_USERS,
-            filter: rights => rights.includes(RIGHT_PORTALPOLICYHOLDERUSER_SEARCH)
+            filter: rights =>
+                [
+                    RIGHT_POLICYHOLDERUSER_SEARCH,
+                    RIGHT_PORTALPOLICYHOLDERUSER_SEARCH
+                ].some(right => rights.includes(right))
         }
     ],
     "policyHolder.TabPanel.label": [
