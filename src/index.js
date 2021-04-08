@@ -1,5 +1,6 @@
 import React from "react";
 import BusinessIcon from "@material-ui/icons/Business";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import { FormattedMessage } from "@openimis/fe-core";
 import messages_en from "./translations/en.json";
 import PolicyHoldersPage from "./pages/PolicyHoldersPage";
@@ -9,6 +10,7 @@ import ActivityCodePicker from "./pickers/ActivityCodePicker";
 import reducer from "./reducer";
 import {
     RIGHT_POLICYHOLDER_SEARCH,
+    RIGHT_PORTALPOLICYHOLDERUSER_SEARCH,
     RIGHT_PORTALPOLICYHOLDER_SEARCH
 } from "./constants";
 import TabPanel from "./components/TabPanel";
@@ -28,9 +30,11 @@ import {
     PolicyHolderPaymentsTabLabel,
     PolicyHolderPaymentsTabPanel
 } from "./components/PolicyHolderPaymentsTab";
+import PolicyHolderUsersPage from "./pages/PolicyHolderUsersPage";
 
 const ROUTE_POLICY_HOLDERS = "policyHolders";
 const ROUTE_POLICY_HOLDER = "policyHolders/policyHolder";
+const ROUTE_POLICY_HOLDER_USERS = "policyHolderUsers";
 
 const DEFAULT_CONFIG = {
     "translations": [{ key: "en", messages: messages_en }],
@@ -62,7 +66,8 @@ const DEFAULT_CONFIG = {
     ],
     "core.Router": [
         { path: ROUTE_POLICY_HOLDERS, component: PolicyHoldersPage },
-        { path: ROUTE_POLICY_HOLDER + "/:policyholder_id?", component: PolicyHolderPage }
+        { path: ROUTE_POLICY_HOLDER + "/:policyholder_id?", component: PolicyHolderPage },
+        { path: ROUTE_POLICY_HOLDER_USERS, component: PolicyHolderUsersPage }
     ],
     "insuree.MainMenu": [
         {
@@ -79,7 +84,20 @@ const DEFAULT_CONFIG = {
                     RIGHT_POLICYHOLDER_SEARCH,
                     RIGHT_PORTALPOLICYHOLDER_SEARCH,
                 ].some(right => rights.includes(right))
-        },
+        }
+    ],
+    "admin.MainMenu": [
+        {
+            text: (
+                <FormattedMessage
+                    module="policyHolder"
+                    id="menu.policyHolderUsers"
+                />
+            ),
+            icon: <SupervisorAccountIcon />,
+            route: "/" + ROUTE_POLICY_HOLDER_USERS,
+            filter: rights => rights.includes(RIGHT_PORTALPOLICYHOLDERUSER_SEARCH)
+        }
     ],
     "policyHolder.TabPanel.label": [
         PolicyHolderInsureesTabLabel,
