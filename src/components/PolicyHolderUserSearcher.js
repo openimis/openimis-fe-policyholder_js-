@@ -5,7 +5,8 @@ import {
     formatMessageWithValues,
     Searcher,
     formatDateFromISO,
-    decodeId
+    decodeId,
+    journalize
 } from "@openimis/fe-core";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -19,7 +20,39 @@ import PolicyHolderUserFilter from "./PolicyHolderUserFilter";
 const DEFAULT_ORDER_BY = "id";
 
 class PolicyHolderUserSearcher extends Component {
+    state = {
+        queryParams: null
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.submittingMutation && !this.props.submittingMutation) {
+            this.props.journalize(this.props.mutation);
+        } else if (prevProps.reset !== this.props.reset) {
+            this.refetch();
+        }
+    }
+
     fetch = params => this.props.fetchPolicyHolderUsers(params);
+
+    refetch = () => this.fetch(this.state.queryParams);
+
+    filtersToQueryParams = state => {
+        let params = Object.keys(state.filters)
+            .filter(f => !!state.filters[f]['filter'])
+            .map(f => state.filters[f]['filter']);
+        params.push(`first: ${state.pageSize}`);
+        if (!!state.afterCursor) {
+            params.push(`after: "${state.afterCursor}"`);
+        }
+        if (!!state.beforeCursor) {
+            params.push(`before: "${state.beforeCursor}"`);
+        }
+        if (!!state.orderBy) {
+            params.push(`orderBy: ["${state.orderBy}"]`);
+        }
+        this.setState({ queryParams: params });
+        return params;
+    }
 
     headers = () => [
         "policyHolder.policyHolderUser.userName",
@@ -49,6 +82,13 @@ class PolicyHolderUserSearcher extends Component {
         ['dateValidTo', true]
     ];
 
+    defaultFilters = () => ({
+        isDeleted: {
+            value: false,
+            filter: "isDeleted: false"
+        }
+    });
+
     render() {
         const {
             intl,
@@ -72,15 +112,17 @@ class PolicyHolderUserSearcher extends Component {
                 tableTitle={formatMessageWithValues(
                     intl,
                     "policyHolder",
-                    "policyHolderUsers.searcher.results.title",
+                    "policyHolderUser.searcher.results.title",
                     { policyHolderUsersTotalCount }
                 )}
+                filtersToQueryParams={this.filtersToQueryParams}
                 headers={this.headers}
                 itemFormatters={this.itemFormatters}
                 sorts={this.sorts}
                 rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
                 defaultPageSize={DEFAULT_PAGE_SIZE}
                 defaultOrderBy={DEFAULT_ORDER_BY}
+                defaultFilters={this.defaultFilters()}
             />
         );
     }
@@ -93,10 +135,12 @@ const mapStateToProps = state => ({
     policyHolderUsers: state.policyHolder.policyHolderUsers,
     policyHolderUsersPageInfo: state.policyHolder.policyHolderUsersPageInfo,
     policyHolderUsersTotalCount: state.policyHolder.policyHolderUsersTotalCount,
+    submittingMutation: state.policyHolder.submittingMutation,
+    mutation: state.policyHolder.mutation
 });
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ fetchPolicyHolderUsers }, dispatch);
+    return bindActionCreators({ fetchPolicyHolderUsers, journalize }, dispatch);
 };
 
 export default withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PolicyHolderUserSearcher)));
