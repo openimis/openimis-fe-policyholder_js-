@@ -4,9 +4,12 @@ import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import PolicyHolderUserSearcher from "../components/PolicyHolderUserSearcher";
+import CreatePolicyHolderUserDialog from "../dialogs/CreatePolicyHolderUserDialog";
 import {
     RIGHT_POLICYHOLDERUSER_SEARCH,
-    RIGHT_PORTALPOLICYHOLDERUSER_SEARCH
+    RIGHT_PORTALPOLICYHOLDERUSER_SEARCH,
+    RIGHT_POLICYHOLDERUSER_CREATE,
+    RIGHT_PORTALPOLICYHOLDERUSER_CREATE
 } from "../constants"
 
 const styles = theme => ({
@@ -14,9 +17,18 @@ const styles = theme => ({
 })
 
 class PolicyHolderUsersPage extends Component {
+    state = {
+        reset: 0
+    }
+
     componentDidMount() {
         document.title = formatMessage(this.props.intl, "policyHolder", "menu.policyHolderUsers");
     }
+
+    onSave = () =>
+        this.setState(state => ({
+            reset: state.reset + 1
+        }));
 
     render() {
         const { classes, rights } = this.props;
@@ -28,10 +40,19 @@ class PolicyHolderUsersPage extends Component {
                 <div className={classes.page}>
                     <PolicyHolderUserSearcher
                         rights={rights}
+                        reset={this.state.reset}
                     />
+                    {[
+                        RIGHT_POLICYHOLDERUSER_CREATE,
+                        RIGHT_PORTALPOLICYHOLDERUSER_CREATE
+                    ].some(right => rights.includes(right)) && (
+                        <CreatePolicyHolderUserDialog
+                            onSave={this.onSave}
+                        />
+                    )}
                 </div>
             )
-        )
+        );
     }
 }
 

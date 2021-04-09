@@ -119,7 +119,7 @@ export function fetchPolicyHolderUsers(params) {
 
 function formatPolicyHolderGQL(policyHolder) {
     return `
-        ${!!policyHolder.id ? `id: "${decodeId(policyHolder.id)}"` : ''}
+        ${!!policyHolder.id ? `id: "${decodeId(policyHolder.id)}"` : ""}
         ${!!policyHolder.code ? `code: "${formatGQLString(policyHolder.code)}"` : ""}
         ${!!policyHolder.tradeName ? `tradeName: "${formatGQLString(policyHolder.tradeName)}"` : ""}
         ${!!policyHolder.locations ? `locationsId: ${decodeId(policyHolder.locations.id)}` : ""}
@@ -140,8 +140,8 @@ function formatPolicyHolderGQL(policyHolder) {
 
 function formatPolicyHolderInsureeGQL(policyHolderInsuree, isReplaceMutation = false) {
     return `
-        ${!!policyHolderInsuree.id ? `${isReplaceMutation ? 'uuid' : 'id'}: "${decodeId(policyHolderInsuree.id)}"` : ''}
-        ${!!policyHolderInsuree.policyHolder && !isReplaceMutation ? `policyHolderId: "${decodeId(policyHolderInsuree.policyHolder.id)}"` : ''}
+        ${!!policyHolderInsuree.id ? `${isReplaceMutation ? 'uuid' : 'id'}: "${decodeId(policyHolderInsuree.id)}"` : ""}
+        ${!!policyHolderInsuree.policyHolder && !isReplaceMutation ? `policyHolderId: "${decodeId(policyHolderInsuree.policyHolder.id)}"` : ""}
         ${!!policyHolderInsuree.insuree ? `insureeId: ${decodeId(policyHolderInsuree.insuree.id)}` : ""}
         ${!!policyHolderInsuree.contributionPlanBundle ? `contributionPlanBundleId: "${decodeId(policyHolderInsuree.contributionPlanBundle.id)}"` : ""}
         ${!!policyHolderInsuree.jsonExt && !isReplaceMutation ? `jsonExt: ${JSON.stringify(policyHolderInsuree.jsonExt)}` : ""}
@@ -152,12 +152,21 @@ function formatPolicyHolderInsureeGQL(policyHolderInsuree, isReplaceMutation = f
 
 function formatPolicyHolderContributionPlanBundleGQL(policyHolderContributionPlanBundle, isReplaceMutation = false) {
     return `
-        ${!!policyHolderContributionPlanBundle.id ? `${isReplaceMutation ? 'uuid' : 'id'}: "${decodeId(policyHolderContributionPlanBundle.id)}"` : ''}
-        ${!!policyHolderContributionPlanBundle.policyHolder && !isReplaceMutation ? `policyHolderId: "${decodeId(policyHolderContributionPlanBundle.policyHolder.id)}"` : ''}
+        ${!!policyHolderContributionPlanBundle.id ? `${isReplaceMutation ? 'uuid' : 'id'}: "${decodeId(policyHolderContributionPlanBundle.id)}"` : ""}
+        ${!!policyHolderContributionPlanBundle.policyHolder && !isReplaceMutation ? `policyHolderId: "${decodeId(policyHolderContributionPlanBundle.policyHolder.id)}"` : ""}
         ${!!policyHolderContributionPlanBundle.contributionPlanBundle ? `contributionPlanBundleId: "${decodeId(policyHolderContributionPlanBundle.contributionPlanBundle.id)}"` : ""}
         ${!!policyHolderContributionPlanBundle.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderContributionPlanBundle.dateValidFrom)}"` : ""}
         ${!!policyHolderContributionPlanBundle.dateValidTo ? `dateValidTo: "${dateTimeToDate(policyHolderContributionPlanBundle.dateValidTo)}"` : ""}
     `;
+}
+
+function formatPolicyHolderUserGQL(policyHolderUser) {
+    return `
+        ${!!policyHolderUser.user ? `userId: "${policyHolderUser.user}"` : ""}
+        ${!!policyHolderUser.policyHolder ? `policyHolderId: "${decodeId(policyHolderUser.policyHolder.id)}"` : ""}
+        ${!!policyHolderUser.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderUser.dateValidFrom)}"` : ""}
+        ${!!policyHolderUser.dateValidTo ? `dateValidTo: "${dateTimeToDate(policyHolderUser.dateValidTo)}"` : ""}
+    `
 }
 
 export function createPolicyHolder(policyHolder, clientMutationLabel) {
@@ -309,6 +318,20 @@ export function replacePolicyHolderContributionPlanBundle(policyHolderContributi
     return graphql(
         mutation.payload,
         ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_REPLACE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}
+
+export function createPolicyHolderUser(policyHolderUser, clientMutationLabel) {
+    let mutation = formatMutation("createPolicyHolderUser", formatPolicyHolderUserGQL(policyHolderUser), clientMutationLabel);
+    var requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_CREATE_POLICYHOLDERUSER_RESP", "POLICYHOLDER_MUTATION_ERR"],
         {
             clientMutationId: mutation.clientMutationId,
             clientMutationLabel,
