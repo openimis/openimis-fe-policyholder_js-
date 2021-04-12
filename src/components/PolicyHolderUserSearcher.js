@@ -13,9 +13,12 @@ import { connect } from "react-redux";
 import { fetchPolicyHolderUsers } from "../actions"
 import {
     DEFAULT_PAGE_SIZE,
+    RIGHT_POLICYHOLDERUSER_UPDATE,
+    RIGHT_PORTALPOLICYHOLDERUSER_UPDATE,
     ROWS_PER_PAGE_OPTIONS
 } from "../constants";
 import PolicyHolderUserFilter from "./PolicyHolderUserFilter";
+import UpdatePolicyHolderUserDialog from "../dialogs/UpdatePolicyHolderUserDialog";
 
 const DEFAULT_ORDER_BY = "id";
 
@@ -54,17 +57,28 @@ class PolicyHolderUserSearcher extends Component {
         return params;
     }
 
-    headers = () => [
-        "policyHolder.policyHolderUser.userName",
-        "policyHolder.policyHolderUser.dateValidFrom",
-        "policyHolder.policyHolderUser.dateValidTo"
-    ];
+    headers = () => {
+        const result = [
+            "policyHolder.policyHolderUser.userName",
+            "policyHolder.policyHolderUser.dateValidFrom",
+            "policyHolder.policyHolderUser.dateValidTo"
+        ];
+        if (
+            [
+                RIGHT_POLICYHOLDERUSER_UPDATE,
+                RIGHT_PORTALPOLICYHOLDERUSER_UPDATE
+            ].some(right => this.props.rights.includes(right))
+        ) {
+            result.push("policyHolder.emptyLabel");
+        }
+        return result;
+    }
 
     itemFormatters = () => {
-        const { intl, modulesManager } = this.props;
+        const { intl, modulesManager, rights, onSave } = this.props;
         const result = [
-            policyHolderUser => !!policyHolderUser.id
-                ? decodeId(policyHolderUser.id)
+            policyHolderUser => !!policyHolderUser.user
+                ? decodeId(policyHolderUser.user.id)
                 : "",
             policyHolderUser => !!policyHolderUser.dateValidFrom
                 ? formatDateFromISO(modulesManager, intl, policyHolderUser.dateValidFrom)
@@ -73,6 +87,21 @@ class PolicyHolderUserSearcher extends Component {
                 ? formatDateFromISO(modulesManager, intl, policyHolderUser.dateValidTo)
                 : ""
         ];
+        if (
+            [
+                RIGHT_POLICYHOLDERUSER_UPDATE,
+                RIGHT_PORTALPOLICYHOLDERUSER_UPDATE
+            ].some(right => rights.includes(right))
+        ) {
+            result.push(
+                policyHolderUser => !this.isDeletedFilterEnabled(policyHolderUser) && (
+                    <UpdatePolicyHolderUserDialog
+                        onSave={onSave}
+                        policyHolderUser={policyHolderUser}
+                    />
+                )
+            )
+        }
         return result;
     }
 
@@ -88,6 +117,8 @@ class PolicyHolderUserSearcher extends Component {
             filter: "isDeleted: false"
         }
     });
+
+    isDeletedFilterEnabled = policyHolderUser => policyHolderUser.isDeleted;
 
     render() {
         const {

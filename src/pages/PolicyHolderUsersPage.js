@@ -41,6 +41,7 @@ class PolicyHolderUsersPage extends Component {
                     <PolicyHolderUserSearcher
                         rights={rights}
                         reset={this.state.reset}
+                        onSave={this.onSave}
                     />
                     {[
                         RIGHT_POLICYHOLDERUSER_CREATE,

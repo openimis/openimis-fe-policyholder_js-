@@ -37,7 +37,8 @@ const POLICYHOLDERCONTRIBUTIONPLANBUNDLE_PICKER_PROJECTION = modulesManager => [
 ];
 
 const POLICYHOLDERUSER_FULL_PROJECTION = () => [
-    "id", "dateValidFrom", "dateValidTo"
+    "id", "dateValidFrom", "dateValidTo", "isDeleted",
+    "policyHolder" + `{${POLICYHOLDER_PICKER_PROJECTION()}}`,
 ];
 
 function dateTimeToDate(date) {
@@ -162,6 +163,7 @@ function formatPolicyHolderContributionPlanBundleGQL(policyHolderContributionPla
 
 function formatPolicyHolderUserGQL(policyHolderUser) {
     return `
+        ${!!policyHolderUser.id ? `id: "${decodeId(policyHolderUser.id)}"` : ""}
         ${!!policyHolderUser.user ? `userId: "${policyHolderUser.user}"` : ""}
         ${!!policyHolderUser.policyHolder ? `policyHolderId: "${decodeId(policyHolderUser.policyHolder.id)}"` : ""}
         ${!!policyHolderUser.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderUser.dateValidFrom)}"` : ""}
@@ -332,6 +334,20 @@ export function createPolicyHolderUser(policyHolderUser, clientMutationLabel) {
     return graphql(
         mutation.payload,
         ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_CREATE_POLICYHOLDERUSER_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}
+
+export function updatePolicyHolderUser(policyHolderUser, clientMutationLabel) {
+    let mutation = formatMutation("updatePolicyHolderUser", formatPolicyHolderUserGQL(policyHolderUser), clientMutationLabel);
+    var requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_UPDATE_POLICYHOLDERUSER_RESP", "POLICYHOLDER_MUTATION_ERR"],
         {
             clientMutationId: mutation.clientMutationId,
             clientMutationLabel,
