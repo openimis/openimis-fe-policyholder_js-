@@ -163,24 +163,19 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
 
     onDelete = policyHolderContributionPlanBundle => {
         const { intl, coreConfirm, deletePolicyHolderContributionPlanBundle, policyHolder } = this.props;
-        let confirm = () => coreConfirm(
-            formatMessageWithValues(
-                intl,
-                "policyHolder",
-                "policyHolderContributionPlanBundle.dialog.delete.title",
-                {
-                    code: policyHolderContributionPlanBundle.contributionPlanBundle.code,
-                    name: policyHolderContributionPlanBundle.contributionPlanBundle.name
-                }),
-            formatMessageWithValues(
-                intl,
-                "policyHolder",
-                "dialog.delete.message",
-                {
-                    code: policyHolder.code,
-                    tradeName: policyHolder.tradeName
-                })
-        );
+        let confirm = () =>
+            coreConfirm(
+                formatMessageWithValues(
+                    intl,
+                    "policyHolder",
+                    "policyHolderContributionPlanBundle.dialog.delete.title",
+                    {
+                        code: policyHolderContributionPlanBundle.contributionPlanBundle.code,
+                        name: policyHolderContributionPlanBundle.contributionPlanBundle.name
+                    }
+                ),
+                formatMessage(intl, "policyHolder", "dialog.delete.message")
+            );
         let confirmedAction = () => {
             deletePolicyHolderContributionPlanBundle(
                 policyHolderContributionPlanBundle,

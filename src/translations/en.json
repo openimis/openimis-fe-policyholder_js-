@@ -88,5 +88,7 @@
     "policyHolder.policyHolderUser.createPolicyHolderUser": "Create new Policy Holder User",
     "policyHolder.CreatePolicyHolderUser.mutationLabel": "{user} is added on {policyHolder}",
     "policyHolder.policyHolderUser.updatePolicyHolderUser": "Edit Policy Holder User",
-    "policyHolder.UpdatePolicyHolderUser.mutationLabel": "{user} - {policyHolder} is updated"
+    "policyHolder.UpdatePolicyHolderUser.mutationLabel": "{user} - {policyHolder} is updated",
+    "policyHolder.policyHolderUser.dialog.delete.title": "Are you sure you want to delete {user}?",
+    "policyHolder.DeletePolicyHolderUser.mutationLabel": "{user} is removed from {policyHolder}"
 }

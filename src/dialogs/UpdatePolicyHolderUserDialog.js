@@ -47,7 +47,7 @@ class UpdatePolicyHolderUserDialog extends Component {
             this.state.policyHolderUser,
             formatMessageWithValues(intl, "policyHolder", "UpdatePolicyHolderUser.mutationLabel", {
                 user: policyHolderUser.user,
-                policyHolder: `${policyHolderUser.policyHolder.code} - ${policyHolderUser.policyHolder.tradeName}`,
+                policyHolder: `${policyHolderUser.policyHolder.code} - ${policyHolderUser.policyHolder.tradeName}`
             }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
         );
         onSave();
@@ -69,13 +69,13 @@ class UpdatePolicyHolderUserDialog extends Component {
     };
 
     render() {
-        const { intl, classes } = this.props;
+        const { intl, classes, disabled } = this.props;
         const { open, policyHolderUser } = this.state;
         return (
             <Fragment>
                 <Tooltip title={formatMessage(intl, "policyHolder", "editButton.tooltip")}>
                     <div>
-                        <IconButton onClick={this.handleOpen}>
+                        <IconButton onClick={this.handleOpen} disabled={disabled}>
                             <EditIcon />
                         </IconButton>
                     </div>

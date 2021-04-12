@@ -6,16 +6,25 @@ import {
     Searcher,
     formatDateFromISO,
     decodeId,
-    journalize
+    journalize,
+    withTooltip,
+    coreConfirm,
+    formatMessage
 } from "@openimis/fe-core";
+import { IconButton } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { fetchPolicyHolderUsers } from "../actions"
+import { fetchPolicyHolderUsers, deletePolicyHolderUser } from "../actions"
 import {
     DEFAULT_PAGE_SIZE,
+    RIGHT_POLICYHOLDERUSER_DELETE,
     RIGHT_POLICYHOLDERUSER_UPDATE,
+    RIGHT_PORTALPOLICYHOLDERUSER_DELETE,
     RIGHT_PORTALPOLICYHOLDERUSER_UPDATE,
-    ROWS_PER_PAGE_OPTIONS
+    ROWS_PER_PAGE_OPTIONS,
+    ZERO,
+    MAX_CLIENTMUTATIONLABEL_LENGTH
 } from "../constants";
 import PolicyHolderUserFilter from "./PolicyHolderUserFilter";
 import UpdatePolicyHolderUserDialog from "../dialogs/UpdatePolicyHolderUserDialog";
@@ -24,13 +33,23 @@ const DEFAULT_ORDER_BY = "id";
 
 class PolicyHolderUserSearcher extends Component {
     state = {
-        queryParams: null
+        queryParams: null,
+        toDelete: null,
+        deleted: []
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.submittingMutation && !this.props.submittingMutation) {
             this.props.journalize(this.props.mutation);
-        } else if (prevProps.reset !== this.props.reset) {
+        } else if (
+            prevProps.confirmed !== this.props.confirmed &&
+            !!this.props.confirmed &&
+            !!this.state.confirmedAction
+        ) {
+            this.state.confirmedAction();
+        } else if (prevState.toDelete !== this.state.toDelete && !!this.state.toDelete) {
+            this.setState((state) => ({ deleted: state.deleted.concat(state.toDelete), toDelete: null }));
+        } else if (prevState.deleted !== this.state.deleted || prevProps.reset !== this.props.reset) {
             this.refetch();
         }
     }
@@ -71,6 +90,14 @@ class PolicyHolderUserSearcher extends Component {
         ) {
             result.push("policyHolder.emptyLabel");
         }
+        if (
+            [
+                RIGHT_POLICYHOLDERUSER_DELETE,
+                RIGHT_PORTALPOLICYHOLDERUSER_DELETE
+            ].some(right => this.props.rights.includes(right))
+        ) {
+            result.push("policyHolder.emptyLabel");
+        }
         return result;
     }
 
@@ -98,11 +125,56 @@ class PolicyHolderUserSearcher extends Component {
                     <UpdatePolicyHolderUserDialog
                         onSave={onSave}
                         policyHolderUser={policyHolderUser}
+                        disabled={this.state.deleted.includes(policyHolderUser.id)}
                     />
                 )
-            )
+            );
+        }
+        if (
+            [
+                RIGHT_POLICYHOLDERUSER_DELETE,
+                RIGHT_PORTALPOLICYHOLDERUSER_DELETE
+            ].some(right => rights.includes(right))
+        ) {
+            result.push(
+                policyHolderUser => !this.isDeletedFilterEnabled(policyHolderUser) && withTooltip(
+                    <div>
+                        <IconButton
+                            onClick={() => this.onDelete(policyHolderUser)}
+                            disabled={this.state.deleted.includes(policyHolderUser.id)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </div>,
+                    formatMessage(intl, "policyHolder", "deleteButton.tooltip")
+                )
+            );
         }
         return result;
+    }
+
+    onDelete = policyHolderUser => {
+        const { intl, coreConfirm, deletePolicyHolderUser } = this.props;
+        let confirm = () =>
+            coreConfirm(
+                formatMessageWithValues(intl, "policyHolder", "policyHolderUser.dialog.delete.title", {
+                    user: policyHolderUser.user
+                }),
+                formatMessage(intl, "policyHolder", "dialog.delete.message")
+            );
+        let confirmedAction = () => {
+            deletePolicyHolderUser(
+                policyHolderUser,
+                formatMessageWithValues(intl, "policyHolder", "DeletePolicyHolderUser.mutationLabel", {
+                    user: policyHolderUser.user,
+                    policyHolder: `${policyHolderUser.policyHolder.code} - ${policyHolderUser.policyHolder.tradeName}`,
+                }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
+            );
+            this.setState({ toDelete: policyHolderUser.id });
+        };
+        this.setState(
+            { confirmedAction },
+            confirm
+        );
     }
 
     sorts = () => [
@@ -119,6 +191,10 @@ class PolicyHolderUserSearcher extends Component {
     });
 
     isDeletedFilterEnabled = policyHolderUser => policyHolderUser.isDeleted;
+
+    isRowDisabled = (_, policyHolderUser) => 
+        this.state.deleted.includes(policyHolderUser.id) &&
+        !this.isDeletedFilterEnabled(policyHolderUser);
 
     render() {
         const {
@@ -154,6 +230,8 @@ class PolicyHolderUserSearcher extends Component {
                 defaultPageSize={DEFAULT_PAGE_SIZE}
                 defaultOrderBy={DEFAULT_ORDER_BY}
                 defaultFilters={this.defaultFilters()}
+                rowLocked={this.isRowDisabled}
+                rowDisabled={this.isRowDisabled}
             />
         );
     }
@@ -167,11 +245,12 @@ const mapStateToProps = state => ({
     policyHolderUsersPageInfo: state.policyHolder.policyHolderUsersPageInfo,
     policyHolderUsersTotalCount: state.policyHolder.policyHolderUsersTotalCount,
     submittingMutation: state.policyHolder.submittingMutation,
-    mutation: state.policyHolder.mutation
+    mutation: state.policyHolder.mutation,
+    confirmed: state.core.confirmed
 });
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ fetchPolicyHolderUsers, journalize }, dispatch);
+    return bindActionCreators({ fetchPolicyHolderUsers, deletePolicyHolderUser, journalize, coreConfirm }, dispatch);
 };
 
 export default withModulesManager(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PolicyHolderUserSearcher)));
