@@ -4,7 +4,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@material-ui/icons/Edit";
 import {
     FormattedMessage,
     formatMessage,
@@ -12,10 +12,10 @@ import {
     PublishedComponent,
     TextInput
 } from "@openimis/fe-core";
-import { Fab, Grid, Tooltip } from "@material-ui/core";
+import { IconButton, Grid, Tooltip } from "@material-ui/core";
 import PolicyHolderPicker from "../pickers/PolicyHolderPicker";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { createPolicyHolderUser } from "../actions";
+import { updatePolicyHolderUser } from "../actions";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -29,22 +29,23 @@ const styles = theme => ({
     fab: theme.fab
 });
 
-class CreatePolicyHolderUserDialog extends Component {
+class UpdatePolicyHolderUserDialog extends Component {
     state = {
         open: false,
-        policyHolderUser: {}
+        policyHolderUser: {},
+        isDirty: false
     }
 
-    handleOpen = () => this.setState({ open: true });
+    handleOpen = () => this.setState((_, props) => ({ open: true, policyHolderUser: props.policyHolderUser }));
 
     handleClose = () => this.setState({ open: false, policyHolderUser: {} });
 
     handleSave = () => {
-        const { intl, onSave, createPolicyHolderUser } = this.props;
+        const { intl, onSave, updatePolicyHolderUser } = this.props;
         const { policyHolderUser } = this.state;
-        createPolicyHolderUser(
+        updatePolicyHolderUser(
             this.state.policyHolderUser,
-            formatMessageWithValues(intl, "policyHolder", "CreatePolicyHolderUser.mutationLabel", {
+            formatMessageWithValues(intl, "policyHolder", "UpdatePolicyHolderUser.mutationLabel", {
                 user: policyHolderUser.user,
                 policyHolder: `${policyHolderUser.policyHolder.code} - ${policyHolderUser.policyHolder.tradeName}`,
             }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
@@ -58,12 +59,13 @@ class CreatePolicyHolderUserDialog extends Component {
             policyHolderUser: {
                 ...state.policyHolderUser,
                 [attribute]: value,
-            }
+            },
+            isDirty: true
         }));
 
     canSave = () => {
-        const { policyHolderUser } = this.state;
-        return !!policyHolderUser.user && !!policyHolderUser.policyHolder && !!policyHolderUser.dateValidFrom;
+        const { policyHolderUser, isDirty } = this.state;
+        return !!isDirty && !!policyHolderUser.policyHolder && !!policyHolderUser.dateValidFrom;
     };
 
     render() {
@@ -71,16 +73,16 @@ class CreatePolicyHolderUserDialog extends Component {
         const { open, policyHolderUser } = this.state;
         return (
             <Fragment>
-                <div className={classes.fab}>
-                    <Tooltip title={formatMessage(intl, "policyHolder", "policyHolderUser.createPolicyHolderUser")}>
-                        <Fab color="primary" onClick={this.handleOpen}>
-                            <AddIcon />
-                        </Fab>
-                    </Tooltip>
-                </div>
+                <Tooltip title={formatMessage(intl, "policyHolder", "editButton.tooltip")}>
+                    <div>
+                        <IconButton onClick={this.handleOpen}>
+                            <EditIcon />
+                        </IconButton>
+                    </div>
+                </Tooltip>
                 <Dialog open={open} onClose={this.handleClose}>
                     <DialogTitle>
-                        <FormattedMessage module="policyHolder" id="policyHolderUser.createPolicyHolderUser" />
+                        <FormattedMessage module="policyHolder" id="policyHolderUser.updatePolicyHolderUser" />
                     </DialogTitle>
                     <DialogContent>
                         <Grid container direction="column" className={classes.item}>
@@ -88,7 +90,8 @@ class CreatePolicyHolderUserDialog extends Component {
                                 <TextInput
                                     module="policyHolder"
                                     label="policyHolderUser.userName"
-                                    onChange={(v) => this.updateAttribute("user", v)}
+                                    value={!!policyHolderUser.user && policyHolderUser.user}
+                                    readOnly
                                     required
                                 />
                             </Grid>
@@ -107,6 +110,7 @@ class CreatePolicyHolderUserDialog extends Component {
                                     pubRef="core.DatePicker"
                                     module="policyHolder"
                                     label="policyHolderUser.dateValidFrom"
+                                    value={!!policyHolderUser.dateValidFrom && policyHolderUser.dateValidFrom}
                                     onChange={(v) => this.updateAttribute("dateValidFrom", v)}
                                     required
                                 />
@@ -116,6 +120,7 @@ class CreatePolicyHolderUserDialog extends Component {
                                     pubRef="core.DatePicker"
                                     module="policyHolder"
                                     label="policyHolderUser.dateValidTo"
+                                    value={!!policyHolderUser.dateValidTo && policyHolderUser.dateValidTo}
                                     onChange={(v) => this.updateAttribute("dateValidTo", v)}
                                 />
                             </Grid>
@@ -131,7 +136,7 @@ class CreatePolicyHolderUserDialog extends Component {
                             variant="contained"
                             color="primary"
                         >
-                            <FormattedMessage module="policyHolder" id="dialog.create" />
+                            <FormattedMessage module="policyHolder" id="dialog.update" />
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -141,9 +146,9 @@ class CreatePolicyHolderUserDialog extends Component {
 }
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ createPolicyHolderUser }, dispatch);
+    return bindActionCreators({ updatePolicyHolderUser }, dispatch);
 };
 
 export default injectIntl(
-    withTheme(withStyles(styles)(connect(null, mapDispatchToProps)(CreatePolicyHolderUserDialog)))
+    withTheme(withStyles(styles)(connect(null, mapDispatchToProps)(UpdatePolicyHolderUserDialog)))
 );

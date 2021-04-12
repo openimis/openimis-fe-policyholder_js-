@@ -259,6 +259,8 @@ function reducer(
             return dispatchMutationResp(state, "replacePolicyHolderContributionPlanBundle", action);
         case "POLICYHOLDER_CREATE_POLICYHOLDERUSER_RESP":
             return dispatchMutationResp(state, "createPolicyHolderUser", action);
+        case "POLICYHOLDER_UPDATE_POLICYHOLDERUSER_RESP":
+            return dispatchMutationResp(state, "updatePolicyHolderUser", action);
         default:
             return state;
     }
