@@ -355,3 +355,18 @@ export function updatePolicyHolderUser(policyHolderUser, clientMutationLabel) {
         }
     );
 }
+
+export function deletePolicyHolderUser(policyHolderUser, clientMutationLabel, clientMutationDetails = null) {
+    let policyHolderUserUuids = `uuids: ["${decodeId(policyHolderUser.id)}"]`;
+    let mutation = formatMutation("deletePolicyHolderUser", policyHolderUserUuids, clientMutationLabel, clientMutationDetails);
+    var requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_DELETE_POLICYHOLDERUSER_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}

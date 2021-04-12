@@ -207,24 +207,14 @@ class PolicyHolderInsureeSearcher extends Component {
 
     onDelete = policyHolderInsuree => {
         const { intl, coreConfirm, deletePolicyHolderInsuree, policyHolder } = this.props;
-        let confirm = () => coreConfirm(
-            formatMessageWithValues(
-                intl,
-                "policyHolder",
-                "policyHolderInsuree.dialog.delete.title",
-                {
+        let confirm = () =>
+            coreConfirm(
+                formatMessageWithValues(intl, "policyHolder", "policyHolderInsuree.dialog.delete.title", {
                     otherNames: policyHolderInsuree.insuree.otherNames,
                     lastName: policyHolderInsuree.insuree.lastName
                 }),
-            formatMessageWithValues(
-                intl,
-                "policyHolder",
-                "dialog.delete.message",
-                {
-                    code: policyHolder.code,
-                    tradeName: policyHolder.tradeName
-                })
-        );
+                formatMessage(intl, "policyHolder", "dialog.delete.message")
+            );
         let confirmedAction = () => {
             deletePolicyHolderInsuree(
                 policyHolderInsuree,

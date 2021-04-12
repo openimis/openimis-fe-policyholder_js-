@@ -144,10 +144,7 @@ class PolicyHolderSearcher extends Component {
                     code: policyHolder.code,
                     tradeName: policyHolder.tradeName
                 }),
-                formatMessageWithValues(intl, "policyHolder", "dialog.delete.message", {
-                    code: policyHolder.code,
-                    tradeName: policyHolder.tradeName
-                })
+                formatMessage(intl, "policyHolder", "dialog.delete.message")
             );
         let confirmedAction = () => {
             deletePolicyHolder(
