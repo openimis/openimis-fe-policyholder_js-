@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { PublishedComponent, decodeId } from "@openimis/fe-core";
-import { RIGHT_PORTALPAYMENT_SEARCH } from "../constants"
+import { RIGHT_PAYMENT_SEARCH, RIGHT_PORTALPAYMENT_SEARCH } from "../constants"
 
 class PolicyHolderPaymentsTabLabel extends Component {
     render() {
         return (
-            this.props.rights.includes(RIGHT_PORTALPAYMENT_SEARCH) && (
+            [RIGHT_PAYMENT_SEARCH, RIGHT_PORTALPAYMENT_SEARCH].some((right) => this.props.rights.includes(right)) && (
                 <PublishedComponent
                     pubRef="payment.PaymentsTab.label"
                     {...this.props}
@@ -25,7 +25,7 @@ class PolicyHolderPaymentsTabPanel extends Component {
 
     render() {
         return (
-            this.props.rights.includes(RIGHT_PORTALPAYMENT_SEARCH) &&
+            [RIGHT_PAYMENT_SEARCH, RIGHT_PORTALPAYMENT_SEARCH].some((right) => this.props.rights.includes(right)) &&
             !!this.props.policyHolder.id && (
                 <PublishedComponent
                     pubRef="payment.PaymentsTab.panel"
