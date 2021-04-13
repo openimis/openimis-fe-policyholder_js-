@@ -32,6 +32,7 @@ import {
     PolicyHolderPaymentsTabPanel
 } from "./components/PolicyHolderPaymentsTab";
 import PolicyHolderUsersPage from "./pages/PolicyHolderUsersPage";
+import { PolicyHolderUsersTabLabel, PolicyHolderUsersTabPanel } from "./components/PolicyHolderUsersTab";
 
 const ROUTE_POLICY_HOLDERS = "policyHolders";
 const ROUTE_POLICY_HOLDER = "policyHolders/policyHolder";
@@ -107,12 +108,14 @@ const DEFAULT_CONFIG = {
     "policyHolder.TabPanel.label": [
         PolicyHolderInsureesTabLabel,
         PolicyHolderContributionPlanBundlesTabLabel,
-        PolicyHolderPaymentsTabLabel
+        PolicyHolderPaymentsTabLabel,
+        PolicyHolderUsersTabLabel
     ],
     "policyHolder.TabPanel.panel": [
         PolicyHolderInsureesTabPanel,
         PolicyHolderContributionPlanBundlesTabPanel,
-        PolicyHolderPaymentsTabPanel
+        PolicyHolderPaymentsTabPanel,
+        PolicyHolderUsersTabPanel
     ]
 };
 

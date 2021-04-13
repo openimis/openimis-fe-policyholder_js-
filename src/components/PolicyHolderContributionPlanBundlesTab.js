@@ -22,7 +22,7 @@ class PolicyHolderContributionPlanBundlesTabLabel extends Component {
                     className={tabStyle(POLICYHOLDERCONTRIBUTIONPLANBUNDLE_TAB_VALUE)}
                     selected={isSelected(POLICYHOLDERCONTRIBUTIONPLANBUNDLE_TAB_VALUE)}
                     value={POLICYHOLDERCONTRIBUTIONPLANBUNDLE_TAB_VALUE}
-                    label={formatMessage(intl, "policyHolder", "contributionPlanBundle")}
+                    label={formatMessage(intl, "policyHolder", "contributionPlanBundle.label")}
                 />
             )
         )
