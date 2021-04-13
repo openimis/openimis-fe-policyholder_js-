@@ -19,8 +19,10 @@ import { fetchPolicyHolderUsers, deletePolicyHolderUser } from "../actions"
 import {
     DEFAULT_PAGE_SIZE,
     RIGHT_POLICYHOLDERUSER_DELETE,
+    RIGHT_POLICYHOLDERUSER_REPLACE,
     RIGHT_POLICYHOLDERUSER_UPDATE,
     RIGHT_PORTALPOLICYHOLDERUSER_DELETE,
+    RIGHT_PORTALPOLICYHOLDERUSER_REPLACE,
     RIGHT_PORTALPOLICYHOLDERUSER_UPDATE,
     ROWS_PER_PAGE_OPTIONS,
     ZERO,
@@ -84,6 +86,14 @@ class PolicyHolderUserSearcher extends Component {
         ];
         if (
             [
+                RIGHT_POLICYHOLDERUSER_REPLACE,
+                RIGHT_PORTALPOLICYHOLDERUSER_REPLACE
+            ].some(right => this.props.rights.includes(right))
+        ) {
+            result.push("policyHolder.emptyLabel");
+        }
+        if (
+            [
                 RIGHT_POLICYHOLDERUSER_UPDATE,
                 RIGHT_PORTALPOLICYHOLDERUSER_UPDATE
             ].some(right => this.props.rights.includes(right))
@@ -114,6 +124,23 @@ class PolicyHolderUserSearcher extends Component {
                 ? formatDateFromISO(modulesManager, intl, policyHolderUser.dateValidTo)
                 : ""
         ];
+        if (
+            [
+                RIGHT_POLICYHOLDERUSER_REPLACE,
+                RIGHT_PORTALPOLICYHOLDERUSER_REPLACE
+            ].some(right => rights.includes(right))
+        ) {
+            result.push(
+                policyHolderUser => !this.isDeletedFilterEnabled(policyHolderUser) && (
+                    <UpdatePolicyHolderUserDialog
+                        onSave={onSave}
+                        policyHolderUser={policyHolderUser}
+                        disabled={this.state.deleted.includes(policyHolderUser.id)}
+                        isReplacing
+                    />
+                )
+            );
+        }
         if (
             [
                 RIGHT_POLICYHOLDERUSER_UPDATE,

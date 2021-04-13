@@ -161,9 +161,9 @@ function formatPolicyHolderContributionPlanBundleGQL(policyHolderContributionPla
     `;
 }
 
-function formatPolicyHolderUserGQL(policyHolderUser) {
+function formatPolicyHolderUserGQL(policyHolderUser, isReplaceMutation = false) {
     return `
-        ${!!policyHolderUser.id ? `id: "${decodeId(policyHolderUser.id)}"` : ""}
+        ${!!policyHolderUser.id ? `${isReplaceMutation ? 'uuid' : 'id'}: "${decodeId(policyHolderUser.id)}"` : ""}
         ${!!policyHolderUser.user ? `userId: "${policyHolderUser.user}"` : ""}
         ${!!policyHolderUser.policyHolder ? `policyHolderId: "${decodeId(policyHolderUser.policyHolder.id)}"` : ""}
         ${!!policyHolderUser.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderUser.dateValidFrom)}"` : ""}
@@ -363,6 +363,20 @@ export function deletePolicyHolderUser(policyHolderUser, clientMutationLabel, cl
     return graphql(
         mutation.payload,
         ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_DELETE_POLICYHOLDERUSER_RESP", "POLICYHOLDER_MUTATION_ERR"],
+        {
+            clientMutationId: mutation.clientMutationId,
+            clientMutationLabel,
+            requestedDateTime
+        }
+    );
+}
+
+export function replacePolicyHolderUser(policyHolderUser, clientMutationLabel) {
+    let mutation = formatMutation("replacePolicyHolderUser", formatPolicyHolderUserGQL(policyHolderUser, true), clientMutationLabel);
+    var requestedDateTime = new Date();
+    return graphql(
+        mutation.payload,
+        ["POLICYHOLDER_MUTATION_REQ", "POLICYHOLDER_REPLACE_POLICYHOLDERUSER_RESP", "POLICYHOLDER_MUTATION_ERR"],
         {
             clientMutationId: mutation.clientMutationId,
             clientMutationLabel,
