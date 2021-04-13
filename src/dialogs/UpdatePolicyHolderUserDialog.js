@@ -5,6 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import EditIcon from "@material-ui/icons/Edit";
+import NoteAddIcon from "@material-ui/icons/NoteAdd";
 import {
     FormattedMessage,
     formatMessage,
@@ -15,7 +16,7 @@ import {
 import { IconButton, Grid, Tooltip } from "@material-ui/core";
 import PolicyHolderPicker from "../pickers/PolicyHolderPicker";
 import { withTheme, withStyles } from "@material-ui/core/styles";
-import { updatePolicyHolderUser } from "../actions";
+import { updatePolicyHolderUser, replacePolicyHolderUser } from "../actions";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -41,15 +42,32 @@ class UpdatePolicyHolderUserDialog extends Component {
     handleClose = () => this.setState({ open: false, policyHolderUser: {} });
 
     handleSave = () => {
-        const { intl, onSave, updatePolicyHolderUser } = this.props;
-        const { policyHolderUser } = this.state;
-        updatePolicyHolderUser(
-            this.state.policyHolderUser,
-            formatMessageWithValues(intl, "policyHolder", "UpdatePolicyHolderUser.mutationLabel", {
-                user: policyHolderUser.user,
-                policyHolder: `${policyHolderUser.policyHolder.code} - ${policyHolderUser.policyHolder.tradeName}`
-            }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
-        );
+        const {
+            intl,
+            onSave,
+            policyHolderUser,
+            updatePolicyHolderUser,
+            replacePolicyHolderUser,
+            isReplacing = false
+        } = this.props;
+        if (isReplacing) {
+            replacePolicyHolderUser(
+                this.state.policyHolderUser,
+                formatMessageWithValues(intl, "policyHolder", "ReplacePolicyHolderUser.mutationLabel", {
+                    newUser: this.state.policyHolderUser.user,
+                    oldUser: policyHolderUser.user,
+                    policyHolder: this.policyHolderLabel(this.state.policyHolderUser.policyHolder)
+                }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
+            );
+        } else {
+            updatePolicyHolderUser(
+                this.state.policyHolderUser,
+                formatMessageWithValues(intl, "policyHolder", "UpdatePolicyHolderUser.mutationLabel", {
+                    user: this.state.policyHolderUser.user,
+                    policyHolder: this.policyHolderLabel(this.state.policyHolderUser.policyHolder)
+                }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
+            );
+        }
         onSave();
         this.handleClose();
     };
@@ -65,24 +83,44 @@ class UpdatePolicyHolderUserDialog extends Component {
 
     canSave = () => {
         const { policyHolderUser, isDirty } = this.state;
-        return !!isDirty && !!policyHolderUser.policyHolder && !!policyHolderUser.dateValidFrom;
+        return (
+            (this.props.isReplacing ? !!policyHolderUser.user : !!isDirty) &&
+            !!policyHolderUser.policyHolder &&
+            !!policyHolderUser.dateValidFrom
+        );
     };
 
+    policyHolderLabel = (policyHolder) => `${policyHolder.code} - ${policyHolder.tradeName}`;
+
     render() {
-        const { intl, classes, disabled } = this.props;
+        const { intl, classes, disabled, isReplacing = false } = this.props;
         const { open, policyHolderUser } = this.state;
         return (
             <Fragment>
-                <Tooltip title={formatMessage(intl, "policyHolder", "editButton.tooltip")}>
-                    <div>
-                        <IconButton onClick={this.handleOpen} disabled={disabled}>
-                            <EditIcon />
-                        </IconButton>
-                    </div>
-                </Tooltip>
+                {isReplacing ? (
+                    <Tooltip title={formatMessage(intl, "policyHolder", "replaceButton.tooltip")}>
+                        <div>
+                            <IconButton onClick={this.handleOpen} disabled={disabled}>
+                                <NoteAddIcon />
+                            </IconButton>
+                        </div>
+                    </Tooltip>
+                ) : (
+                    <Tooltip title={formatMessage(intl, "policyHolder", "editButton.tooltip")}>
+                        <div>
+                            <IconButton onClick={this.handleOpen} disabled={disabled}>
+                                <EditIcon />
+                            </IconButton>
+                        </div>
+                    </Tooltip>
+                )}
                 <Dialog open={open} onClose={this.handleClose}>
                     <DialogTitle>
-                        <FormattedMessage module="policyHolder" id="policyHolderUser.updatePolicyHolderUser" />
+                        {isReplacing ? (
+                            <FormattedMessage module="policyHolder" id="policyHolderUser.dialog.replace.title" />
+                        ) : (
+                            <FormattedMessage module="policyHolder" id="policyHolderUser.dialog.update.title" />
+                        )}
                     </DialogTitle>
                     <DialogContent>
                         <Grid container direction="column" className={classes.item}>
@@ -91,7 +129,8 @@ class UpdatePolicyHolderUserDialog extends Component {
                                     module="policyHolder"
                                     label="policyHolderUser.userName"
                                     value={!!policyHolderUser.user && policyHolderUser.user}
-                                    readOnly
+                                    onChange={(v) => this.updateAttribute("user", v)}
+                                    readOnly={!isReplacing}
                                     required
                                 />
                             </Grid>
@@ -136,7 +175,11 @@ class UpdatePolicyHolderUserDialog extends Component {
                             variant="contained"
                             color="primary"
                         >
-                            <FormattedMessage module="policyHolder" id="dialog.update" />
+                            {isReplacing ? (
+                                <FormattedMessage module="policyHolder" id="dialog.replace" />
+                            ) : (
+                                <FormattedMessage module="policyHolder" id="dialog.update" />
+                            )}
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -146,7 +189,7 @@ class UpdatePolicyHolderUserDialog extends Component {
 }
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({ updatePolicyHolderUser }, dispatch);
+    return bindActionCreators({ updatePolicyHolderUser, replacePolicyHolderUser }, dispatch);
 };
 
 export default injectIntl(
