@@ -10,7 +10,8 @@ import {
     formatMessage,
     formatMessageWithValues,
     PublishedComponent,
-    TextInput
+    TextInput,
+    decodeId
 } from "@openimis/fe-core";
 import { Fab, Grid, Tooltip } from "@material-ui/core";
 import PolicyHolderPicker from "../pickers/PolicyHolderPicker";
@@ -33,6 +34,19 @@ class CreatePolicyHolderUserDialog extends Component {
     state = {
         open: false,
         policyHolderUser: {}
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.policyHolders !== this.props.policyHolders) {
+            this.setState((state, props) => ({
+                policyHolderUser: {
+                    ...state.policyHolderUser,
+                    policyHolder: props.policyHolders.find(
+                        policyHolder => decodeId(policyHolder.id) === props.predefinedPolicyHolderId
+                    )
+                }
+            }));
+        }
     }
 
     handleOpen = () => this.setState({ open: true });
@@ -67,17 +81,23 @@ class CreatePolicyHolderUserDialog extends Component {
     };
 
     render() {
-        const { intl, classes } = this.props;
+        const { intl, classes, tabView = false, predefinedPolicyHolderId = null } = this.props;
         const { open, policyHolderUser } = this.state;
         return (
             <Fragment>
-                <div className={classes.fab}>
-                    <Tooltip title={formatMessage(intl, "policyHolder", "policyHolderUser.createPolicyHolderUser")}>
-                        <Fab color="primary" onClick={this.handleOpen}>
-                            <AddIcon />
-                        </Fab>
-                    </Tooltip>
-                </div>
+                {tabView ? (
+                    <Fab color="primary" onClick={this.handleOpen} size="small">
+                        <AddIcon />
+                    </Fab>
+                ) : (
+                    <div className={classes.fab}>
+                        <Tooltip title={formatMessage(intl, "policyHolder", "policyHolderUser.createPolicyHolderUser")}>
+                            <Fab color="primary" onClick={this.handleOpen}>
+                                <AddIcon />
+                            </Fab>
+                        </Tooltip>
+                    </div>
+                )}
                 <Dialog open={open} onClose={this.handleClose}>
                     <DialogTitle>
                         <FormattedMessage module="policyHolder" id="policyHolderUser.createPolicyHolderUser" />
@@ -99,6 +119,7 @@ class CreatePolicyHolderUserDialog extends Component {
                                     nullLabel={formatMessage(intl, "policyHolder", "emptyLabel")}
                                     value={!!policyHolderUser.policyHolder && policyHolderUser.policyHolder}
                                     onChange={(v) => this.updateAttribute("policyHolder", v)}
+                                    readOnly={!!predefinedPolicyHolderId}
                                     required
                                 />
                             </Grid>
@@ -140,10 +161,14 @@ class CreatePolicyHolderUserDialog extends Component {
     }
 }
 
+const mapStateToProps = state => ({
+    policyHolders: state.policyHolder.policyHolders
+});
+
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({ createPolicyHolderUser }, dispatch);
 };
 
 export default injectIntl(
-    withTheme(withStyles(styles)(connect(null, mapDispatchToProps)(CreatePolicyHolderUserDialog)))
+    withTheme(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(CreatePolicyHolderUserDialog)))
 );

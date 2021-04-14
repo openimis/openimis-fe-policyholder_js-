@@ -26,6 +26,7 @@ export const DEFAULT_PAGE_SIZE = 10
 export const ROWS_PER_PAGE_OPTIONS = [10, 20, 50, 100]
 export const POLICYHOLDERINSUREE_TAB_VALUE = "policyHolderInsureesTab"
 export const POLICYHOLDERCONTRIBUTIONPLANBUNDLE_TAB_VALUE = "policyHolderContributionPlanBundlesTab"
+export const POLICYHOLDERUSER_TAB_VALUE = "policyHolderUsersTab"
 export const MAX_CODE_LENGTH = 32
 export const MAX_TRADENAME_LENGTH = 255
 export const MAX_ADDRESS_LENGTH = 1024

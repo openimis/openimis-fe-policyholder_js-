@@ -93,7 +93,7 @@ class UpdatePolicyHolderUserDialog extends Component {
     policyHolderLabel = (policyHolder) => `${policyHolder.code} - ${policyHolder.tradeName}`;
 
     render() {
-        const { intl, classes, disabled, isReplacing = false } = this.props;
+        const { intl, classes, disabled, isReplacing = false, isPolicyHolderPredefined = false } = this.props;
         const { open, policyHolderUser } = this.state;
         return (
             <Fragment>
@@ -141,6 +141,7 @@ class UpdatePolicyHolderUserDialog extends Component {
                                     nullLabel={formatMessage(intl, "policyHolder", "emptyLabel")}
                                     value={!!policyHolderUser.policyHolder && policyHolderUser.policyHolder}
                                     onChange={(v) => this.updateAttribute("policyHolder", v)}
+                                    readOnly={!!isPolicyHolderPredefined}
                                     required
                                 />
                             </Grid>

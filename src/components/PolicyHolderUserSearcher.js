@@ -112,7 +112,7 @@ class PolicyHolderUserSearcher extends Component {
     }
 
     itemFormatters = () => {
-        const { intl, modulesManager, rights, onSave } = this.props;
+        const { intl, modulesManager, rights, onSave, predefinedPolicyHolderId } = this.props;
         const result = [
             policyHolderUser => !!policyHolderUser.user
                 ? decodeId(policyHolderUser.user.id)
@@ -137,6 +137,7 @@ class PolicyHolderUserSearcher extends Component {
                         policyHolderUser={policyHolderUser}
                         disabled={this.state.deleted.includes(policyHolderUser.id)}
                         isReplacing
+                        isPolicyHolderPredefined={!!predefinedPolicyHolderId}
                     />
                 )
             );
@@ -153,6 +154,7 @@ class PolicyHolderUserSearcher extends Component {
                         onSave={onSave}
                         policyHolderUser={policyHolderUser}
                         disabled={this.state.deleted.includes(policyHolderUser.id)}
+                        isPolicyHolderPredefined={!!predefinedPolicyHolderId}
                     />
                 )
             );
@@ -210,12 +212,22 @@ class PolicyHolderUserSearcher extends Component {
         ['dateValidTo', true]
     ];
 
-    defaultFilters = () => ({
-        isDeleted: {
-            value: false,
-            filter: "isDeleted: false"
+    defaultFilters = () => {
+        const { predefinedPolicyHolderId } = this.props;
+        const filters = {
+            isDeleted: {
+                value: false,
+                filter: "isDeleted: false"
+            }
         }
-    });
+        if (!!predefinedPolicyHolderId) {
+            filters.policyHolder_Id = {
+                value: predefinedPolicyHolderId,
+                filter: `policyHolder_Id: "${predefinedPolicyHolderId}"`
+            }
+        }
+        return filters;
+    }
 
     isDeletedFilterEnabled = policyHolderUser => policyHolderUser.isDeleted;
 
