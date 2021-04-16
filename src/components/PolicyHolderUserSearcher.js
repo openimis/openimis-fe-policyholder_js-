@@ -218,6 +218,10 @@ class PolicyHolderUserSearcher extends Component {
             isDeleted: {
                 value: false,
                 filter: "isDeleted: false"
+            },
+            applyDefaultValidityFilter: {
+                value: true,
+                filter: "applyDefaultValidityFilter: true"
             }
         }
         if (!!predefinedPolicyHolderId) {
