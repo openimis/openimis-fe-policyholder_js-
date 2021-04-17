@@ -36,7 +36,8 @@ class CreatePolicyHolderInsureeDialog extends Component {
         super(props);
         this.state = {
             open: false,
-            policyHolderInsuree: {}
+            policyHolderInsuree: {},
+            jsonExtValid: true
         }
     }
 
@@ -46,7 +47,8 @@ class CreatePolicyHolderInsureeDialog extends Component {
             policyHolderInsuree: {
                 policyHolder: props.policyHolder,
                 policy: {}
-            }
+            },
+            jsonExtValid: true
         }));
     };
 
@@ -77,12 +79,15 @@ class CreatePolicyHolderInsureeDialog extends Component {
     }
 
     canSave = () => {
-        const { policyHolderInsuree } = this.state;
-        return !!policyHolderInsuree.policyHolder
-            && !!policyHolderInsuree.insuree
-            && !!policyHolderInsuree.contributionPlanBundle
-            && !!policyHolderInsuree.dateValidFrom;
+        const { policyHolderInsuree, jsonExtValid } = this.state;
+        return !!policyHolderInsuree.policyHolder &&
+            !!policyHolderInsuree.insuree &&
+            !!policyHolderInsuree.contributionPlanBundle &&
+            !!policyHolderInsuree.dateValidFrom &&
+            !!jsonExtValid;
     }
+
+    setJsonExtValid = (valid) => this.setState({ jsonExtValid: !!valid });
 
     render() {
         const { intl, classes } = this.props;
@@ -127,6 +132,7 @@ class CreatePolicyHolderInsureeDialog extends Component {
                                 value={!!policyHolderInsuree.jsonExt && policyHolderInsuree.jsonExt}
                                 onChange={this.updateAttribute}
                                 gridItemStyle={classes.item}
+                                setJsonExtValid={this.setJsonExtValid}
                             />
                             <Grid item className={classes.item}>
                                 <PublishedComponent
