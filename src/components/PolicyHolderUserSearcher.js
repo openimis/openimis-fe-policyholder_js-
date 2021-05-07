@@ -30,6 +30,7 @@ import {
 } from "../constants";
 import PolicyHolderUserFilter from "./PolicyHolderUserFilter";
 import UpdatePolicyHolderUserDialog from "../dialogs/UpdatePolicyHolderUserDialog";
+import PolicyHolderPicker from "../pickers/PolicyHolderPicker";
 
 const DEFAULT_ORDER_BY = "id";
 
@@ -79,16 +80,22 @@ class PolicyHolderUserSearcher extends Component {
     }
 
     headers = () => {
+        const { rights, predefinedPolicyHolderId = null } = this.props;
         const result = [
-            "policyHolder.policyHolderUser.userName",
+            "policyHolder.policyHolderUser.userName"
+        ];
+        if (predefinedPolicyHolderId === null) {
+            result.push("policyHolder.policyHolder");
+        }
+        result.push(
             "policyHolder.policyHolderUser.dateValidFrom",
             "policyHolder.policyHolderUser.dateValidTo"
-        ];
+        );
         if (
             [
                 RIGHT_POLICYHOLDERUSER_REPLACE,
                 RIGHT_PORTALPOLICYHOLDERUSER_REPLACE
-            ].some(right => this.props.rights.includes(right))
+            ].some(right => rights.includes(right))
         ) {
             result.push("policyHolder.emptyLabel");
         }
@@ -96,7 +103,7 @@ class PolicyHolderUserSearcher extends Component {
             [
                 RIGHT_POLICYHOLDERUSER_UPDATE,
                 RIGHT_PORTALPOLICYHOLDERUSER_UPDATE
-            ].some(right => this.props.rights.includes(right))
+            ].some(right => rights.includes(right))
         ) {
             result.push("policyHolder.emptyLabel");
         }
@@ -104,7 +111,7 @@ class PolicyHolderUserSearcher extends Component {
             [
                 RIGHT_POLICYHOLDERUSER_DELETE,
                 RIGHT_PORTALPOLICYHOLDERUSER_DELETE
-            ].some(right => this.props.rights.includes(right))
+            ].some(right => rights.includes(right))
         ) {
             result.push("policyHolder.emptyLabel");
         }
@@ -112,18 +119,30 @@ class PolicyHolderUserSearcher extends Component {
     }
 
     itemFormatters = () => {
-        const { intl, modulesManager, rights, onSave, predefinedPolicyHolderId } = this.props;
+        const { intl, modulesManager, rights, onSave, predefinedPolicyHolderId = null } = this.props;
         const result = [
             policyHolderUser => !!policyHolderUser.user
                 ? decodeId(policyHolderUser.user.id)
-                : "",
+                : ""
+        ];
+        if (predefinedPolicyHolderId === null) {
+            result.push(
+                policyHolderUser =>
+                    <PolicyHolderPicker
+                        value={!!policyHolderUser.policyHolder && policyHolderUser.policyHolder}
+                        withLabel={false}
+                        readOnly
+                    />
+            );
+        }
+        result.push(
             policyHolderUser => !!policyHolderUser.dateValidFrom
                 ? formatDateFromISO(modulesManager, intl, policyHolderUser.dateValidFrom)
                 : "",
             policyHolderUser => !!policyHolderUser.dateValidTo
                 ? formatDateFromISO(modulesManager, intl, policyHolderUser.dateValidTo)
                 : ""
-        ];
+        );
         if (
             [
                 RIGHT_POLICYHOLDERUSER_REPLACE,
@@ -206,11 +225,20 @@ class PolicyHolderUserSearcher extends Component {
         );
     }
 
-    sorts = () => [
-        ['id', true],
-        ['dateValidFrom', true],
-        ['dateValidTo', true]
-    ];
+    sorts = () => {
+        const { predefinedPolicyHolderId = null } = this.props;
+        const result = [
+            ["id", true]
+        ];
+        if (predefinedPolicyHolderId === null) {
+            result.push(["policyHolder", true]);
+        }
+        result.push(
+            ["dateValidFrom", true],
+            ["dateValidTo", true]
+        );
+        return result;
+    }
 
     defaultFilters = () => {
         const { predefinedPolicyHolderId } = this.props;
@@ -247,7 +275,8 @@ class PolicyHolderUserSearcher extends Component {
             errorPolicyHolderUsers,
             policyHolderUsers,
             policyHolderUsersPageInfo,
-            policyHolderUsersTotalCount
+            policyHolderUsersTotalCount,
+            predefinedPolicyHolderId,
         } = this.props;
         return (
             <Searcher
@@ -275,6 +304,7 @@ class PolicyHolderUserSearcher extends Component {
                 defaultFilters={this.defaultFilters()}
                 rowLocked={this.isRowDisabled}
                 rowDisabled={this.isRowDisabled}
+                FilterExt={predefinedPolicyHolderId}
             />
         );
     }
