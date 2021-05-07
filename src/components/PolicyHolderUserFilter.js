@@ -3,7 +3,8 @@ import { injectIntl } from 'react-intl';
 import {
     formatMessage,
     TextInput,
-    PublishedComponent
+    PublishedComponent,
+    decodeId,
 } from "@openimis/fe-core";
 import { Grid, FormControlLabel, Checkbox } from "@material-ui/core";
 import { withTheme, withStyles } from "@material-ui/core/styles";
@@ -12,6 +13,7 @@ import {
     LESS_OR_EQUAL_LOOKUP,
     DATE_TO_DATETIME_SUFFIX
 } from "../constants";
+import PolicyHolderPicker from "../pickers/PolicyHolderPicker";
 
 const styles = theme => ({
     form: {
@@ -23,6 +25,15 @@ const styles = theme => ({
 });
 
 class PolicyHolderUserFilter extends Component {
+    componentDidMount() {
+        /**
+         * @see FilterExt prop can pass @see PolicyHolder entity id
+         * to disable filtering by @see PolicyHolder if only @see PolicyHolderUser entities
+         * with a specific @see PolicyHolder assigned are to be displayed
+         */
+        this.isFilteredByDefaultPolicyHolder = !!this.props.FilterExt;
+    }
+
     _filterValue = k => {
         const { filters } = this.props;
         return !!filters[k] ? filters[k].value : null
@@ -59,7 +70,7 @@ class PolicyHolderUserFilter extends Component {
     }
 
     render() {
-        const { intl, classes } = this.props;
+        const { intl, classes, onChangeFilters } = this.props;
         return (
             <Grid container className={classes.form}>
                 <Grid item xs={3} className={classes.item}>
@@ -70,6 +81,20 @@ class PolicyHolderUserFilter extends Component {
                         onChange={v => this._onChangeStringFilter("id", v)}
                     />
                 </Grid>
+                {!this.isFilteredByDefaultPolicyHolder && (
+                    <Grid item xs={3} className={classes.item}>
+                        <PolicyHolderPicker
+                            withNull
+                            nullLabel={formatMessage(intl, "policyHolder", "any")}
+                            value={this._filterValue("policyHolder_Id")}
+                            onChange={v => onChangeFilters([{
+                                id: "policyHolder_Id",
+                                value: v,
+                                filter: `policyHolder_Id: "${!!v && decodeId(v.id)}"`
+                            }])}
+                        />
+                    </Grid>
+                )}
                 <Grid item xs={2} className={classes.item}>
                     <PublishedComponent
                         pubRef="core.DatePicker"

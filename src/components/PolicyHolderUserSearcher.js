@@ -275,7 +275,8 @@ class PolicyHolderUserSearcher extends Component {
             errorPolicyHolderUsers,
             policyHolderUsers,
             policyHolderUsersPageInfo,
-            policyHolderUsersTotalCount
+            policyHolderUsersTotalCount,
+            predefinedPolicyHolderId,
         } = this.props;
         return (
             <Searcher
@@ -303,6 +304,7 @@ class PolicyHolderUserSearcher extends Component {
                 defaultFilters={this.defaultFilters()}
                 rowLocked={this.isRowDisabled}
                 rowDisabled={this.isRowDisabled}
+                FilterExt={predefinedPolicyHolderId}
             />
         );
     }
