@@ -6,12 +6,12 @@ import {
     formatDateFromISO,
     Searcher,
     decodeId,
-    PublishedComponent,
     withTooltip,
     formatMessage,
     coreConfirm
 } from "@openimis/fe-core";
 import PolicyHolderContributionPlanBundleFilter from "./PolicyHolderContributionPlanBundleFilter";
+import PolicyHolderContributionPlanBundlePicker from "../pickers/PolicyHolderContributionPlanBundlePicker";
 import {
     fetchPolicyHolderContributionPlanBundles,
     fetchPickerPolicyHolderContributionPlanBundles,
@@ -105,10 +105,10 @@ class PolicyHolderContributionPlanBundleSearcher extends Component {
         const { intl, modulesManager, rights, policyHolder, onSave } = this.props;
         let result = [
             policyHolderContributionPlanBundle => !!policyHolderContributionPlanBundle.contributionPlanBundle
-                ? <PublishedComponent
-                    pubRef="contributionPlan.ContributionPlanBundlePicker"
+                ? <PolicyHolderContributionPlanBundlePicker
                     value={policyHolderContributionPlanBundle.contributionPlanBundle}
                     withLabel={false}
+                    policyHolderId={decodeId(policyHolder.id)}
                     readOnly />
                 : "",
             policyHolderContributionPlanBundle => !!policyHolderContributionPlanBundle.jsonExt ? policyHolderContributionPlanBundle.jsonExt : "",
