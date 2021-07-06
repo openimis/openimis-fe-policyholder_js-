@@ -10,7 +10,6 @@ import {
     formatMessage,
     formatMessageWithValues,
     PublishedComponent,
-    TextInput,
     decodeId
 } from "@openimis/fe-core";
 import { Fab, Grid, Tooltip } from "@material-ui/core";

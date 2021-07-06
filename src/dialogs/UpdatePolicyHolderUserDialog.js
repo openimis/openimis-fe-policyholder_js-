@@ -10,8 +10,7 @@ import {
     FormattedMessage,
     formatMessage,
     formatMessageWithValues,
-    PublishedComponent,
-    TextInput
+    PublishedComponent
 } from "@openimis/fe-core";
 import { IconButton, Grid, Tooltip } from "@material-ui/core";
 import PolicyHolderPicker from "../pickers/PolicyHolderPicker";

@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import { injectIntl } from 'react-intl';
 import {
     formatMessage,
-    TextInput,
     PublishedComponent,
     decodeId,
 } from "@openimis/fe-core";
