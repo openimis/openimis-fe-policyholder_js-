@@ -54,8 +54,8 @@ class UpdatePolicyHolderUserDialog extends Component {
             replacePolicyHolderUser(
                 this.state.policyHolderUser,
                 formatMessageWithValues(intl, "policyHolder", "ReplacePolicyHolderUser.mutationLabel", {
-                    newUser: this.state.policyHolderUser.user,
-                    oldUser: policyHolderUser.user,
+                    newUser: this.state.policyHolderUser.user.username,
+                    oldUser: policyHolderUser.user.username,
                     policyHolder: this.policyHolderLabel(this.state.policyHolderUser.policyHolder)
                 }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );
@@ -63,7 +63,7 @@ class UpdatePolicyHolderUserDialog extends Component {
             updatePolicyHolderUser(
                 this.state.policyHolderUser,
                 formatMessageWithValues(intl, "policyHolder", "UpdatePolicyHolderUser.mutationLabel", {
-                    user: this.state.policyHolderUser.user,
+                    user: this.state.policyHolderUser.user.username,
                     policyHolder: this.policyHolderLabel(this.state.policyHolderUser.policyHolder)
                 }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );
@@ -125,12 +125,11 @@ class UpdatePolicyHolderUserDialog extends Component {
                     <DialogContent>
                         <Grid container direction="column" className={classes.item}>
                             <Grid item className={classes.item}>
-                                <TextInput
+                                <PublishedComponent
+                                    pubRef="admin.UserPicker"
                                     module="policyHolder"
-                                    label="policyHolderUser.userName"
                                     value={!!policyHolderUser.user && policyHolderUser.user}
                                     onChange={(v) => this.updateAttribute("user", v)}
-                                    readOnly={!isReplacing}
                                     required
                                 />
                             </Grid>
