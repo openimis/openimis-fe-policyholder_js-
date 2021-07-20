@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import { injectIntl } from 'react-intl';
 import {
     formatMessage,
-    TextInput,
     PublishedComponent,
     decodeId,
 } from "@openimis/fe-core";
@@ -74,11 +73,15 @@ class PolicyHolderUserFilter extends Component {
         return (
             <Grid container className={classes.form}>
                 <Grid item xs={3} className={classes.item}>
-                    <TextInput
-                        module="policyHolder" 
-                        label="policyHolderUser.userName"
-                        value={this._filterValue("id")}
-                        onChange={v => this._onChangeStringFilter("id", v)}
+                    <PublishedComponent
+                        pubRef="admin.UserPicker"
+                        module="policyHolder"
+                        value={this._filterValue("user_Id")}
+                        onChange={v => onChangeFilters([{
+                            id: "user_Id",
+                            value: v,
+                            filter: `user_Id: "${!!v && decodeId(v.id)}"`
+                        }])}
                     />
                 </Grid>
                 {!this.isFilteredByDefaultPolicyHolder && (

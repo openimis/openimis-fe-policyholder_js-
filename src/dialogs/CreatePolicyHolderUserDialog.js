@@ -10,7 +10,6 @@ import {
     formatMessage,
     formatMessageWithValues,
     PublishedComponent,
-    TextInput,
     decodeId
 } from "@openimis/fe-core";
 import { Fab, Grid, Tooltip } from "@material-ui/core";
@@ -59,7 +58,7 @@ class CreatePolicyHolderUserDialog extends Component {
         createPolicyHolderUser(
             this.state.policyHolderUser,
             formatMessageWithValues(intl, "policyHolder", "CreatePolicyHolderUser.mutationLabel", {
-                user: policyHolderUser.user,
+                user: policyHolderUser.user.username,
                 policyHolder: `${policyHolderUser.policyHolder.code} - ${policyHolderUser.policyHolder.tradeName}`,
             }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
         );
@@ -105,9 +104,10 @@ class CreatePolicyHolderUserDialog extends Component {
                     <DialogContent>
                         <Grid container direction="column" className={classes.item}>
                             <Grid item className={classes.item}>
-                                <TextInput
+                                <PublishedComponent
+                                    pubRef="admin.UserPicker"
                                     module="policyHolder"
-                                    label="policyHolderUser.userName"
+                                    value={!!policyHolderUser.user && policyHolderUser.user}
                                     onChange={(v) => this.updateAttribute("user", v)}
                                     required
                                 />

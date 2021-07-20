@@ -5,11 +5,11 @@ import {
     formatMessageWithValues,
     Searcher,
     formatDateFromISO,
-    decodeId,
     journalize,
     withTooltip,
     coreConfirm,
-    formatMessage
+    formatMessage,
+    PublishedComponent
 } from "@openimis/fe-core";
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -57,7 +57,7 @@ class PolicyHolderUserSearcher extends Component {
         }
     }
 
-    fetch = params => this.props.fetchPolicyHolderUsers(params);
+    fetch = params => this.props.fetchPolicyHolderUsers(this.props.modulesManager, params);
 
     refetch = () => this.fetch(this.state.queryParams);
 
@@ -121,9 +121,14 @@ class PolicyHolderUserSearcher extends Component {
     itemFormatters = () => {
         const { intl, modulesManager, rights, onSave, predefinedPolicyHolderId = null } = this.props;
         const result = [
-            policyHolderUser => !!policyHolderUser.user
-                ? decodeId(policyHolderUser.user.id)
-                : ""
+            policyHolderUser =>
+                <PublishedComponent
+                    pubRef="admin.UserPicker"
+                    module="policyHolder"
+                    value={!!policyHolderUser.user && policyHolderUser.user}
+                    withLabel={false}
+                    readOnly
+                />
         ];
         if (predefinedPolicyHolderId === null) {
             result.push(
@@ -205,7 +210,7 @@ class PolicyHolderUserSearcher extends Component {
         let confirm = () =>
             coreConfirm(
                 formatMessageWithValues(intl, "policyHolder", "policyHolderUser.dialog.delete.title", {
-                    user: policyHolderUser.user
+                    user: policyHolderUser.user.username
                 }),
                 formatMessage(intl, "policyHolder", "dialog.delete.message")
             );
@@ -213,7 +218,7 @@ class PolicyHolderUserSearcher extends Component {
             deletePolicyHolderUser(
                 policyHolderUser,
                 formatMessageWithValues(intl, "policyHolder", "DeletePolicyHolderUser.mutationLabel", {
-                    user: policyHolderUser.user,
+                    user: policyHolderUser.user.username,
                     policyHolder: `${policyHolderUser.policyHolder.code} - ${policyHolderUser.policyHolder.tradeName}`,
                 }).slice(ZERO, MAX_CLIENTMUTATIONLABEL_LENGTH)
             );

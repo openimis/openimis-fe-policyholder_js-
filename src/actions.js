@@ -36,9 +36,10 @@ const POLICYHOLDERCONTRIBUTIONPLANBUNDLE_PICKER_PROJECTION = modulesManager => [
     "id", "contributionPlanBundle" + modulesManager.getProjection("contributionPlan.ContributionPlanBundlePicker.projection")
 ];
 
-const POLICYHOLDERUSER_FULL_PROJECTION = () => [
+const POLICYHOLDERUSER_FULL_PROJECTION = modulesManager => [
     "id", "dateValidFrom", "dateValidTo", "isDeleted",
     "policyHolder" + `{${POLICYHOLDER_PICKER_PROJECTION()}}`,
+    "user" + modulesManager.getProjection("admin.UserPicker.projection")
 ];
 
 function dateTimeToDate(date) {
@@ -109,11 +110,11 @@ export function fetchPickerPolicyHolderContributionPlanBundles(modulesManager, p
     return graphql(payload, "POLICYHOLDER_PICKERPOLICYHOLDERCONTRIBUTIONPLANBUNDLES");
 }
 
-export function fetchPolicyHolderUsers(params) {
+export function fetchPolicyHolderUsers(modulesManager, params) {
     const payload = formatPageQueryWithCount(
         "policyHolderUser",
         params,
-        POLICYHOLDERUSER_FULL_PROJECTION()
+        POLICYHOLDERUSER_FULL_PROJECTION(modulesManager)
     );
     return graphql(payload, "POLICYHOLDER_POLICYHOLDERUSERS");
 }
@@ -164,7 +165,7 @@ function formatPolicyHolderContributionPlanBundleGQL(policyHolderContributionPla
 function formatPolicyHolderUserGQL(policyHolderUser, isReplaceMutation = false) {
     return `
         ${!!policyHolderUser.id ? `${isReplaceMutation ? 'uuid' : 'id'}: "${decodeId(policyHolderUser.id)}"` : ""}
-        ${!!policyHolderUser.user ? `userId: "${policyHolderUser.user}"` : ""}
+        ${!!policyHolderUser.user ? `userId: "${decodeId(policyHolderUser.user.id)}"` : ""}
         ${!!policyHolderUser.policyHolder ? `policyHolderId: "${decodeId(policyHolderUser.policyHolder.id)}"` : ""}
         ${!!policyHolderUser.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderUser.dateValidFrom)}"` : ""}
         ${!!policyHolderUser.dateValidTo ? `dateValidTo: "${dateTimeToDate(policyHolderUser.dateValidTo)}"` : ""}
