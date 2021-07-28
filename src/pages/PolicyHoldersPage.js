@@ -1,13 +1,22 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import PolicyHolderSearcher from "../components/PolicyHolderSearcher";
-import { withModulesManager, formatMessage } from "@openimis/fe-core";
+import { withModulesManager, formatMessage, withTooltip, historyPush } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { RIGHT_POLICYHOLDER_SEARCH } from "../constants"
+import {
+    RIGHT_POLICYHOLDER_SEARCH,
+    RIGHT_POLICYHOLDER_CREATE,
+    RIGHT_POLICYHOLDER_UPDATE,
+    RIGHT_PORTALPOLICYHOLDER_SEARCH
+} from "../constants"
+import { Fab } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import { decodeId } from "@openimis/fe-core";
 
 const styles = theme => ({
     page: theme.page,
+    fab: theme.fab
 })
 
 class PolicyHoldersPage extends Component {
@@ -15,12 +24,40 @@ class PolicyHoldersPage extends Component {
         document.title = formatMessage(this.props.intl, "policyHolder", "policyHolders.page.title");
     }
 
+    onAdd = () => {
+        historyPush(this.props.modulesManager, this.props.history, "policyHolder.route.policyHolder");
+    }
+
+    policyHolderPageLink = policyHolder => {
+        return `${this.props.modulesManager.getRef("policyHolder.route.policyHolder")}${"/" + decodeId(policyHolder.id)}`;
+    }
+
+    onDoubleClick = (policyHolder, newTab = false) => {
+        const { rights, modulesManager, history } = this.props;
+        if (rights.includes(RIGHT_POLICYHOLDER_UPDATE) || rights.includes(RIGHT_PORTALPOLICYHOLDER_SEARCH)) {
+            historyPush(modulesManager, history, "policyHolder.route.policyHolder", [decodeId(policyHolder.id)], newTab);
+        }
+    }
+
     render() {
-        const { classes, rights } = this.props;
+        const { intl, classes, rights } = this.props;
         return (
-            rights.includes(RIGHT_POLICYHOLDER_SEARCH) && (
+            (rights.includes(RIGHT_POLICYHOLDER_SEARCH) ||
+                rights.includes(RIGHT_PORTALPOLICYHOLDER_SEARCH)) && (
                 <div className={classes.page}>
-                    <PolicyHolderSearcher />
+                    <PolicyHolderSearcher
+                        onDoubleClick={this.onDoubleClick}
+                        policyHolderPageLink={this.policyHolderPageLink}
+                        rights={rights}
+                    />
+                    {rights.includes(RIGHT_POLICYHOLDER_CREATE) && withTooltip(
+                        <div className={classes.fab}>
+                            <Fab color="primary" onClick={this.onAdd}>
+                                <AddIcon />
+                            </Fab>
+                        </div>,
+                        formatMessage(intl, "policyHolder", "createButton.tooltip")
+                    )}
                 </div>
             )
         )

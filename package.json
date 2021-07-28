@@ -1,6 +1,6 @@
 {
   "name": "@openimis/fe-policyholder",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "license": "AGPL-3.0-only",
   "description": "openIMIS Frontend PolicyHolder module",
   "repository": "openimis/openimis-fe-policyholder_js",
