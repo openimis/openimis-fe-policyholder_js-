@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Form, withModulesManager, withHistory, formatMessage, formatMessageWithValues, journalize } from "@openimis/fe-core";
+import { Form, withModulesManager, withHistory, formatMessage, formatMessageWithValues, journalize, Helmet } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { bindActionCreators } from "redux";
@@ -50,7 +50,6 @@ class PolicyHolderForm extends Component {
     }
 
     componentDidMount() {
-        document.title = formatMessageWithValues(this.props.intl, "policyHolder", "policyHolder.page.title", { label: "" });
         if (!!this.props.policyHolderId) {
             this.setState(
                 (_, props) => ({ policyHolderId: props.policyHolderId }),
@@ -63,8 +62,7 @@ class PolicyHolderForm extends Component {
         if (prevProps.fetchedPolicyHolder !== this.props.fetchedPolicyHolder && !!this.props.fetchedPolicyHolder) {
             this.unwrapJSONFields(this.props.policyHolder);
             this.setState(
-                (_, props) => ({ policyHolder: props.policyHolder, policyHolderId: props.policyHolderId }),
-                () => document.title = formatMessageWithValues(this.props.intl, "policyHolder", "policyHolder.page.title", this.titleParams())
+                (_, props) => ({ policyHolder: props.policyHolder, policyHolderId: props.policyHolderId })
             );
         }
         if (prevProps.submittingMutation && !this.props.submittingMutation) {
@@ -93,7 +91,7 @@ class PolicyHolderForm extends Component {
 
     onEditedChanged = (policyHolder) => this.setState({ policyHolder });
 
-    titleParams = () => this.props.titleParams(this.state.policyHolder);
+    titleParams = () => this.state.policyHolder && this.props.titleParams(this.state.policyHolder);
 
     onValidation = (isFormValid) => {
         if (this.state.isFormValid !== isFormValid) {
@@ -110,6 +108,7 @@ class PolicyHolderForm extends Component {
         const { intl, rights, back } = this.props;
         return (
             <Fragment>
+                <Helmet title={formatMessageWithValues(this.props.intl, "policyHolder", "policyHolder.page.title", this.titleParams())} />
                 <Form
                     module="policyHolder"
                     title="policyHolder.page.title"

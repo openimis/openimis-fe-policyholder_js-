@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { formatMessage } from "@openimis/fe-core";
+import { formatMessage, Helmet } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
@@ -21,10 +21,6 @@ class PolicyHolderUsersPage extends Component {
         reset: 0
     }
 
-    componentDidMount() {
-        document.title = formatMessage(this.props.intl, "policyHolder", "menu.policyHolderUsers");
-    }
-
     onSave = () =>
         this.setState(state => ({
             reset: state.reset + 1
@@ -38,6 +34,7 @@ class PolicyHolderUsersPage extends Component {
                 RIGHT_PORTALPOLICYHOLDERUSER_SEARCH
             ].some(right => rights.includes(right)) && (
                 <div className={classes.page}>
+                    <Helmet title={formatMessage(this.props.intl, "policyHolder", "menu.policyHolderUsers")} />
                     <PolicyHolderUserSearcher
                         rights={rights}
                         reset={this.state.reset}
