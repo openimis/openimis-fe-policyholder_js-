@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PolicyHolderSearcher from "../components/PolicyHolderSearcher";
-import { withModulesManager, formatMessage, withTooltip, historyPush } from "@openimis/fe-core";
+import { withModulesManager, formatMessage, withTooltip, historyPush, Helmet } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
@@ -20,10 +20,6 @@ const styles = theme => ({
 })
 
 class PolicyHoldersPage extends Component {
-    componentDidMount() {
-        document.title = formatMessage(this.props.intl, "policyHolder", "policyHolders.page.title");
-    }
-
     onAdd = () => {
         historyPush(this.props.modulesManager, this.props.history, "policyHolder.route.policyHolder");
     }
@@ -45,6 +41,7 @@ class PolicyHoldersPage extends Component {
             (rights.includes(RIGHT_POLICYHOLDER_SEARCH) ||
                 rights.includes(RIGHT_PORTALPOLICYHOLDER_SEARCH)) && (
                 <div className={classes.page}>
+                    <Helmet title={formatMessage(this.props.intl, "policyHolder", "policyHolders.page.title")} />
                     <PolicyHolderSearcher
                         onDoubleClick={this.onDoubleClick}
                         policyHolderPageLink={this.policyHolderPageLink}
