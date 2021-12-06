@@ -9,7 +9,8 @@ import {
     withTooltip,
     coreConfirm,
     formatMessage,
-    PublishedComponent
+    PublishedComponent,
+    decodeId
 } from "@openimis/fe-core";
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -319,7 +320,13 @@ const mapStateToProps = state => ({
     fetchingPolicyHolderUsers: state.policyHolder.fetchingPolicyHolderUsers,
     fetchedPolicyHolderUsers: state.policyHolder.fetchedPolicyHolderUsers,
     errorPolicyHolderUsers: state.policyHolder.errorPolicyHolderUsers,
-    policyHolderUsers: state.policyHolder.policyHolderUsers,
+    policyHolderUsers: state.policyHolder.policyHolderUsers.map(({ policyHolder, ...other }) => ({
+        policyHolder: {
+            ...policyHolder,
+            id: decodeId(policyHolder.id),
+        },
+        ...other,
+    })),
     policyHolderUsersPageInfo: state.policyHolder.policyHolderUsersPageInfo,
     policyHolderUsersTotalCount: state.policyHolder.policyHolderUsersTotalCount,
     submittingMutation: state.policyHolder.submittingMutation,

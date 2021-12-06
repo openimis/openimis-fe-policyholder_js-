@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { FormattedMessage, SelectInput } from "@openimis/fe-core";
+import { FormattedMessage, SelectInput, decodeId } from "@openimis/fe-core";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchPickerPolicyHolders } from "../actions"
+import { fetchPickerPolicyHolders } from "../actions";
 
 class PolicyHolderPicker extends Component {
     componentDidMount() {
@@ -39,8 +39,11 @@ class PolicyHolderPicker extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    policyHolders: state.policyHolder.policyHolders
+const mapStateToProps = (state) => ({
+    policyHolders: state.policyHolder.policyHolders.map(({ id: encodedId, ...other }) => ({
+        id: decodeId(encodedId),
+        ...other,
+    })),
 });
 
 const mapDispatchToProps = dispatch => {
