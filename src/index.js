@@ -33,6 +33,7 @@ import {
 } from "./components/PolicyHolderPaymentsTab";
 import PolicyHolderUsersPage from "./pages/PolicyHolderUsersPage";
 import { PolicyHolderUsersTabLabel, PolicyHolderUsersTabPanel } from "./components/PolicyHolderUsersTab";
+import { POLICYHOLDER_PICKER_PROJECTION } from "./actions";
 
 const ROUTE_POLICY_HOLDERS = "policyHolders";
 const ROUTE_POLICY_HOLDER = "policyHolders/policyHolder";
@@ -47,7 +48,7 @@ const DEFAULT_CONFIG = {
         { key: "policyHolder.ConfigBasedPicker", ref: ConfigBasedPicker },
         { key: "policyHolder.TabPanel", ref: TabPanel },
         { key: "policyHolder.PolicyHolderPicker", ref: PolicyHolderPicker },
-        { key: "policyHolder.PolicyHolderPicker.projection", ref: ["id", "code", "tradeName"] },
+        { key: "policyHolder.PolicyHolderPicker.projection", ref: POLICYHOLDER_PICKER_PROJECTION },
         { key: "policyHolder.PolicyHolderInsureePicker", ref: PolicyHolderInsureePicker },
         { key: "policyHolder.PolicyHolderInsureePicker.projection", ref:
             [
@@ -116,6 +117,13 @@ const DEFAULT_CONFIG = {
         PolicyHolderContributionPlanBundlesTabPanel,
         PolicyHolderPaymentsTabPanel,
         PolicyHolderUsersTabPanel
+    ],
+    "invoice.SubjectAndThirdpartyPicker": [
+        {
+            type: "policy holder",
+            picker: PolicyHolderPicker,
+            pickerProjection: POLICYHOLDER_PICKER_PROJECTION
+        },
     ]
 };
 

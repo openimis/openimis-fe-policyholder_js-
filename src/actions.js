@@ -8,9 +8,7 @@ const POLICYHOLDER_FULL_PROJECTION = modulesManager => [
     "accountancyAccount", "bankAccount", "paymentReference", "dateValidFrom", "dateValidTo", "isDeleted"
 ];
 
-const POLICYHOLDER_PICKER_PROJECTION = () => [
-    "id", "code", "tradeName"
-];
+export const POLICYHOLDER_PICKER_PROJECTION = ["id", "code", "tradeName"];
 
 const POLICYHOLDERINSUREE_FULL_PROJECTION = modulesManager => [
     "id", "dateValidFrom", "dateValidTo", "jsonExt", "lastPolicy{id}",
@@ -38,7 +36,7 @@ const POLICYHOLDERCONTRIBUTIONPLANBUNDLE_PICKER_PROJECTION = modulesManager => [
 
 const POLICYHOLDERUSER_FULL_PROJECTION = modulesManager => [
     "id", "dateValidFrom", "dateValidTo", "isDeleted",
-    "policyHolder" + `{${POLICYHOLDER_PICKER_PROJECTION()}}`,
+    "policyHolder" + `{${POLICYHOLDER_PICKER_PROJECTION}}`,
     "user" + modulesManager.getProjection("admin.UserPicker.projection")
 ];
 
@@ -59,7 +57,7 @@ export function fetchPickerPolicyHolders(params) {
     const payload = formatPageQuery(
         "policyHolder",
         params,
-        POLICYHOLDER_PICKER_PROJECTION()
+        POLICYHOLDER_PICKER_PROJECTION
     );
     return graphql(payload, "POLICYHOLDER_POLICYHOLDERS");
 }
@@ -166,7 +164,7 @@ function formatPolicyHolderUserGQL(policyHolderUser, isReplaceMutation = false) 
     return `
         ${!!policyHolderUser.id ? `${isReplaceMutation ? 'uuid' : 'id'}: "${decodeId(policyHolderUser.id)}"` : ""}
         ${!!policyHolderUser.user ? `userId: "${decodeId(policyHolderUser.user.id)}"` : ""}
-        ${!!policyHolderUser.policyHolder ? `policyHolderId: "${decodeId(policyHolderUser.policyHolder.id)}"` : ""}
+        ${!!policyHolderUser.policyHolder ? `policyHolderId: "${policyHolderUser.policyHolder.id}"` : ""}
         ${!!policyHolderUser.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderUser.dateValidFrom)}"` : ""}
         ${!!policyHolderUser.dateValidTo ? `dateValidTo: "${dateTimeToDate(policyHolderUser.dateValidTo)}"` : ""}
     `
