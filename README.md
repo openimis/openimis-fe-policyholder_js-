@@ -12,6 +12,7 @@ None
 * `insuree.MainMenu`:
     
     **Policy Holders** (`menu.policyHolders` translation key)
+* `invoice.SubjectAndThirdpartyPicker`: providing Policy Holder picker for Invoice module
 
 ## Available Contribution Points
 * `policyHolder.TabPanel.label` ability to extend Policy Holder tab panel with a label

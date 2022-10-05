@@ -93,7 +93,7 @@ class PolicyHolderUserFilter extends Component {
                             onChange={v => onChangeFilters([{
                                 id: "policyHolder_Id",
                                 value: v,
-                                filter: `policyHolder_Id: "${!!v && decodeId(v.id)}"`
+                                filter: `policyHolder_Id: "${!!v && v.id}"`
                             }])}
                         />
                     </Grid>

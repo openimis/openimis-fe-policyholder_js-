@@ -41,7 +41,7 @@ class CreatePolicyHolderUserDialog extends Component {
                 policyHolderUser: {
                     ...state.policyHolderUser,
                     policyHolder: props.policyHolders.find(
-                        policyHolder => decodeId(policyHolder.id) === props.predefinedPolicyHolderId
+                        policyHolder => policyHolder.id === props.predefinedPolicyHolderId
                     )
                 }
             }));
@@ -162,7 +162,10 @@ class CreatePolicyHolderUserDialog extends Component {
 }
 
 const mapStateToProps = state => ({
-    policyHolders: state.policyHolder.policyHolders
+    policyHolders: state.policyHolder.policyHolders.map(({ id: encodedId, ...other }) => ({
+        id: decodeId(encodedId),
+        ...other,
+    })),
 });
 
 const mapDispatchToProps = dispatch => {
