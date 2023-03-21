@@ -64,7 +64,7 @@
     "policyHolder.dialog.create": "Create",
     "policyHolder.dialog.update": "Save",
     "policyHolder.dialog.replace": "Add",
-    "policyHolder.dialog.delete.message": "Deleting data does not mean erasing it from OpenIMIS database. The data will only be deactivated from the viewed list.",
+    "policyHolder.dialog.delete.message": "Deleting data does not mean erasing it from openIMIS database. The data will only be deactivated from the viewed list.",
     "policyHolder.CreatePolicyHolderInsuree.mutationLabel": "Create Policy Holder Insuree for {code} - {tradeName}",
     "policyHolder.UpdatePolicyHolderInsuree.mutationLabel": "Update Policy Holder Insuree of {code} - {tradeName}",
     "policyHolder.DeletePolicyHolderInsuree.mutationLabel": "Delete Policy Holder Insuree from {code} - {tradeName}",
