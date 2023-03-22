@@ -144,7 +144,7 @@ function formatPolicyHolderInsureeGQL(policyHolderInsuree, isReplaceMutation = f
         ${!!policyHolderInsuree.policyHolder && !isReplaceMutation ? `policyHolderId: "${decodeId(policyHolderInsuree.policyHolder.id)}"` : ""}
         ${!!policyHolderInsuree.insuree ? `insureeId: ${decodeId(policyHolderInsuree.insuree.id)}` : ""}
         ${!!policyHolderInsuree.contributionPlanBundle ? `contributionPlanBundleId: "${decodeId(policyHolderInsuree.contributionPlanBundle.id)}"` : ""}
-        ${!!policyHolderInsuree.jsonExt && !isReplaceMutation ? `jsonExt: ${JSON.stringify(policyHolderInsuree.jsonExt)}` : ""}
+        ${!!policyHolderInsuree.jsonExt ? `jsonExt: ${JSON.stringify(policyHolderInsuree.jsonExt)}` : ""}
         ${!!policyHolderInsuree.dateValidFrom ? `dateValidFrom: "${dateTimeToDate(policyHolderInsuree.dateValidFrom)}"` : ""}
         ${!!policyHolderInsuree.dateValidTo ? `dateValidTo: "${dateTimeToDate(policyHolderInsuree.dateValidTo)}"` : ""}
     `;
