@@ -105,7 +105,7 @@ class PolicyHolderForm extends Component {
         !this.props.rights.includes(RIGHT_POLICYHOLDER_UPDATE);
 
     render() {
-        const { intl, rights, back } = this.props;
+        const { intl, rights, back, save } = this.props;
         return (
             <Fragment>
                 <Helmet title={formatMessageWithValues(this.props.intl, "policyHolder", "policyHolder.page.title", this.titleParams())} />
@@ -125,6 +125,7 @@ class PolicyHolderForm extends Component {
                     Panels={[PolicyHolderTabPanel]}
                     rights={rights}
                     isPolicyHolderPortalUser={this.isPolicyHolderPortalUser()}
+                    openDirty={save}
                 />
             </Fragment>
         )
