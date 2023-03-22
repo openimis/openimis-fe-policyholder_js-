@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { bindActionCreators } from "redux";
 import PolicyHolderSearcher from "../components/PolicyHolderSearcher";
 import {
   withModulesManager,
@@ -6,6 +7,7 @@ import {
   withTooltip,
   historyPush,
   Helmet,
+  clearCurrentPaginationPage,
 } from "@openimis/fe-core";
 import { injectIntl } from "react-intl";
 import { withTheme, withStyles } from "@material-ui/core/styles";
@@ -56,6 +58,21 @@ class PolicyHoldersPage extends Component {
     }
   };
 
+  componentDidMount = () => {
+    const moduleName = "policyHolder";
+    const { module } = this.props;
+    if (module !== moduleName) this.props.clearCurrentPaginationPage();
+  };
+
+  componentWillUnmount = () => {
+    const { location, history } = this.props;
+    const {
+      location: { pathname },
+    } = history;
+    const urlPath = location.pathname;
+    if (!pathname.includes(urlPath)) this.props.clearCurrentPaginationPage();
+  };
+
   render() {
     const { intl, classes, rights } = this.props;
     return (
@@ -94,12 +111,18 @@ const mapStateToProps = (state) => ({
     !!state.core && !!state.core.user && !!state.core.user.i_user
       ? state.core.user.i_user.rights
       : [],
+  module: state.core?.savedPagination?.module,
 });
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators({ clearCurrentPaginationPage }, dispatch);
 
 export default withModulesManager(
   injectIntl(
     withTheme(
-      withStyles(styles)(connect(mapStateToProps, null)(PolicyHoldersPage))
+      withStyles(styles)(
+        connect(mapStateToProps, mapDispatchToProps)(PolicyHoldersPage)
+      )
     )
   )
 );
