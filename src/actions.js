@@ -3,6 +3,7 @@ import {
   formatPageQuery,
   formatPageQueryWithCount,
   formatMutation,
+  graphqlWithVariables,
   decodeId,
   formatGQLString,
 } from "@openimis/fe-core";
@@ -118,6 +119,12 @@ export function fetchPolicyHolder(modulesManager, policyHolderId) {
     POLICYHOLDER_FULL_PROJECTION(modulesManager)
   );
   return graphql(payload, "POLICYHOLDER_POLICYHOLDER");
+}
+
+export function clearPolicyHolder() {
+  return (dispatch) => {
+    dispatch({ type: "POLICYHOLDER_POLICYHOLDER_CLEAR" });
+  };
 }
 
 export function fetchPolicyHolderInsurees(modulesManager, params) {
@@ -776,3 +783,29 @@ export function replacePolicyHolderUser(policyHolderUser, clientMutationLabel) {
     }
   );
 }
+
+export const policyHolderCodeValidation = (mm, variables) => {
+  return graphqlWithVariables(
+    `
+    query ($policyHolderCode: String!) {
+      isValid: validatePolicyHolderCode(policyHolderCode: $policyHolderCode)
+    }
+    `,
+    variables,
+    "POLICYHOLDER_CODE_FIELDS_VALIDATION"
+  );
+};
+
+export const policyHolderCodeSetValid = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "POLICYHOLDER_CODE_FIELDS_VALIDATION_SET_VALID",
+    });
+  };
+};
+
+export const policyHolderCodeClear = () => {
+  return (dispatch) => {
+    dispatch({ type: "POLICYHOLDER_CODE_FIELDS_VALIDATION_CLEAR" });
+  };
+};

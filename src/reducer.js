@@ -102,6 +102,14 @@ function reducer(
         ),
         errorPolicyHolder: formatGraphQLError(action.payload),
       };
+    case "POLICYHOLDER_POLICYHOLDER_CLEAR":
+      return {
+        ...state,
+        fetchingPolicyHolder: true,
+        fetchedPolicyHolder: false,
+        policyHolder: {},
+        errorPolicyHolder: null,
+      };
     case "POLICYHOLDER_POLICYHOLDER_ERR":
       return {
         ...state,
@@ -277,6 +285,66 @@ function reducer(
         ...state,
         fetchingPolicyHolderUsers: false,
         errorPolicyHolderUsers: formatServerError(action.payload),
+      };
+    case "POLICYHOLDER_CODE_FIELDS_VALIDATION_REQ":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          policyHolderCode: {
+            isValidating: true,
+            isValid: false,
+            validationError: null,
+          },
+        },
+      };
+    case "POLICYHOLDER_CODE_FIELDS_VALIDATION_RESP":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          policyHolderCode: {
+            isValidating: false,
+            isValid: action.payload?.data?.isValid,
+            validationError: formatGraphQLError(action.payload),
+          },
+        },
+      };
+    case "POLICYHOLDER_CODE_FIELDS_VALIDATION_ERR":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          policyHolderCode: {
+            isValidating: false,
+            isValid: false,
+            validationError: formatServerError(action.payload),
+          },
+        },
+      };
+    case "POLICYHOLDER_CODE_FIELDS_VALIDATION_CLEAR":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          policyHolderCode: {
+            isValidating: true,
+            isValid: false,
+            validationError: null,
+          },
+        },
+      };
+    case "POLICYHOLDER_CODE_FIELDS_VALIDATION_SET_VALID":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          policyHolderCode: {
+            isValidating: false,
+            isValid: true,
+            validationError: null,
+          },
+        },
       };
     case "POLICYHOLDER_MUTATION_REQ":
       return dispatchMutationReq(state, action);

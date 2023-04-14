@@ -1,16 +1,25 @@
 import React, { Fragment } from "react";
+import { connect } from "react-redux";
+import { injectIntl } from "react-intl";
+
 import { Grid, Divider, Typography } from "@material-ui/core";
+import { withTheme, withStyles } from "@material-ui/core/styles";
+
 import {
   withModulesManager,
   formatMessage,
   FormPanel,
   TextInput,
+  ValidatedTextInput,
   TextAreaInput,
   FormattedMessage,
   PublishedComponent,
 } from "@openimis/fe-core";
-import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@material-ui/core/styles";
+import {
+  policyHolderCodeClear,
+  policyHolderCodeSetValid,
+  policyHolderCodeValidation,
+} from "../actions";
 import {
   MAX_ACCOUNTANCYACCOUNT_LENGTH,
   MAX_ADDRESS_LENGTH,
@@ -154,6 +163,11 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
     return false;
   };
 
+  shouldValidate = (input) => {
+    const { savedPolicyHolderCode } = this.props;
+    return input !== savedPolicyHolderCode;
+  };
+
   render() {
     const {
       intl,
@@ -161,6 +175,9 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
       edited,
       mandatoryFieldsEmpty,
       isPolicyHolderPortalUser,
+      isCodeValid,
+      isCodeValidating,
+      validationError,
     } = this.props;
     return (
       <Fragment>
@@ -198,14 +215,22 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
         )}
         <Grid container className={classes.item}>
           <Grid item xs={2} className={classes.item}>
-            <TextInput
+            <ValidatedTextInput
+              itemQueryIdentifier="policyHolderCode"
+              codeTakenLabel="policyHolder.codeTaken"
+              shouldValidate={this.shouldValidate}
+              isValid={isCodeValid}
+              isValidating={isCodeValidating}
+              validationError={validationError}
+              action={policyHolderCodeValidation}
+              clearAction={policyHolderCodeClear}
+              setValidAction={policyHolderCodeSetValid}
               module="policyHolder"
+              required={true}
               label="code"
-              required
-              inputProps={{ maxLength: MAX_CODE_LENGTH }}
               value={!!edited && !!edited.code ? edited.code : ""}
               onChange={(v) => this.updateAttribute("code", v)}
-              readOnly={(!!edited && !!edited.id) || isPolicyHolderPortalUser}
+              readOnly={isPolicyHolderPortalUser}
             />
           </Grid>
           <Grid item xs={2} className={classes.item}>
@@ -386,6 +411,20 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
   }
 }
 
+const mapStateToProps = (store) => ({
+  isCodeValid: store.policyHolder?.validationFields?.policyHolderCode?.isValid,
+  isCodeValidating:
+    store.policyHolder?.validationFields?.policyHolderCode?.isValidating,
+  validationError:
+    store.policyHolder?.validationFields?.policyHolderCode?.validationError,
+  savedPolicyHolderCode: store.policyHolder?.policyHolder?.code,
+});
+
 export default withModulesManager(
-  injectIntl(withTheme(withStyles(styles)(PolicyHolderGeneralInfoPanel)))
+  injectIntl(
+    connect(
+      mapStateToProps,
+      null
+    )(withTheme(withStyles(styles)(PolicyHolderGeneralInfoPanel)))
+  )
 );

@@ -1,4 +1,11 @@
 import React, { Component, Fragment } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { injectIntl } from "react-intl";
+import _ from "lodash";
+
+import { withTheme, withStyles } from "@material-ui/core/styles";
+
 import {
   Form,
   withModulesManager,
@@ -8,18 +15,14 @@ import {
   journalize,
   Helmet,
 } from "@openimis/fe-core";
-import { injectIntl } from "react-intl";
-import { withTheme, withStyles } from "@material-ui/core/styles";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
-import { fetchPolicyHolder } from "../actions";
-import PolicyHolderGeneralInfoPanel from "./PolicyHolderGeneralInfoPanel";
-import PolicyHolderTabPanel from "./PolicyHolderTabPanel";
+import { fetchPolicyHolder, clearPolicyHolder } from "../actions";
 import {
   RIGHT_PORTALPOLICYHOLDER_SEARCH,
   RIGHT_POLICYHOLDER_CREATE,
   RIGHT_POLICYHOLDER_UPDATE,
 } from "../constants";
+import PolicyHolderGeneralInfoPanel from "./PolicyHolderGeneralInfoPanel";
+import PolicyHolderTabPanel from "./PolicyHolderTabPanel";
 
 const styles = (theme) => ({
   paper: theme.paper.paper,
@@ -89,6 +92,10 @@ class PolicyHolderForm extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.clearPolicyHolder();
+  }
+
   isMandatoryFieldsEmpty = () => {
     const { policyHolder } = this.state;
     if (
@@ -102,7 +109,19 @@ class PolicyHolderForm extends Component {
     return true;
   };
 
-  canSave = () => !this.isMandatoryFieldsEmpty() && this.state.isFormValid;
+  doesPolicyHolderChange = () => {
+    const { policyHolder } = this.props;
+    if (_.isEqual(policyHolder, this.state.policyHolder)) {
+      return false;
+    }
+    return true;
+  };
+
+  canSave = () =>
+    !this.isMandatoryFieldsEmpty() &&
+    this.doesPolicyHolderChange() &&
+    this.props.isPolicyHolderCodeValid &&
+    this.state.isFormValid;
 
   save = (policyHolder) => {
     this.wrapJSONFields(policyHolder);
@@ -172,12 +191,17 @@ const mapStateToProps = (state) => ({
   errorPolicyHolder: state.policyHolder.errorPolicyHolder,
   fetchedPolicyHolder: state.policyHolder.fetchedPolicyHolder,
   policyHolder: state.policyHolder.policyHolder,
+  isPolicyHolderCodeValid:
+    state.policyHolder?.validationFields?.policyHolderCode?.isValid,
   submittingMutation: state.policyHolder.submittingMutation,
   mutation: state.policyHolder.mutation,
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ fetchPolicyHolder, journalize }, dispatch);
+  return bindActionCreators(
+    { fetchPolicyHolder, clearPolicyHolder, journalize },
+    dispatch
+  );
 };
 
 export default withHistory(
