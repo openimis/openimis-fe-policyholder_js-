@@ -30,10 +30,14 @@ None
 ## Dispatched Redux Actions
 * `POLICYHOLDER_POLICYHOLDERS_{REQ|RESP|ERR}`, fetching Policy Holders (as triggered by the searcher)
 * `POLICYHOLDER_POLICYHOLDER_{REQ|RESP|ERR}`, fetching Policy Holder
+* `POLICYHOLDER_POLICYHOLDER_CLEAR`, clearing Policy Holder when unmounting form
 * `POLICYHOLDER_POLICYHOLDERINSUREES_{REQ|RESP|ERR}`, fetching Policy Holder Insurees (as triggered by the searcher)
 * `POLICYHOLDER_PICKERPOLICYHOLDERINSUREES_{REQ|RESP|ERR}`, fetching Policy Holder Insurees for Policy Holder Insurees Picker
 * `POLICYHOLDER_POLICYHOLDERCONTRIBUTIONPLANBUNDLES_{REQ|RESP|ERR}`, fetching Policy Holder Contribution Plan Bundles (as triggered by the searcher)
 * `POLICYHOLDER_PICKERPOLICYHOLDERCONTRIBUTIONPLANBUNDLES_{REQ|RESP|ERR}`, fetching Policy Holder Contribution Plan Bundles for Policy Holder Contribution Plan Bundle Picker
+* `POLICYHOLDER_CODE_FIELDS_VALIDATION_{REQ|RESP|ERR}`, validating Policy Holder code field
+* `POLICYHOLDER_CODE_FIELDS_VALIDATION_CLEAR`, clearing validation state of Policy Holder code
+* `POLICYHOLDER_CODE_FIELDS_VALIDATION_SET_VALID`, setting Policy Holder code as a valid one
 * `POLICYHOLDER_MUTATION_{REQ|ERR}`, sending a mutation
 * `POLICYHOLDER_CREATE_POLICYHOLDER_RESP`, receiving a result of create Policy Holder mutation
 * `POLICYHOLDER_UPDATE_POLICYHOLDER_RESP`, receiving a result of update Policy Holder mutation
