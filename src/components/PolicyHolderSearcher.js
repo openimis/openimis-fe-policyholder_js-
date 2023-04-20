@@ -99,10 +99,15 @@ class PolicyHolderSearcher extends Component {
           : "",
       (policyHolder) =>
         !!policyHolder.locations
-          ? `${policyHolder.locations.parent.parent.parent.name} 
-            ${policyHolder.locations.parent.parent.name} 
-            ${policyHolder.locations.parent.name}
-            ${policyHolder.locations.name}`
+          ? `
+          ${policyHolder.locations.parent.parent.parent.code} 
+          ${policyHolder.locations.parent.parent.parent.name}
+          ${policyHolder.locations.parent.parent.code} 
+          ${policyHolder.locations.parent.parent.name} 
+          ${policyHolder.locations.parent.code}
+          ${policyHolder.locations.parent.name}
+          ${policyHolder.locations.code}
+          ${policyHolder.locations.name}`
           : "",
       (policyHolder) =>
         !!policyHolder.legalForm ? (

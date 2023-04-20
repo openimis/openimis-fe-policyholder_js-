@@ -139,7 +139,13 @@ class PolicyHolderUserSearcher extends Component {
     } = this.props;
     const result = [
       (policyHolderUser) =>
-        !!policyHolderUser.user ? `${policyHolderUser.user.username}` : "",
+        !!policyHolderUser.user
+          ? `
+        ${policyHolderUser.user.username}
+        ${policyHolderUser.user.iUser.lastName}
+        ${policyHolderUser.user.iUser.otherNames}
+        `
+          : "",
     ];
     if (predefinedPolicyHolderId === null) {
       result.push((policyHolderUser) => (
