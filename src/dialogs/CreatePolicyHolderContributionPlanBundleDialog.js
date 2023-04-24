@@ -123,7 +123,7 @@ class CreatePolicyHolderContributionPlanBundleDialog extends Component {
                             <FormattedMessage module="policyHolder" id="dialog.cancel" />
                         </Button>
                         <Button onClick={this.handleSave} disabled={!this.canSave()} variant="contained" color="primary" autoFocus>
-                            <FormattedMessage module="policyHolder" id="dialog.create" />
+                            <FormattedMessage module="policyHolder" id="dialog.replace" />
                         </Button>
                     </DialogActions>
                 </Dialog>

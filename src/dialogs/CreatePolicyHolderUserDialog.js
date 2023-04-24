@@ -152,7 +152,7 @@ class CreatePolicyHolderUserDialog extends Component {
                             variant="contained"
                             color="primary"
                         >
-                            <FormattedMessage module="policyHolder" id="dialog.create" />
+                            <FormattedMessage module="policyHolder" id="dialog.replace" />
                         </Button>
                     </DialogActions>
                 </Dialog>
