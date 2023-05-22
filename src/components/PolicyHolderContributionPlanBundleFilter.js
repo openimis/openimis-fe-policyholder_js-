@@ -19,7 +19,7 @@ const styles = theme => ({
 class PolicyHolderContributionPlanBundleFilter extends Component {
     _filterValue = k => {
         const { filters } = this.props;
-        return !!filters[k] ? filters[k].value : null
+        return !!filters[k] ? filters[k].value : "";
     }
 
     _onChangeFilter = (k, v) => {
