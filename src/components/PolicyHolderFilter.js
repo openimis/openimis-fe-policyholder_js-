@@ -17,7 +17,12 @@ const styles = theme => ({
 class PolicyHolderFilter extends Component {
     _filterValue = k => {
         const { filters } = this.props;
-        return !!filters[k] ? filters[k].value : null
+        return !!filters[k] ? filters[k].value : null;
+    }
+
+    _filterTextFieldValue = (key) => {
+        const { filters } = this.props;
+        return !!filters[key] ? filters[key].value : "";
     }
 
     _onChangeFilter = (k, v) => {
@@ -58,7 +63,7 @@ class PolicyHolderFilter extends Component {
                     <TextInput
                         module="policyHolder"
                         label="code"
-                        value={this._filterValue('code')}
+                        value={this._filterTextFieldValue('code')}
                         onChange={v => this._onChangeStringFilter('code', v, CONTAINS_LOOKUP)}
                     />
                 </Grid>
@@ -66,7 +71,7 @@ class PolicyHolderFilter extends Component {
                     <TextInput
                         module="policyHolder"
                         label="tradeName"
-                        value={this._filterValue('tradeName')}
+                        value={this._filterTextFieldValue('tradeName')}
                         onChange={v => this._onChangeStringFilter('tradeName', v, CONTAINS_LOOKUP)}
                     />
                 </Grid>

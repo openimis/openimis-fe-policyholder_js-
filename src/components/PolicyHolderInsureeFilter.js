@@ -22,6 +22,11 @@ class PolicyHolderInsureeFilter extends Component {
         return !!filters[k] ? filters[k].value : null
     }
 
+    _filterTextFieldValue = k => {
+        const { filters } = this.props;
+        return !!filters[k] ? filters[k].value : "";
+    }
+
     _onChangeFilter = (k, v) => {
         this.props.onChangeFilters([
             {
@@ -60,7 +65,7 @@ class PolicyHolderInsureeFilter extends Component {
                     <TextInput
                         module="policyHolder" 
                         label="insureeCHFID"
-                        value={this._filterValue('chfId')}
+                        value={this._filterTextFieldValue('insuree_ChfId')}
                         onChange={v => this._onChangeStringFilter('insuree_ChfId', v, STARTS_WITH_LOOKUP)}
                     />
                 </Grid>
