@@ -149,6 +149,16 @@ function reducer(
         fetchingPolicyHolderInsurees: false,
         errorPolicyHolderInsurees: formatServerError(action.payload),
       };
+    case "POLICYHOLDER_POLICYHOLDERINSUREES_CLEAR":
+      return {
+        ...state,
+        fetchingPolicyHolderInsurees: false,
+        fetchedPolicyHolderInsurees: false,
+        policyHolderInsurees: [],
+        policyHolderInsureesPageInfo: {},
+        policyHolderInsureesTotalCount: 0,
+        errorPolicyHolderInsurees: null,
+      };
     case "POLICYHOLDER_PICKERPOLICYHOLDERINSUREES_REQ":
       return {
         ...state,
