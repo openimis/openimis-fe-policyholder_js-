@@ -94,5 +94,9 @@
     "policyHolder.policyHolderUser.dialog.delete.title": "Are you sure you want to delete {user}?",
     "policyHolder.DeletePolicyHolderUser.mutationLabel": "{user} is removed from {policyHolder}",
     "policyHolder.policyHolderUser.dialog.replace.title": "Add new version of Policy Holder User",
-    "policyHolder.ReplacePolicyHolderUser.mutationLabel": "{newUser} is replacing {oldUser} on {policyHolder}"
+    "policyHolder.ReplacePolicyHolderUser.mutationLabel": "{newUser} is replacing {oldUser} on {policyHolder}",
+    "policyHolder.EconomicUnitPicker.label": "Economic Unit",
+    "policyHolder.selectEconomicUnit.title": "Select an Economic Unit",
+    "policyHolder.selectEconomicUnit.message": "Select the Economic Unit you want to work with.",
+    "policyHolder.selectEconomicUnit.confirm": "Confirm"
 }

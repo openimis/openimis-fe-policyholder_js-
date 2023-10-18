@@ -34,6 +34,7 @@ import {
 import PolicyHolderUsersPage from "./pages/PolicyHolderUsersPage";
 import { PolicyHolderUsersTabLabel, PolicyHolderUsersTabPanel } from "./components/PolicyHolderUsersTab";
 import { POLICYHOLDER_PICKER_PROJECTION } from "./actions";
+import EconomicUnitDialog from "./dialogs/EconomicUnitDialog";
 
 const ROUTE_POLICY_HOLDERS = "policyHolders";
 const ROUTE_POLICY_HOLDER = "policyHolders/policyHolder";
@@ -124,7 +125,8 @@ const DEFAULT_CONFIG = {
             picker: PolicyHolderPicker,
             pickerProjection: POLICYHOLDER_PICKER_PROJECTION
         },
-    ]
+    ],
+    "policyholder.EconomicUnitDialog": [EconomicUnitDialog]
 };
 
 export const PolicyHolderModule = (cfg) => {
