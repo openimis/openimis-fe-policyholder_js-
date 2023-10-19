@@ -12,7 +12,6 @@ const EconomicUnitPicker = ({
   readOnly = false,
   required,
   value,
-  additionalFilters = [],
 }) => {
   const dispatch = useDispatch();
   const modulesManager = useModulesManager();
@@ -23,8 +22,10 @@ const EconomicUnitPicker = ({
   } = useSelector((store) => store.policyHolder);
 
   const fetchAvailableEconomicUnits = async () => {
+    //NOTE: We want to fetch all economic units available for logged User
+    //TODO: Add possibility to filter EU using userId. After that, fetch the logged user and change the filters
     try {
-      const filters = [...additionalFilters];
+      const filters = ['isDeleted: false'];
       await dispatch(fetchEconomicUnits(modulesManager, filters));
     } catch (error) {
       console.error('Failed to fetch economic units:', error);
@@ -34,6 +35,12 @@ const EconomicUnitPicker = ({
   useEffect(() => {
     fetchAvailableEconomicUnits();
   }, []);
+
+  useEffect(() => {
+    if (economicUnits.length === 1) {
+      onChange(economicUnits[0]);
+    }
+  }, [economicUnits]);
 
   return (
     <Autocomplete
