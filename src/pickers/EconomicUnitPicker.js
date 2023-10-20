@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { TextField } from '@material-ui/core';
 
 import { useModulesManager, Autocomplete } from '@openimis/fe-core';
-import { fetchPolicyHolders as fetchEconomicUnits } from '../actions';
+import { fetchPolicyHolderUsers as fetchEconomicUnits } from '../actions';
 
 const EconomicUnitPicker = ({
   onChange,
@@ -16,16 +16,19 @@ const EconomicUnitPicker = ({
   const dispatch = useDispatch();
   const modulesManager = useModulesManager();
   const {
-    policyHolders: economicUnits,
-    fetchingPolicyHolders: fetchingEconomicUnits,
-    errorPolicyHolders: errorEconomicUnits,
+    policyHolderUsers: economicUnitsWithUser,
+    fetchingPolicyHolderUsers: fetchingEconomicUnitsWithUser,
+    errorPolicyHolderUsers: errorEconomicUnitsWithUser,
   } = useSelector((store) => store.policyHolder);
+  const userId = useSelector((store) => store.core.user.id);
+
+  const economicUnits = economicUnitsWithUser.map(
+    (economicUnit) => economicUnit.policyHolder
+  );
 
   const fetchAvailableEconomicUnits = async () => {
-    //NOTE: We want to fetch all economic units available for logged User
-    //TODO: Add possibility to filter EU using userId. After that, fetch the logged user and change the filters
     try {
-      const filters = ['isDeleted: false'];
+      const filters = ['isDeleted: false', `user_Id: "${userId}"`];
       await dispatch(fetchEconomicUnits(modulesManager, filters));
     } catch (error) {
       console.error('Failed to fetch economic units:', error);
@@ -44,10 +47,10 @@ const EconomicUnitPicker = ({
 
   return (
     <Autocomplete
-      error={errorEconomicUnits}
+      error={errorEconomicUnitsWithUser}
       readOnly={readOnly}
       options={economicUnits}
-      isLoading={fetchingEconomicUnits}
+      isLoading={fetchingEconomicUnitsWithUser}
       value={value}
       getOptionLabel={(economicUnit) =>
         `${economicUnit.code} - ${economicUnit.tradeName}`
