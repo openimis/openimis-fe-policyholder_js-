@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Button,
@@ -19,11 +20,18 @@ const useStyles = makeStyles((theme) => ({
   secondaryButton: theme.dialog.secondaryButton,
 }));
 
-const EconomicUnitDialog = ({ open, onClose, setEconomicUnitDialogOpen }) => {
+const EconomicUnitDialog = ({ open, setEconomicUnitDialogOpen, onLogout }) => {
   const modulesManager = useModulesManager();
+  const dispatch = useDispatch();
   const classes = useStyles();
   const { formatMessage } = useTranslations(MODULE_NAME, modulesManager);
+  const {
+    policyHolderUsers: economicUnitsWithUser,
+    fetchingPolicyHolderUsers: fetchingEconomicUnitsWithUser,
+  } = useSelector((store) => store.policyHolder);
+
   const [value, setValue] = useState(null);
+  const storageEconomicUnit = localStorage.getItem(ECONOMIC_UNIT_STORAGE_KEY);
 
   const onChange = (option) => {
     setValue(option);
@@ -32,13 +40,18 @@ const EconomicUnitDialog = ({ open, onClose, setEconomicUnitDialogOpen }) => {
   const onConfirm = () => {
     if (value) {
       localStorage.setItem(ECONOMIC_UNIT_STORAGE_KEY, JSON.stringify(value));
-      onClose();
+      setEconomicUnitDialogOpen(false);
     }
   };
 
+  const onLogoutAction = () => {
+    setEconomicUnitDialogOpen(false);
+    onLogout(dispatch);
+  };
+
   useEffect(() => {
-    const handleLocalStorageChange = (e) => {
-      if (!e.target.localStorage.getItem(ECONOMIC_UNIT_STORAGE_KEY)) {
+    const handleLocalStorageChange = () => {
+      if (!storageEconomicUnit) {
         setEconomicUnitDialogOpen(true);
       }
     };
@@ -65,11 +78,24 @@ const EconomicUnitDialog = ({ open, onClose, setEconomicUnitDialogOpen }) => {
         />
       </DialogContent>
       <DialogActions>
+        {!economicUnitsWithUser?.length && (
+          <Button
+            onClick={onLogoutAction}
+            className={classes.primaryButton}
+            disabled={
+              fetchingEconomicUnitsWithUser || economicUnitsWithUser?.length
+            }
+          >
+            {formatMessage('selectEconomicUnit.logout')}
+          </Button>
+        )}
         <Button
           onClick={onConfirm}
           autoFocus
           className={classes.primaryButton}
-          disabled={!value}
+          disabled={
+            fetchingEconomicUnitsWithUser || !economicUnitsWithUser?.length
+          }
         >
           {formatMessage('selectEconomicUnit.confirm')}
         </Button>

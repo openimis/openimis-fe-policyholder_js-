@@ -99,5 +99,6 @@
     "policyHolder.selectEconomicUnit.title": "Select an Economic Unit",
     "policyHolder.selectEconomicUnit.message": "Select the Economic Unit you want to work with.",
     "policyHolder.selectEconomicUnit.confirm": "Confirm",
+    "policyHolder.selectEconomicUnit.logout": "Logout",
     "policyHolder.EconomicUnitChangeButton.tooltip": "Change your Economic Unit"
 }
