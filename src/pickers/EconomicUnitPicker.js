@@ -20,7 +20,7 @@ const EconomicUnitPicker = ({
     fetchingPolicyHolderUsers: fetchingEconomicUnitsWithUser,
     errorPolicyHolderUsers: errorEconomicUnitsWithUser,
   } = useSelector((store) => store.policyHolder);
-  const userId = useSelector((store) => store.core.user.id);
+  const userId = useSelector((store) => store.core.user?.id);
 
   const economicUnits = economicUnitsWithUser.map(
     (economicUnit) => economicUnit.policyHolder
