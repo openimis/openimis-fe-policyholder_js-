@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
-import { useTranslations, useModulesManager } from '@openimis/fe-core';
+import { useTranslations, useModulesManager, redirectToSamlLogout } from '@openimis/fe-core';
 import { ECONOMIC_UNIT_STORAGE_KEY, MODULE_NAME } from '../constants';
 import EconomicUnitPicker from '../pickers/EconomicUnitPicker';
 
@@ -44,9 +44,9 @@ const EconomicUnitDialog = ({ open, setEconomicUnitDialogOpen, onLogout }) => {
     }
   };
 
-  const onLogoutAction = () => {
+  const onLogoutAction = async (e) => {
     setEconomicUnitDialogOpen(false);
-    onLogout(dispatch);
+    await redirectToSamlLogout(e);
   };
 
   useEffect(() => {
