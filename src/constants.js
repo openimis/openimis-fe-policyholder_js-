@@ -58,3 +58,5 @@ export const RIGHT_PORTALPOLICYHOLDERUSER_REPLACE = 154406
 export const RIGHT_PAYMENT_SEARCH = 101401
 export const MODULE_NAME = "policyHolder";
 export const ECONOMIC_UNIT_STORAGE_KEY = 'userEconomicUnit';
+
+export const RIGHT_VIEW_EU_MODAL = 203000;
