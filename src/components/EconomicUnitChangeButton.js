@@ -1,11 +1,12 @@
 import React from 'react';
+import { useSelector } from "react-redux";
 
 import { makeStyles } from '@material-ui/core/styles';
 import { IconButton, Tooltip } from '@material-ui/core';
 import { PinDrop } from '@material-ui/icons';
 
 import { useTranslations, useModulesManager } from '@openimis/fe-core';
-import { MODULE_NAME } from '../constants';
+import { MODULE_NAME, RIGHT_VIEW_EU_MODAL } from '../constants';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 const EconomicUnitChangeButton = ({ onEconomicDialogOpen }) => {
   const classes = useStyles();
   const modulesManager = useModulesManager();
+  const rights = useSelector((store) => store.core.user?.i_user?.rights ?? [])
   const { formatMessage } = useTranslations(MODULE_NAME, modulesManager);
 
   const economicUnitConfig = modulesManager.getConf(
@@ -25,7 +27,7 @@ const EconomicUnitChangeButton = ({ onEconomicDialogOpen }) => {
     false
   );
 
-  if (!economicUnitConfig) return null;
+  if (!economicUnitConfig || !rights.includes(RIGHT_VIEW_EU_MODAL)) return null;
 
   return (
     <Tooltip title={formatMessage('EconomicUnitChangeButton.tooltip')}>
