@@ -85,7 +85,7 @@ const POLICYHOLDERUSER_FULL_PROJECTION = (modulesManager) => [
   "dateValidFrom",
   "dateValidTo",
   "isDeleted",
-  "policyHolder" + `{${POLICYHOLDER_PICKER_PROJECTION}}`,
+  `policyHolder{${POLICYHOLDER_FULL_PROJECTION(modulesManager).join(",")}}`,
   "user" + modulesManager.getProjection("admin.UserPicker.projection"),
 ];
 
