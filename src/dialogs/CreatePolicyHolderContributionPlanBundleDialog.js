@@ -93,7 +93,7 @@ class CreatePolicyHolderContributionPlanBundleDialog extends Component {
                             <Grid item className={classes.item}>
                                 <PublishedComponent
                                     pubRef="contributionPlan.ContributionPlanBundlePicker"
-                                    withNull={true}
+                                    withNull={false}
                                     required
                                     value={!!policyHolderContributionPlanBundle.contributionPlanBundle && policyHolderContributionPlanBundle.contributionPlanBundle}
                                     onChange={v => this.updateAttribute('contributionPlanBundle', v)}

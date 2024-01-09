@@ -116,7 +116,7 @@ class CreatePolicyHolderInsureeDialog extends Component {
                             </Grid>
                             <Grid item className={classes.item}>
                                 <PolicyHolderContributionPlanBundlePicker
-                                    withNull={true}
+                                    withNull={false}
                                     required
                                     policyHolderId={!!policyHolderInsuree.policyHolder && decodeId(policyHolderInsuree.policyHolder.id)}
                                     value={!!policyHolderInsuree.contributionPlanBundle && policyHolderInsuree.contributionPlanBundle}
