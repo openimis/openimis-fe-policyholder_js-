@@ -115,8 +115,6 @@ class CreatePolicyHolderUserDialog extends Component {
                             <Grid item className={classes.item}>
                                 <PolicyHolderPicker
                                     module="policyHolder"
-                                    withNull
-                                    nullLabel={formatMessage(intl, "policyHolder", "emptyLabel")}
                                     value={!!policyHolderUser.policyHolder && policyHolderUser.policyHolder}
                                     onChange={(v) => this.updateAttribute("policyHolder", v)}
                                     readOnly={!!predefinedPolicyHolderId}
