@@ -81,7 +81,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
       }
     );
     this.emailValidation = {
-      regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      regex: /^(?:[^\s@]+@[^\s@]+\.[^\s@]+)$/,
       regexMsg: {
         en: formatMessage(
           props.intl,

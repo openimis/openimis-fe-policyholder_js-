@@ -85,7 +85,7 @@ const POLICYHOLDERUSER_FULL_PROJECTION = (modulesManager) => [
   "dateValidFrom",
   "dateValidTo",
   "isDeleted",
-  "policyHolder" + `{${POLICYHOLDER_PICKER_PROJECTION}}`,
+  `policyHolder{${POLICYHOLDER_FULL_PROJECTION(modulesManager).join(",")}}`,
   "user" + modulesManager.getProjection("admin.UserPicker.projection"),
 ];
 
@@ -111,11 +111,12 @@ export function fetchPickerPolicyHolders(params) {
   return graphql(payload, "POLICYHOLDER_POLICYHOLDERS");
 }
 
-export function fetchPolicyHolder(modulesManager, policyHolderId) {
+export function fetchPolicyHolder(modulesManager, policyHolderId, filters=[]) {
   let filter = !!policyHolderId ? `id: "${policyHolderId}"` : "";
+  filters.push(filter)
   const payload = formatPageQuery(
     "policyHolder",
-    [filter],
+    filters,
     POLICYHOLDER_FULL_PROJECTION(modulesManager)
   );
   return graphql(payload, "POLICYHOLDER_POLICYHOLDER");
@@ -134,6 +135,12 @@ export function fetchPolicyHolderInsurees(modulesManager, params) {
     POLICYHOLDERINSUREE_FULL_PROJECTION(modulesManager)
   );
   return graphql(payload, "POLICYHOLDER_POLICYHOLDERINSUREES");
+}
+
+export function clearPolicyHolderInsurees() {
+  return (dispatch) => {
+    dispatch({ type: "POLICYHOLDER_POLICYHOLDERINSUREES_CLEAR" });
+  };
 }
 
 export function fetchPickerPolicyHolderInsurees(modulesManager, params) {

@@ -14,8 +14,9 @@ import {
   formatMessageWithValues,
   journalize,
   Helmet,
+  decodeId,
 } from "@openimis/fe-core";
-import { fetchPolicyHolder, clearPolicyHolder } from "../actions";
+import { fetchPolicyHolder, clearPolicyHolder, clearPolicyHolderInsurees } from "../actions";
 import {
   RIGHT_PORTALPOLICYHOLDER_SEARCH,
   RIGHT_POLICYHOLDER_CREATE,
@@ -86,14 +87,22 @@ class PolicyHolderForm extends Component {
         policyHolder: props.policyHolder,
         policyHolderId: props.policyHolderId,
       }));
+      const policyHolderRouteRef = this.props.modulesManager.getRef('policyHolder.route.policyHolder');
+      const decodedId = decodeId(this.props.policyHolder.id);
+      this.props.history.replace(`/${policyHolderRouteRef}/${decodedId}`);
     }
     if (prevProps.submittingMutation && !this.props.submittingMutation) {
       this.props.journalize(this.props.mutation);
+      if (!this.props?.policyHolderId) {
+        this.props.fetchPolicyHolder(this.props.modulesManager, null, [`clientMutationId: "${this.props.mutation.clientMutationId}"`]);
+      }
     }
   }
 
   componentWillUnmount() {
     this.props.clearPolicyHolder();
+    //if different default tab under policyholder then it needs to be cleared according to default tab
+    this.props.clearPolicyHolderInsurees();
   }
 
   isMandatoryFieldsEmpty = () => {
@@ -199,7 +208,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    { fetchPolicyHolder, clearPolicyHolder, journalize },
+    { fetchPolicyHolder,
+      clearPolicyHolder,
+      clearPolicyHolderInsurees,
+      journalize,
+    },
     dispatch
   );
 };
