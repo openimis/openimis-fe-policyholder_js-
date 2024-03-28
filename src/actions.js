@@ -816,3 +816,9 @@ export const policyHolderCodeClear = () => {
     dispatch({ type: "POLICYHOLDER_CODE_FIELDS_VALIDATION_CLEAR" });
   };
 };
+
+export const saveEconomicUnit = (economicUnit) => {
+  return (dispatch) => {
+    dispatch({ type: "SAVE_ECONOMIC_UNIT", payload: economicUnit });
+  };
+}
