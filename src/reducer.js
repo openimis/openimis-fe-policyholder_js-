@@ -7,6 +7,7 @@ import {
   dispatchMutationResp,
   dispatchMutationErr,
 } from "@openimis/fe-core";
+import { ECONOMIC_UNIT_STORAGE_KEY } from "./constants";
 
 function reducer(
   state = {
@@ -52,6 +53,7 @@ function reducer(
     policyHolderUsers: [],
     policyHolderUsersPageInfo: {},
     policyHolderUsersTotalCount: 0,
+    economicUnit: JSON.parse(localStorage.getItem(ECONOMIC_UNIT_STORAGE_KEY) ?? '{}'),
   },
   action
 ) {
@@ -356,6 +358,15 @@ function reducer(
           },
         },
       };
+    case 'SAVE_ECONOMIC_UNIT':
+      try {
+        return {
+          ...state,
+          economicUnit: action.payload,
+        };
+      } catch (error) {
+        console.error('[SAVE_ECONOMIC_UNIT]: ', error);
+      }
     case "POLICYHOLDER_MUTATION_REQ":
       return dispatchMutationReq(state, action);
     case "POLICYHOLDER_MUTATION_ERR":

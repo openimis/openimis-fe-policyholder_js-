@@ -12,6 +12,7 @@ import {
 import { makeStyles } from '@material-ui/styles';
 
 import { useTranslations, useModulesManager, redirectToSamlLogout } from '@openimis/fe-core';
+import { saveEconomicUnit } from '../actions';
 import { ECONOMIC_UNIT_STORAGE_KEY, MODULE_NAME } from '../constants';
 import EconomicUnitPicker from '../pickers/EconomicUnitPicker';
 
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   secondaryButton: theme.dialog.secondaryButton,
 }));
 
-const EconomicUnitDialog = ({ open, setEconomicUnitDialogOpen, onLogout }) => {
+const EconomicUnitDialog = ({ open, setEconomicUnitDialogOpen }) => {
   const modulesManager = useModulesManager();
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -40,6 +41,7 @@ const EconomicUnitDialog = ({ open, setEconomicUnitDialogOpen, onLogout }) => {
   const onConfirm = () => {
     if (value) {
       localStorage.setItem(ECONOMIC_UNIT_STORAGE_KEY, JSON.stringify(value));
+      dispatch(saveEconomicUnit(value));
       setEconomicUnitDialogOpen(false);
     }
   };
