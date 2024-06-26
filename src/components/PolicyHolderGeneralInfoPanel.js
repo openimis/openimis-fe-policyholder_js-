@@ -312,8 +312,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
               pubRef="policyHolder.LegalFormPicker"
               module="policyHolder"
               label="legalForm"
-              withNull
-              nullLabel={formatMessage(intl, "policyHolder", "emptyLabel")}
+              withNull={false}
               value={!!edited ? edited.legalForm : null}
               onChange={(v) => this.updateAttribute("legalForm", v)}
               readOnly={isPolicyHolderPortalUser}
@@ -324,8 +323,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
               pubRef="policyHolder.ActivityCodePicker"
               module="policyHolder"
               label="activityCode"
-              withNull
-              nullLabel={formatMessage(intl, "policyHolder", "emptyLabel")}
+              withNull={false}
               value={!!edited ? edited.activityCode : null}
               onChange={(v) => this.updateAttribute("activityCode", v)}
               readOnly={isPolicyHolderPortalUser}
