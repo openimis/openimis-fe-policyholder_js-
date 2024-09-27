@@ -230,7 +230,7 @@ class PolicyHolderGeneralInfoPanel extends FormPanel {
               label="code"
               value={!!edited && !!edited.code ? edited.code : ""}
               onChange={(v) => this.updateAttribute("code", v)}
-              readOnly={isPolicyHolderPortalUser}
+              readOnly={(!!edited && !!edited.id) || isPolicyHolderPortalUser}
             />
           </Grid>
           <Grid item xs={2} className={classes.item}>
