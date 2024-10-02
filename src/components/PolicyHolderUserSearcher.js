@@ -147,17 +147,9 @@ class PolicyHolderUserSearcher extends Component {
         `
           : "",
     ];
-    if (predefinedPolicyHolderId === null) {
       result.push((policyHolderUser) => (
-        <PolicyHolderPicker
-          value={
-            !!policyHolderUser.policyHolder && policyHolderUser.policyHolder
-          }
-          withLabel={false}
-          readOnly
-        />
+        !!policyHolderUser.policyHolder ? `${policyHolderUser.policyHolder.code} - ${policyHolderUser.policyHolder.tradeName}` : ''
       ));
-    }
     result.push(
       (policyHolderUser) =>
         !!policyHolderUser.dateValidFrom
