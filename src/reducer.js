@@ -54,6 +54,69 @@ function reducer(
     policyHolderUsersPageInfo: {},
     policyHolderUsersTotalCount: 0,
     economicUnit: JSON.parse(localStorage.getItem(ECONOMIC_UNIT_STORAGE_KEY) ?? '{}'),
+    policyholderMutationReq: false,
+    policyholderMutationErr: false,
+    policyholderMutationResp: false,
+    
+    policyholderCreatePolicyholderReq: false,
+    policyholderCreatePolicyholderResp: false,
+    policyholderCreatePolicyholderErr: false,
+    
+    policyholderUpdatePolicyholderReq: false,
+    policyholderUpdatePolicyholderResp: false,
+    policyholderUpdatePolicyholderErr: false,
+
+    policyholderDeletePolicyholderReq: false,
+    policyholderDeletePolicyholderResp: false,
+    policyholderDeletePolicyholderErr: false,
+
+    policyholderCreatePolicyholderinsureeReq: false,
+    policyholderCreatePolicyholderinsureeResp: false,
+    policyholderCreatePolicyholderinsureeErr: false,
+
+    policyholderUpdatePolicyholderinsureeReq: false,
+    policyholderUpdatePolicyholderinsureeResp: false,
+    policyholderUpdatePolicyholderinsureeErr: false,
+    
+    policyholderDeletePolicyholderinsureeReq: false,
+    policyholderDeletePolicyholderinsureeResp: false,
+    policyholderDeletePolicyholderinsureeErr: false,
+
+    policyholderReplacePolicyholderinsureeReq: false,
+    policyholderReplacePolicyholderinsureeResp: false,
+    policyholderReplacePolicyholderinsureeErr: false,
+    
+    policyholderCreatePolicyholdercontributionplanbundleReq: false,
+    policyholderCreatePolicyholdercontributionplanbundleResp: false,
+    policyholderCreatePolicyholdercontributionplanbundleErr: false,
+    
+    policyholderUpdatePolicyholdercontributionplanbundleReq: false,
+    policyholderUpdatePolicyholdercontributionplanbundleResp: false,
+    policyholderUpdatePolicyholdercontributionplanbundleErr: false,
+    
+    policyholderDeletePolicyholdercontributionplanbundleReq: false,
+    policyholderDeletePolicyholdercontributionplanbundleResp: false,
+    policyholderDeletePolicyholdercontributionplanbundleErr: false,
+
+    policyholderReplacePolicyholdercontributionplanbundleReq: false,
+    policyholderReplacePolicyholdercontributionplanbundleResp: false,
+    policyholderReplacePolicyholdercontributionplanbundleRErr: false,
+    
+    policyholderCreatePolicyholderuserReq: false,
+    policyholderCreatePolicyholderuserResp: false,
+    policyholderCreatePolicyholderuserErr: false,
+    
+    policyholderUpdatePolicyholderuserReq: false,
+    policyholderUpdatePolicyholderuserResp: false,
+    policyholderUpdatePolicyholderuserErr: false,
+
+    policyholderDeletePolicyholderuserReq: false,
+    policyholderDeletePolicyholderuserResp: false,
+    policyholderDeletePolicyholderuserErr: false,
+
+    policyholderReplacePolicyholderuserReq: false,
+    policyholderReplacePolicyholderuserResp: false,
+    policyholderReplacePolicyholderuserErr: false,
   },
   action
 ) {
@@ -364,55 +427,377 @@ function reducer(
         economicUnit: action.payload,
       };
     case "POLICYHOLDER_MUTATION_REQ":
-      return dispatchMutationReq(state, action);
+      return dispatchMutationReq({
+        ...state,
+        policyholderMutationReq: true,
+        policyholderMutationErr: false,
+        policyholderMutationResp: false,
+        }, action);
     case "POLICYHOLDER_MUTATION_ERR":
-      return dispatchMutationErr(state, action);
+      return dispatchMutationErr({
+        ...state,
+        policyholderMutationReq: false,
+        policyholderMutationErr: true,
+        policyholderMutationResp: false,
+        }, action);
+    case "POLICYHOLDER_MUTATION_RESP":
+      return dispatchMutationErr({
+        ...state,
+        policyholderMutationReq: false,
+        policyholderMutationErr: false,
+        policyholderMutationResp: true,
+        }, action);
+    case "POLICYHOLDER_CREATE_POLICYHOLDER_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholderReq: true,
+        policyholderCreatePolicyholderResp: false,
+        policyholderCreatePolicyholderErr: false,
+        }, "createPolicyHolder", action);
     case "POLICYHOLDER_CREATE_POLICYHOLDER_RESP":
-      return dispatchMutationResp(state, "createPolicyHolder", action);
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholderReq: false,
+        policyholderCreatePolicyholderResp: true,
+        policyholderCreatePolicyholderErr: false,
+        }, "createPolicyHolder", action);
+    case "POLICYHOLDER_CREATE_POLICYHOLDER_ERR":
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholderReq: false,
+        policyholderCreatePolicyholderResp: false,
+        policyholderCreatePolicyholderErr: true
+        }, "createPolicyHolder", action);
+    case "POLICYHOLDER_UPDATE_POLICYHOLDER_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholderReq: true,
+        policyholderUpdatePolicyholderResp: false,
+        policyholderUpdatePolicyholderErr: false,
+      }, "updatePolicyHolder", action);
     case "POLICYHOLDER_UPDATE_POLICYHOLDER_RESP":
-      return dispatchMutationResp(state, "updatePolicyHolder", action);
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholderReq: false,
+        policyholderUpdatePolicyholderResp: true,
+        policyholderUpdatePolicyholderErr: false,
+      }, "updatePolicyHolder", action);
+    case "POLICYHOLDER_UPDATE_POLICYHOLDER_RESP":
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholderReq: false,
+        policyholderUpdatePolicyholderResp: false,
+        policyholderUpdatePolicyholderErr: true,
+      }, "updatePolicyHolder", action);
+    case "POLICYHOLDER_DELETE_POLICYHOLDER_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderDeletePolicyholderReq: true,
+        policyholderDeletePolicyholderResp: false,
+        policyholderDeletePolicyholderErr: false,
+      }, "deletePolicyHolder", action);
     case "POLICYHOLDER_DELETE_POLICYHOLDER_RESP":
-      return dispatchMutationResp(state, "deletePolicyHolder", action);
+      return dispatchMutationResp({
+        ...state,
+        policyholderDeletePolicyholderReq: false,
+        policyholderDeletePolicyholderResp: true,
+        policyholderDeletePolicyholderErr: false,
+      }, "deletePolicyHolder", action);
+    case "POLICYHOLDER_DELETE_POLICYHOLDER_ERR":
+      return dispatchMutationResp({
+        ...state,
+        policyholderDeletePolicyholderReq: false,
+        policyholderDeletePolicyholderResp: false,
+        policyholderDeletePolicyholderErr: true,
+      }, "deletePolicyHolder", action);
+    case "POLICYHOLDER_CREATE_POLICYHOLDERINSUREE_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholderinsureeReq: true,
+        policyholderCreatePolicyholderinsureeResp: false,
+        policyholderCreatePolicyholderinsureeErr: false,
+      }, "createPolicyHolderInsuree", action);
     case "POLICYHOLDER_CREATE_POLICYHOLDERINSUREE_RESP":
-      return dispatchMutationResp(state, "createPolicyHolderInsuree", action);
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholderinsureeReq: false,
+        policyholderCreatePolicyholderinsureeResp: true,
+        policyholderCreatePolicyholderinsureeErr: false,
+      }, "createPolicyHolderInsuree", action);
+    case "POLICYHOLDER_CREATE_POLICYHOLDERINSUREE_ERR":
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholderinsureeReq: false,
+        policyholderCreatePolicyholderinsureeResp: false,
+        policyholderCreatePolicyholderinsureeErr: true,
+      }, "createPolicyHolderInsuree", action);
+    case "POLICYHOLDER_UPDATE_POLICYHOLDERINSUREE_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholderinsureeReq: true,
+        policyholderUpdatePolicyholderinsureeResp: false,
+        policyholderUpdatePolicyholderinsureeErr: false,
+      }, "updatePolicyHolderInsuree", action);
     case "POLICYHOLDER_UPDATE_POLICYHOLDERINSUREE_RESP":
-      return dispatchMutationResp(state, "updatePolicyHolderInsuree", action);
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholderinsureeReq: false,
+        policyholderUpdatePolicyholderinsureeResp: true,
+        policyholderUpdatePolicyholderinsureeErr: false,
+      }, "updatePolicyHolderInsuree", action);
+    case "POLICYHOLDER_UPDATE_POLICYHOLDERINSUREE_RESP":
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholderinsureeReq: false,
+        policyholderUpdatePolicyholderinsureeResp: false,
+        policyholderUpdatePolicyholderinsureeErr: true,
+      }, "updatePolicyHolderInsuree", action);
+    case "POLICYHOLDER_DELETE_POLICYHOLDERINSUREE_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderDeletePolicyholderinsureeReq: true,
+        policyholderDeletePolicyholderinsureeResp: false,
+        policyholderDeletePolicyholderinsureeErr: false,    
+      }, "deletePolicyHolderInsuree", action);
     case "POLICYHOLDER_DELETE_POLICYHOLDERINSUREE_RESP":
-      return dispatchMutationResp(state, "deletePolicyHolderInsuree", action);
+      return dispatchMutationResp({
+        ...state,
+        policyholderDeletePolicyholderinsureeReq: false,
+        policyholderDeletePolicyholderinsureeResp: true,
+        policyholderDeletePolicyholderinsureeErr: false,    
+      }, "deletePolicyHolderInsuree", action);
+    case "POLICYHOLDER_DELETE_POLICYHOLDERINSUREE_ERR":
+      return dispatchMutationResp({
+        ...state,
+        policyholderDeletePolicyholderinsureeReq: false,
+        policyholderDeletePolicyholderinsureeResp: false,
+        policyholderDeletePolicyholderinsureeErr: true,    
+      }, "deletePolicyHolderInsuree", action);
+    case "POLICYHOLDER_REPLACE_POLICYHOLDERINSUREE_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderReplacePolicyholderinsureeReq: true,
+        policyholderReplacePolicyholderinsureeResp: false,
+        policyholderReplacePolicyholderinsureeErr: false,
+      }, "replacePolicyHolderInsuree", action);
     case "POLICYHOLDER_REPLACE_POLICYHOLDERINSUREE_RESP":
-      return dispatchMutationResp(state, "replacePolicyHolderInsuree", action);
-    case "POLICYHOLDER_CREATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
-      return dispatchMutationResp(
-        state,
+      return dispatchMutationResp({
+        ...state,
+        policyholderReplacePolicyholderinsureeReq: false,
+        policyholderReplacePolicyholderinsureeResp: true,
+        policyholderReplacePolicyholderinsureeErr: false,
+      }, "replacePolicyHolderInsuree", action);
+    case "POLICYHOLDER_REPLACE_POLICYHOLDERINSUREE_ERR":
+      return dispatchMutationResp({
+        ...state,
+        policyholderReplacePolicyholderinsureeReq: false,
+        policyholderReplacePolicyholderinsureeResp: false,
+        policyholderReplacePolicyholderinsureeErr: true,
+      }, "replacePolicyHolderInsuree", action);
+    case "POLICYHOLDER_CREATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholdercontributionplanbundleReq: true,
+        policyholderCreatePolicyholdercontributionplanbundleResp: false,
+        policyholderCreatePolicyholdercontributionplanbundleErr: false,    
+        },
         "createPolicyHolderContributionPlanBundle",
         action
       );
-    case "POLICYHOLDER_UPDATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
-      return dispatchMutationResp(
-        state,
+    case "POLICYHOLDER_CREATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholdercontributionplanbundleReq: false,
+        policyholderCreatePolicyholdercontributionplanbundleResp: true,
+        policyholderCreatePolicyholdercontributionplanbundleErr: false,    
+        },
+        "createPolicyHolderContributionPlanBundle",
+        action
+      );
+    case "POLICYHOLDER_CREATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_ERR":
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholdercontributionplanbundleReq: false,
+        policyholderCreatePolicyholdercontributionplanbundleResp: false,
+        policyholderCreatePolicyholdercontributionplanbundleErr: true,    
+        },
+        "createPolicyHolderContributionPlanBundle",
+        action
+      );
+    case "POLICYHOLDER_UPDATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholdercontributionplanbundleReq: true,
+        policyholderUpdatePolicyholdercontributionplanbundleResp: false,
+        policyholderUpdatePolicyholdercontributionplanbundleErr: false,
+        },
         "updatePolicyHolderContributionPlanBundle",
         action
       );
-    case "POLICYHOLDER_DELETE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
-      return dispatchMutationResp(
-        state,
+    case "POLICYHOLDER_UPDATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholdercontributionplanbundleReq: false,
+        policyholderUpdatePolicyholdercontributionplanbundleResp: true,
+        policyholderUpdatePolicyholdercontributionplanbundleErr: false,
+        },
+        "updatePolicyHolderContributionPlanBundle",
+        action
+      );
+    case "POLICYHOLDER_UPDATE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_ERR":
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholdercontributionplanbundleReq: false,
+        policyholderUpdatePolicyholdercontributionplanbundleResp: false,
+        policyholderUpdatePolicyholdercontributionplanbundleErr: true,
+        },
+        "updatePolicyHolderContributionPlanBundle",
+        action
+      );
+    case "POLICYHOLDER_DELETE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_REQ":
+      return dispatchMutationResp({
+        ...state,  
+        policyholderDeletePolicyholdercontributionplanbundleReq: true,
+        policyholderDeletePolicyholdercontributionplanbundleResp: false,
+        policyholderDeletePolicyholdercontributionplanbundleErr: false,
+        },
         "deletePolicyHolderContributionPlanBundle",
         action
       );
-    case "POLICYHOLDER_REPLACE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
-      return dispatchMutationResp(
-        state,
+    case "POLICYHOLDER_DELETE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
+      return dispatchMutationResp({
+        ...state,  
+        policyholderDeletePolicyholdercontributionplanbundleReq: false,
+        policyholderDeletePolicyholdercontributionplanbundleResp: true,
+        policyholderDeletePolicyholdercontributionplanbundleErr: false,
+        },
+        "deletePolicyHolderContributionPlanBundle",
+        action
+      );
+    case "POLICYHOLDER_DELETE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_ERR":
+      return dispatchMutationResp({
+        ...state,  
+        policyholderDeletePolicyholdercontributionplanbundleReq: false,
+        policyholderDeletePolicyholdercontributionplanbundleResp: false,
+        policyholderDeletePolicyholdercontributionplanbundleErr: true,
+        },
+        "deletePolicyHolderContributionPlanBundle",
+        action
+      );
+    case "POLICYHOLDER_REPLACE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_REQ":
+      return dispatchMutationResp({
+        ...state,    
+        policyholderReplacePolicyholdercontributionplanbundleReq: true,
+        policyholderReplacePolicyholdercontributionplanbundleResp: false,
+        policyholderReplacePolicyholdercontributionplanbundleRErr: false,
+      },
         "replacePolicyHolderContributionPlanBundle",
         action
       );
+    case "POLICYHOLDER_REPLACE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_RESP":
+      return dispatchMutationResp({
+        ...state,    
+        policyholderReplacePolicyholdercontributionplanbundleReq: false,
+        policyholderReplacePolicyholdercontributionplanbundleResp: true,
+        policyholderReplacePolicyholdercontributionplanbundleRErr: false,
+      },
+        "replacePolicyHolderContributionPlanBundle",
+        action
+      );
+    case "POLICYHOLDER_REPLACE_POLICYHOLDERCONTRIBUTIONPLANBUNDLE_ERR":
+      return dispatchMutationResp({
+        ...state,    
+        policyholderReplacePolicyholdercontributionplanbundleReq: false,
+        policyholderReplacePolicyholdercontributionplanbundleResp: false,
+        policyholderReplacePolicyholdercontributionplanbundleRErr: true,
+      },
+        "replacePolicyHolderContributionPlanBundle",
+        action
+      );
+    case "POLICYHOLDER_CREATE_POLICYHOLDERUSER_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholderuserReq: true,
+        policyholderCreatePolicyholderuserResp: false,
+        policyholderCreatePolicyholderuserErr: false,
+        }, "createPolicyHolderUser", action);
     case "POLICYHOLDER_CREATE_POLICYHOLDERUSER_RESP":
-      return dispatchMutationResp(state, "createPolicyHolderUser", action);
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholderuserReq: false,
+        policyholderCreatePolicyholderuserResp: true,
+        policyholderCreatePolicyholderuserErr: false,
+        }, "createPolicyHolderUser", action);
+    case "POLICYHOLDER_CREATE_POLICYHOLDERUSER_ERR":
+      return dispatchMutationResp({
+        ...state,
+        policyholderCreatePolicyholderuserReq: false,
+        policyholderCreatePolicyholderuserResp: false,
+        policyholderCreatePolicyholderuserErr: true,
+        }, "createPolicyHolderUser", action);
+    case "POLICYHOLDER_UPDATE_POLICYHOLDERUSER_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholderuserReq: true,
+        policyholderUpdatePolicyholderuserResp: false,
+        policyholderUpdatePolicyholderuserErr: false
+      }, "updatePolicyHolderUser", action);
     case "POLICYHOLDER_UPDATE_POLICYHOLDERUSER_RESP":
-      return dispatchMutationResp(state, "updatePolicyHolderUser", action);
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholderuserReq: false,
+        policyholderUpdatePolicyholderuserResp: true,
+        policyholderUpdatePolicyholderuserErr: false
+      }, "updatePolicyHolderUser", action);
+    case "POLICYHOLDER_UPDATE_POLICYHOLDERUSER_ERR":
+      return dispatchMutationResp({
+        ...state,
+        policyholderUpdatePolicyholderuserReq: false,
+        policyholderUpdatePolicyholderuserResp: false,
+        policyholderUpdatePolicyholderuserErr: true
+      }, "updatePolicyHolderUser", action);
+    case "POLICYHOLDER_DELETE_POLICYHOLDERUSER_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderDeletePolicyholderuserReq: true,
+        policyholderDeletePolicyholderuserResp: false,
+        policyholderDeletePolicyholderuserErr: false,
+      }, "deletePolicyHolderUser", action);
     case "POLICYHOLDER_DELETE_POLICYHOLDERUSER_RESP":
-      return dispatchMutationResp(state, "deletePolicyHolderUser", action);
+      return dispatchMutationResp({
+        ...state,
+        policyholderDeletePolicyholderuserReq: false,
+        policyholderDeletePolicyholderuserResp: true,
+        policyholderDeletePolicyholderuserErr: false,
+      }, "deletePolicyHolderUser", action);
+    case "POLICYHOLDER_DELETE_POLICYHOLDERUSER_ERR":
+      return dispatchMutationResp({
+        ...state,
+        policyholderDeletePolicyholderuserReq: false,
+        policyholderDeletePolicyholderuserResp: false,
+        policyholderDeletePolicyholderuserErr: true,
+      }, "deletePolicyHolderUser", action);
+    case "POLICYHOLDER_REPLACE_POLICYHOLDERUSER_REQ":
+      return dispatchMutationResp({
+        ...state,
+        policyholderReplacePolicyholderuserReq: true,
+        policyholderReplacePolicyholderuserResp: false,
+        policyholderReplacePolicyholderuserErr: false,
+      }, "replacePolicyHolderUser", action);
     case "POLICYHOLDER_REPLACE_POLICYHOLDERUSER_RESP":
-      return dispatchMutationResp(state, "replacePolicyHolderUser", action);
+      return dispatchMutationResp({
+        ...state,
+        policyholderReplacePolicyholderuserReq: false,
+        policyholderReplacePolicyholderuserResp: true,
+        policyholderReplacePolicyholderuserErr: false,
+      }, "replacePolicyHolderUser", action);
+    case "POLICYHOLDER_REPLACE_POLICYHOLDERUSER_ERR":
+      return dispatchMutationResp({
+        ...state,
+        policyholderReplacePolicyholderuserReq: false,
+        policyholderReplacePolicyholderuserResp: false,
+        policyholderReplacePolicyholderuserErr: true,
+      }, "replacePolicyHolderUser", action);
     default:
       return state;
   }

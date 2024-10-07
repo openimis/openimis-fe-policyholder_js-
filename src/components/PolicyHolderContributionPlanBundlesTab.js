@@ -9,6 +9,7 @@ import {
 } from "../constants";
 import PolicyHolderContributionPlanBundleSearcher from "./PolicyHolderContributionPlanBundleSearcher";
 import CreatePolicyHolderContributionPlanBundleDialog from "../dialogs/CreatePolicyHolderContributionPlanBundleDialog";
+import { connect } from "react-redux";
 
 class PolicyHolderContributionPlanBundlesTabLabel extends Component {
     render() {
@@ -29,12 +30,9 @@ class PolicyHolderContributionPlanBundlesTabLabel extends Component {
     }
 }
 
-class PolicyHolderContributionPlanBundlesTabPanel extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            reset: 0
-        }
+class PolicyHolderContributionPlanBundlesTab extends Component {
+    state = {
+        reset: 0,
     }
 
     onSave = () => {
@@ -42,6 +40,18 @@ class PolicyHolderContributionPlanBundlesTabPanel extends Component {
             reset: state.reset + 1
         }));
     }
+
+    componentDidUpdate(prevProps) {
+        if (!prevProps.created && this.props.created) {
+          this.onSave();
+        }
+        if (!prevProps.updated && this.props.updated) {
+          this.onSave();
+        }
+        if (!prevProps.replaced && this.props.replaced) {
+          this.onSave();
+        }
+      }
 
     render() {
         const { rights, value, isTabsEnabled, policyHolder } = this.props;
@@ -66,7 +76,8 @@ class PolicyHolderContributionPlanBundlesTabPanel extends Component {
                                     <Grid item>
                                         <CreatePolicyHolderContributionPlanBundleDialog
                                             policyHolder={policyHolder}
-                                            onSave={this.onSave}
+                                            onSave={() => {}}
+                                            tabView
                                         />
                                     </Grid>
                                 </Grid>
@@ -84,6 +95,15 @@ class PolicyHolderContributionPlanBundlesTabPanel extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => ({
+    created: !!state.policyHolder ? state.policyHolder.policyholderCreatePolicyholdercontributionplanbundleResp : false,
+    updated: !!state.policyHolder ? state.policyHolder.policyholderReplacePolicyholdercontributionplanbundleResp : false,
+    replaced: !!state.policyHolder ? state.policyHolder.policyholderUpdatePolicyholdercontributionplanbundleResp : false,
+});
+  
+
+const PolicyHolderContributionPlanBundlesTabPanel = connect(mapStateToProps)(PolicyHolderContributionPlanBundlesTab) 
 
 export {
     PolicyHolderContributionPlanBundlesTabLabel,

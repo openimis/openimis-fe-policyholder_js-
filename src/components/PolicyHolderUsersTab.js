@@ -10,6 +10,7 @@ import {
 import { POLICYHOLDERUSER_TAB_VALUE } from "../constants"
 import PolicyHolderUserSearcher from "./PolicyHolderUserSearcher";
 import CreatePolicyHolderUserDialog from "../dialogs/CreatePolicyHolderUserDialog";
+import { connect } from "react-redux";
 
 class PolicyHolderUsersTabLabel extends Component {
     render() {
@@ -32,15 +33,28 @@ class PolicyHolderUsersTabLabel extends Component {
     }
 }
 
-class PolicyHolderUsersTabPanel extends Component {
+class PolicyHolderUsersTab extends Component {
     state = {
-        reset: 0
+        reset: 0,
     }
 
-    onSave = () =>
+    onSave = () => {
         this.setState(state => ({
             reset: state.reset + 1
         }));
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!prevProps.created && this.props.created) {
+          this.onSave();
+        }
+        if (!prevProps.updated && this.props.updated) {
+          this.onSave();
+        }
+        if (!prevProps.replaced && this.props.replaced) {
+          this.onSave();
+        }
+      }
 
     render() {
         const { rights, value, isTabsEnabled, policyHolder } = this.props;
@@ -90,6 +104,15 @@ class PolicyHolderUsersTabPanel extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => ({
+    created: !!state.policyHolder ? state.policyHolder.policyholderCreatePolicyholderuserResp : false,
+    updated: !!state.policyHolder ? state.policyHolder.policyholderUpdatePolicyholderuserResp : false,
+    replaced: !!state.policyHolder ? state.policyHolder.policyholderReplacePolicyholderuserResp : false,
+});
+  
+const PolicyHolderUsersTabPanel = connect(mapStateToProps)(PolicyHolderUsersTab) 
+
 
 export {
     PolicyHolderUsersTabLabel,
