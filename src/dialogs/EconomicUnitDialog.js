@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
@@ -19,6 +18,9 @@ import EconomicUnitPicker from '../pickers/EconomicUnitPicker';
 const useStyles = makeStyles((theme) => ({
   primaryButton: theme.dialog.primaryButton,
   secondaryButton: theme.dialog.secondaryButton,
+  dialogWidth: {
+    minWidth: '360px',
+  }
 }));
 
 const EconomicUnitDialog = ({ open, setEconomicUnitDialogOpen }) => {
@@ -68,10 +70,7 @@ const EconomicUnitDialog = ({ open, setEconomicUnitDialogOpen }) => {
   return (
     <Dialog open={open}>
       <DialogTitle>{formatMessage('selectEconomicUnit.title')}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          {formatMessage('selectEconomicUnit.message')}
-        </DialogContentText>
+      <DialogContent className={classes.dialogWidth}>
         <EconomicUnitPicker
           readOnly={false}
           value={value}
