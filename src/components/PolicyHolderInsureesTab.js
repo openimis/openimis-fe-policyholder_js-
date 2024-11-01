@@ -10,6 +10,7 @@ import {
 import PolicyHolderInsureeSearcher from "./PolicyHolderInsureeSearcher";
 import { POLICYHOLDERINSUREE_TAB_VALUE } from "../constants"
 import CreatePolicyHolderInsureeDialog from "../dialogs/CreatePolicyHolderInsureeDialog";
+import { connect } from "react-redux";
 
 class PolicyHolderInsureesTabLabel extends Component {
     render() {
@@ -30,12 +31,9 @@ class PolicyHolderInsureesTabLabel extends Component {
     }
 }
 
-class PolicyHolderInsureesTabPanel extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            reset: 0
-        }
+class PolicyHolderInsureesTab extends Component {
+    state = {
+        reset: 0,
     }
 
     onSave = () => {
@@ -43,6 +41,18 @@ class PolicyHolderInsureesTabPanel extends Component {
             reset: state.reset + 1
         }));
     }
+
+    componentDidUpdate(prevProps) {
+        if (!prevProps.created && this.props.created) {
+          this.onSave();
+        }
+        if (!prevProps.updated && this.props.updated) {
+          this.onSave();
+        }
+        if (!prevProps.replaced && this.props.replaced) {
+          this.onSave();
+        }
+      }
 
     render() {
         const { rights, value, isTabsEnabled, policyHolder } = this.props;
@@ -99,6 +109,15 @@ class PolicyHolderInsureesTabPanel extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => ({
+    created: !!state.policyHolder ? state.policyHolder.policyholderCreatePolicyholderinsureeResp : false,
+    updated: !!state.policyHolder ? state.policyHolder.policyholderUpdatePolicyholderinsureeResp : false,
+    replaced: !!state.policyHolder ? state.policyHolder.policyholderReplacePolicyholderinsureeResp : false,
+});
+  
+const PolicyHolderInsureesTabPanel = connect(mapStateToProps)(PolicyHolderInsureesTab) 
+
 
 export {
     PolicyHolderInsureesTabLabel,
