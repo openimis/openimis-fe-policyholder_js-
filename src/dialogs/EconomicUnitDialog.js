@@ -6,13 +6,19 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
+  Link,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
-import { useTranslations, useModulesManager, redirectToSamlLogout } from '@openimis/fe-core';
+import {
+  useTranslations,
+  useModulesManager,
+  redirectToSamlLogout,
+} from '@openimis/fe-core';
 import { saveEconomicUnit } from '../actions';
-import { ECONOMIC_UNIT_STORAGE_KEY, MODULE_NAME } from '../constants';
+import { ECONOMIC_UNIT_STORAGE_KEY, MODULE_NAME, REF_PUBLIC_GDPR_PAGE } from '../constants';
 import EconomicUnitPicker from '../pickers/EconomicUnitPicker';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,14 +26,21 @@ const useStyles = makeStyles((theme) => ({
   secondaryButton: theme.dialog.secondaryButton,
   dialogWidth: {
     minWidth: '360px',
-  }
+  },
+  gdprLink: {
+    cursor: 'pointer',
+    fontWeight: 'bold',
+  },
 }));
 
-const EconomicUnitDialog = ({ open, setEconomicUnitDialogOpen }) => {
+const EconomicUnitDialog = ({ open, setEconomicUnitDialogOpen, history }) => {
   const modulesManager = useModulesManager();
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { formatMessage } = useTranslations(MODULE_NAME, modulesManager);
+  const { formatMessage, formatMessageWithValues } = useTranslations(
+    MODULE_NAME,
+    modulesManager
+  );
   const {
     policyHolderUsers: economicUnitsWithUser,
     fetchingPolicyHolderUsers: fetchingEconomicUnitsWithUser,
@@ -53,6 +66,12 @@ const EconomicUnitDialog = ({ open, setEconomicUnitDialogOpen }) => {
     await redirectToSamlLogout(e);
   };
 
+  const handleGdprDownload = () => {
+    const url = modulesManager.getRef(REF_PUBLIC_GDPR_PAGE);
+
+    window.open(url, '_blank');
+  };
+
   useEffect(() => {
     const handleLocalStorageChange = () => {
       if (!storageEconomicUnit) {
@@ -68,9 +87,25 @@ const EconomicUnitDialog = ({ open, setEconomicUnitDialogOpen }) => {
   }, []);
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} maxWidth='xs'>
       <DialogTitle>{formatMessage('selectEconomicUnit.title')}</DialogTitle>
       <DialogContent className={classes.dialogWidth}>
+        <DialogContentText>
+          <i>
+            {formatMessageWithValues('selectEconomicUnit.description', {
+              link: (
+                <Link
+                  className={classes.gdprLink}
+                  underline='always'
+                  color='primary'
+                  onClick={handleGdprDownload}
+                >
+                  {formatMessage('selectEconomicUnit.gdpr')}
+                </Link>
+              ),
+            })}
+          </i>
+        </DialogContentText>
         <EconomicUnitPicker
           readOnly={false}
           value={value}
