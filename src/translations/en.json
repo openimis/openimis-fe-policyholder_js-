@@ -97,6 +97,8 @@
     "policyHolder.ReplacePolicyHolderUser.mutationLabel": "{newUser} is replacing {oldUser} on {policyHolder}",
     "policyHolder.EconomicUnitPicker.label": "Selected company",
     "policyHolder.selectEconomicUnit.title": "Select the company",
+    "policyHolder.selectEconomicUnit.gdpr": "GDPR Declaration",
+    "policyHolder.selectEconomicUnit.description": "By confirming the company, you accept the {link} and agree to the processing of your personal data.",
     "policyHolder.selectEconomicUnit.confirm": "Confirm",
     "policyHolder.selectEconomicUnit.logout": "Logout",
     "policyHolder.EconomicUnitChangeButton.label": "Change Company"
