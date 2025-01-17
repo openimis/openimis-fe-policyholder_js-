@@ -50,6 +50,7 @@ const POLICYHOLDERINSUREE_FULL_PROJECTION = (modulesManager) => [
 const POLICYHOLDERINSUREE_PICKER_PROJECTION = (modulesManager) => [
   "id",
   "insuree" + modulesManager.getProjection("insuree.InsureePicker.projection"),
+  "jsonExt",
   "contributionPlanBundle" +
     modulesManager.getProjection(
       "contributionPlan.ContributionPlanBundlePicker.projection"
